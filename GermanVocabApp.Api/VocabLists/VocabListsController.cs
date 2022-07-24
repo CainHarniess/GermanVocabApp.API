@@ -7,11 +7,11 @@ namespace GermanVocabApp.Api.VocabLists;
 
 [ApiController]
 [Route("api/vocab-lists", Name = VocabListsRoutes.Root)]
-public class VocabListController : ControllerBase
+public class VocabListsController : ControllerBase
 {
     private readonly IVocabListRepositoryAsync _repository;
 
-    public VocabListController(IVocabListRepositoryAsync repository)
+    public VocabListsController(IVocabListRepositoryAsync repository)
     {
         _repository = repository;
     }
@@ -39,7 +39,7 @@ public class VocabListController : ControllerBase
         try
         {
             VocabList? vocabList = await _repository.Get(id);
-            return Ok(vocabList.ToResponseDto());
+            return Ok(vocabList!.ToResponseDto());
         }
         catch (KeyNotFoundException e)
         {
