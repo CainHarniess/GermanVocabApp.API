@@ -3,7 +3,7 @@ using VocabListEntity = GermanVocabApp.DataAccess.EntityFramework.Models.VocabLi
 
 namespace GermanVocabApp.DataAccess.EntityFramework;
 
-internal static class VocabListEntityExtensions
+internal static class VocabListEntityConversionExtensions
 {
     public static VocabListDomain ToDomainObject(this VocabListEntity entity)
     {

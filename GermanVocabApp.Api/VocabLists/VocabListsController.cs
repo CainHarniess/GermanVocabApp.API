@@ -1,4 +1,5 @@
-﻿using GermanVocabApp.Api.VocabLists.Models;
+﻿using AutoMapper;
+using GermanVocabApp.Api.VocabLists.Models;
 using GermanVocabApp.Domain.Abstractions;
 using GermanVocabApp.Domain.VocabListAggregate;
 using Microsoft.AspNetCore.Mvc;
@@ -10,16 +11,18 @@ namespace GermanVocabApp.Api.VocabLists;
 public class VocabListsController : ControllerBase
 {
     private readonly IVocabListRepositoryAsync _repository;
+    private readonly IMapper _mapper;
 
-    public VocabListsController(IVocabListRepositoryAsync repository)
+    public VocabListsController(IVocabListRepositoryAsync repository, IMapper mapper)
     {
         _repository = repository;
+        _mapper = mapper;
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddVocabList(VocabListRequestDto vocabListRequest)
+    public async Task<IActionResult> AddVocabList(VocabListCreationDto vocabListRequest)
     {
-        VocabList vocabList = vocabListRequest.ToDomainModel();
+        VocabList vocabList= _mapper.Map<VocabList>(vocabListRequest);
         await _repository.Add(vocabList);
         return CreatedAtRoute(VocabListsRoutes.Root, vocabList.Id);
     }
@@ -28,8 +31,8 @@ public class VocabListsController : ControllerBase
     public async Task<IActionResult> Get()
     {
         IEnumerable<VocabList> vocabLists = await _repository.GetAll();
-        IEnumerable<VocabListResponseDto> responseObjects = vocabLists.ToResponseDtos();
-        return Ok(responseObjects);
+        IEnumerable<VocabListInfoDto> infoDtos = _mapper.Map<IEnumerable<VocabListInfoDto>>(vocabLists);
+        return Ok(infoDtos);
     }
 
     [HttpGet]
@@ -38,8 +41,9 @@ public class VocabListsController : ControllerBase
     {
         try
         {
-            VocabList? vocabList = await _repository.Get(id);
-            return Ok(vocabList!.ToResponseDto());
+            VocabList? vocabListInfo = await _repository.Get(id);
+            VocabListInfoDto listInfoDto = _mapper.Map<VocabListInfoDto>(vocabListInfo);
+            return Ok(listInfoDto);
         }
         catch (KeyNotFoundException e)
         {
@@ -49,7 +53,7 @@ public class VocabListsController : ControllerBase
 
     [HttpPut]
     [Route("{id:guid}")]
-    public async Task<IActionResult> Update(Guid id, VocabListRequestDto vocabListRequest)
+    public async Task<IActionResult> Update(Guid id, VocabListCreationDto vocabListRequest)
     {
         VocabList vocabList = vocabListRequest.ToDomainModel();
         vocabList.Id = id;

@@ -5,15 +5,15 @@ namespace GermanVocabApp.Api.VocabLists.Models;
 
 internal static class VocabListDomainConversionExtensions
 {
-    public static IEnumerable<VocabListResponseDto> ToResponseDtos(this IEnumerable<VocabList> domainObjects)
+    public static IEnumerable<VocabListInfoDto> ToResponseDtos(this IEnumerable<VocabList> domainObjects)
     {
         return domainObjects.Select(vl => vl.ToResponseDto())
                             .ToArray();
     }
 
-    public static VocabListResponseDto ToResponseDto(this VocabList domainObject)
+    public static VocabListInfoDto ToResponseDto(this VocabList domainObject)
     {
-        return new VocabListResponseDto()
+        return new VocabListInfoDto()
         {
             Id = domainObject.Id ?? default,
             Name = domainObject.Name,

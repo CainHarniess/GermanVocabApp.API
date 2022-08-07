@@ -1,9 +1,8 @@
-﻿using GermanVocabApp.Domain.Core;
-using GermanVocabApp.Domain.Data;
+﻿using GermanVocabApp.Domain.Data;
 
-namespace GermanVocabApp.Domain.VocabListAggregate;
+namespace GermanVocabApp.Api.VocabLists.Models;
 
-public class VocabListItem : Entity
+public abstract class VocabListItemDtoBase
 {
     public WordType WordType { get; set; }
     public bool? IsWeakMasculineNoun { get; set; }
