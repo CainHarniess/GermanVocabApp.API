@@ -14,7 +14,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\GermanVocabApp.DataAccess.EntityFramework\GermanVocabApp.DataAccess.EntityFramework.csproj" />
-		<ProjectReference Include="..\GermanVocabApp.Domain.Abstractions\GermanVocabApp.Domain.Abstractions.csproj" />
 	</ItemGroup>
 
 </Project>

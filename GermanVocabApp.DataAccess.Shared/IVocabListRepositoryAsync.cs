@@ -2,7 +2,7 @@
 
 namespace GermanVocabApp.DataAccess.Shared
 {
-    public interface INewVocabListRepositoryAsync
+    public interface IVocabListRepositoryAsync
     {
         Task<IEnumerable<VocabListInfoDto>>
             GetVocabListInfos();

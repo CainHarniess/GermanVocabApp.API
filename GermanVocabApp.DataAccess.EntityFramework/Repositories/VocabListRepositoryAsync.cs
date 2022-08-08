@@ -1,15 +1,17 @@
-﻿using GermanVocabApp.DataAccess.EntityFramework.Models;
+﻿using GermanVocabApp.DataAccess.EntityFramework.Conversion;
+using GermanVocabApp.DataAccess.EntityFramework.Models;
+using GermanVocabApp.DataAccess.EntityFramework.Projection;
 using GermanVocabApp.DataAccess.Shared;
 using GermanVocabApp.DataAccess.Shared.DataTransfer;
 using Microsoft.EntityFrameworkCore;
 
 namespace GermanVocabApp.DataAccess.EntityFramework.Repositories;
 
-public class NewEfVocabListRepositoryAsync : INewVocabListRepositoryAsync
+public class VocabListRepositoryAsync : IVocabListRepositoryAsync
 {
     private readonly VocabListDbContext _context;
 
-    public NewEfVocabListRepositoryAsync(VocabListDbContext context)
+    public VocabListRepositoryAsync(VocabListDbContext context)
     {
         _context = context;
     }
@@ -29,7 +31,7 @@ public class NewEfVocabListRepositoryAsync : INewVocabListRepositoryAsync
 
         if (entity.ListItems == null)
         {
-            throw new NullReferenceException($"VocabList entity ListItems property returned null in {nameof(NewEfVocabListRepositoryAsync)}.{nameof(Get)}." +
+            throw new NullReferenceException($"VocabList entity ListItems property returned null in {nameof(VocabListRepositoryAsync)}.{nameof(Get)}." +
                                              $"\n\nCheck Entity Framework is behaving as expected.");
         }
         return entity.ToDto();
@@ -40,7 +42,7 @@ public class NewEfVocabListRepositoryAsync : INewVocabListRepositoryAsync
         IEnumerable<VocabListInfoDto> listInfoDtos;
         listInfoDtos =  await _context.VocablLists
                                       .Where(vl => vl.DeletedDate == null)
-                                      .Select(vl => vl.ToInfoDto())
+                                      .ProjectToInfoDto()
                                       .ToArrayAsync();
         return listInfoDtos;
     }

@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using GermanVocabApp.Api.VocabLists.Conversion;
+﻿using GermanVocabApp.Api.VocabLists.Conversion;
 using GermanVocabApp.Api.VocabLists.Models;
 using GermanVocabApp.DataAccess.Shared;
 using GermanVocabApp.DataAccess.Shared.DataTransfer;
@@ -11,9 +10,9 @@ namespace GermanVocabApp.Api.VocabLists;
 [Route("api/vocab-lists", Name = VocabListsRoutes.Root)]
 public class VocabListsController : ControllerBase
 {
-    private readonly INewVocabListRepositoryAsync _repository;
+    private readonly IVocabListRepositoryAsync _repository;
 
-    public VocabListsController(INewVocabListRepositoryAsync repository)
+    public VocabListsController(IVocabListRepositoryAsync repository)
     {
         _repository = repository;
     }

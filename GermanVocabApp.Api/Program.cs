@@ -18,13 +18,13 @@ builder.Services.AddDbContext<VocabListDbContext>(options =>
     string connectionString = builder.Configuration.GetConnectionString("GermanVocabApp");
     options.UseSqlServer(connectionString);
     options.LogTo(Console.WriteLine);
-    StreamWriter sw = new StreamWriter("EfCoreLog.txt", append: true);
-    options.LogTo(sw.WriteLine);
+    //StreamWriter sw = new StreamWriter("EfCoreLog.txt", append: true);
+    //options.LogTo(sw.WriteLine);
     options.LogTo(log => Debug.WriteLine(log));
 },
 ServiceLifetime.Scoped);
 
-builder.Services.AddScoped<INewVocabListRepositoryAsync, NewEfVocabListRepositoryAsync>();
+builder.Services.AddScoped<IVocabListRepositoryAsync, VocabListRepositoryAsync>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

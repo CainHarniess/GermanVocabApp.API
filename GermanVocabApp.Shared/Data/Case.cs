@@ -7,25 +7,3 @@ public enum Case
     Dative,
     Genetive,
 }
-
-public enum AuxiliaryVerb
-{
-    Haben,
-    Sein,
-}
-
-public enum Gender
-{
-    Masculine,
-    Feminine,
-    Neuter,
-}
-
-public enum WordType
-{
-    Noun,
-    Verb,
-    Adjective,
-    Adverb,
-}
-
