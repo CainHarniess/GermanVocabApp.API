@@ -1,6 +1,7 @@
-﻿using GermanVocabApp.Domain.VocabListAggregate;
+﻿using GermanVocabApp.Api.VocabLists.Models;
+using GermanVocabApp.Domain.VocabListAggregate;
 
-namespace GermanVocabApp.Api.VocabLists.Models;
+namespace GermanVocabApp.Api.VocabLists.Conversion;
 
 internal static class VocabListRequestDtoConversionExtensions
 {

@@ -9,7 +9,7 @@ internal class VocabListProfile : Profile
     public VocabListProfile()
     {
         CreateMap<VocabListCreationDto, VocabList>();
-        CreateMap<VocabList, VocabListInfoDto>();
+        CreateMap<VocabList, VocabListInfoResponse>();
         CreateMap<VocabList, FullVocabListDto>();
     }
 }

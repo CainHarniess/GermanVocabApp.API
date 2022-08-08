@@ -25,11 +25,6 @@ public class EfVocabListRepositoryAsync : IVocabListRepositoryAsync
         await _context.SaveChangesAsync();
     }
 
-    public async Task AddToList(Guid listId, VocabListItem item)
-    {
-        throw new NotImplementedException();
-    }
-
     public async Task Edit(VocabList list)
     {
         VocabListEntity? entity = await _context.VocablLists.Where(vl => vl.Id == list.Id)
@@ -44,11 +39,6 @@ public class EfVocabListRepositoryAsync : IVocabListRepositoryAsync
         entity.UpdatedDate = DateTime.UtcNow;
 
         await _context.SaveChangesAsync();
-    }
-
-    public async Task EditListItem(Guid listId, VocabListItem updatedItem)
-    {
-        throw new NotImplementedException();
     }
 
     public async Task<VocabListDomain?> Get(Guid listId)
@@ -69,20 +59,5 @@ public class EfVocabListRepositoryAsync : IVocabListRepositoryAsync
                                          .Select(vl => vl.ToDomainObject())
                                          .ToArrayAsync();
                                     
-    }
-
-    public async Task<IEnumerable<VocabListItem>> GetListItems(Guid listId)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task Remove(Guid listId)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task RemoveFromList(Guid listId, Guid itemId)
-    {
-        throw new NotImplementedException();
     }
 }

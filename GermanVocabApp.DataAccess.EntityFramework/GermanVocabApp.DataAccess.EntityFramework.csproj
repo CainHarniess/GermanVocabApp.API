@@ -18,12 +18,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\GermanVocabApp.DataAccess.Shared\GermanVocabApp.DataAccess.Shared.csproj" />
     <ProjectReference Include="..\GermanVocabApp.Domain.Abstractions\GermanVocabApp.Domain.Abstractions.csproj" />
     <ProjectReference Include="..\GermanVocabApp.Domain\GermanVocabApp.Domain.csproj" />
+    <ProjectReference Include="..\GermanVocabApp.Shared\GermanVocabApp.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Migrations\" />
+    <Folder Include="Exceptions\" />
   </ItemGroup>
 
 </Project>

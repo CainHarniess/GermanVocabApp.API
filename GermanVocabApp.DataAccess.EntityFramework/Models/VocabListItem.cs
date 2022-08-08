@@ -1,4 +1,5 @@
-﻿using GermanVocabApp.Domain.Data;
+﻿
+using GermanVocabApp.Shared.Data;
 
 namespace GermanVocabApp.DataAccess.EntityFramework.Models
 {

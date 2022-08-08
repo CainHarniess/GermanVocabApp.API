@@ -1,19 +1,20 @@
 ﻿#nullable enable
+using GermanVocabApp.Api.VocabLists.Models;
 using GermanVocabApp.Domain.VocabListAggregate;
 
-namespace GermanVocabApp.Api.VocabLists.Models;
+namespace GermanVocabApp.Api.VocabLists.Conversion;
 
 internal static class VocabListDomainConversionExtensions
 {
-    public static IEnumerable<VocabListInfoDto> ToResponseDtos(this IEnumerable<VocabList> domainObjects)
+    public static IEnumerable<VocabListInfoResponse> ToResponseDtos(this IEnumerable<VocabList> domainObjects)
     {
         return domainObjects.Select(vl => vl.ToResponseDto())
                             .ToArray();
     }
 
-    public static VocabListInfoDto ToResponseDto(this VocabList domainObject)
+    public static VocabListInfoResponse ToResponseDto(this VocabList domainObject)
     {
-        return new VocabListInfoDto()
+        return new VocabListInfoResponse()
         {
             Id = domainObject.Id ?? default,
             Name = domainObject.Name,

@@ -11,15 +11,5 @@ namespace GermanVocabApp.Domain.Abstractions
         Task Add(VocabList list);
 
         Task Edit(VocabList list);
-
-        Task Remove(Guid listId);
-
-        Task<IEnumerable<VocabListItem>> GetListItems(Guid listId);
-
-        Task AddToList(Guid listId, VocabListItem item);
-
-        Task EditListItem(Guid listId, VocabListItem updatedItem);
-
-        Task RemoveFromList(Guid listId, Guid itemId);
     }
 }

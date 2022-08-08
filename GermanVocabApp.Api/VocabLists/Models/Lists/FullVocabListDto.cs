@@ -9,3 +9,4 @@ public class FullVocabListDto : IVocabList
     public string Description { get; set; }
     public IEnumerable<VocabListItem> ListItems { get; set; }
 }
+
