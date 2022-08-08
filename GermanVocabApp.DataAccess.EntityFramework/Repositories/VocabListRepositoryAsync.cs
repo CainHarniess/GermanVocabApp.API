@@ -18,11 +18,42 @@ public class VocabListRepositoryAsync : IVocabListRepositoryAsync
 
     public async Task<VocabListDto?> Get(Guid listId)
     {
-        VocabList entity = await _context.VocablLists
-                                         .Where(vl => vl.Id == listId
-                                                      && vl.DeletedDate == null)
-                                         .Include(vl => vl.ListItems)
-                                         .SingleOrDefaultAsync();
+        IQueryable<VocabList> query = _context.VocablLists
+                                              .Where(vl => vl.Id == listId
+                                                           && vl.DeletedDate == null)
+                                              .Include(vl => vl.ListItems
+                                                               .Where(li => li.DeletedDate == null));
+
+        query = query.Select(vl => new VocabList()
+                      {
+                      Id = vl.Id,
+                      Name = vl.Name,
+                      Description = vl.Description,
+                      ListItems = vl.ListItems
+                                    .Select(li => new VocabListItem()
+                                    {
+                                        WordType = li.WordType,
+                                        IsWeakMasculineNoun = li.IsWeakMasculineNoun,
+                                        ReflexiveCase = li.ReflexiveCase,
+                                        IsSeparable = li.IsSeparable,
+                                        IsTransitive = li.IsTransitive,
+                                        ThirdPersonPresent = li.ThirdPersonPresent,
+                                        ThirdPersonImperfect = li.ThirdPersonImperfect,
+                                        AuxiliaryVerb = li.AuxiliaryVerb,
+                                        Perfect = li.Perfect,
+                                        Gender = li.Gender,
+                                        German = li.German,
+                                        Plural = li.Plural,
+                                        Preposition = li.Preposition,
+                                        PrepositionCase = li.PrepositionCase,
+                                        Comparative = li.Comparative,
+                                        Superlative = li.Superlative,
+                                        English = li.English,
+                                        VocabListId = li.VocabListId,
+                                    }),
+                      });
+
+        VocabList entity = await query.SingleOrDefaultAsync();
 
         if (entity == null)
         {
