@@ -1,10 +1,9 @@
 ﻿using GermanVocabApp.Shared.Data;
 
-namespace GermanVocabApp.Api.VocabLists.Models;
+namespace GermanVocabApp.DataAccess.Shared.DataTransfer;
 
-internal class VocabListItemResponse
+public class CreateVocabListItemDto
 {
-    public Guid Id { get; set; }
     public WordType WordType { get; set; }
     public bool? IsWeakMasculineNoun { get; set; }
     public Case? ReflexiveCase { get; set; }

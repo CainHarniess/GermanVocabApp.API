@@ -77,4 +77,23 @@ public class VocabListRepositoryAsync : IVocabListRepositoryAsync
                                       .ToArrayAsync();
         return listInfoDtos;
     }
+
+    public async Task<Guid> Add(CreateVocabListDto dto)
+    {
+        DateTime transactionTimeStamp = DateTime.UtcNow;
+        VocabList entity;
+
+        entity = dto.ToEntityWithoutListItems(transactionTimeStamp);
+        _context.Add(entity);
+        
+        if (dto.ListItems.Any())
+        {
+            IEnumerable<VocabListItem> listItems = dto.ListItems
+                                                      .ToEntities(transactionTimeStamp, entity.Id);
+            _context.AddRange(listItems);
+        }
+
+        await _context.SaveChangesAsync();
+        return entity.Id;
+    }
 }

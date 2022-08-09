@@ -4,4 +4,3 @@ internal class VocabListResponse : VocabListInfoResponse
 {
     public IEnumerable<VocabListItemResponse> ListItems { get; set; }
 }
-

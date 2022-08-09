@@ -11,19 +11,19 @@ namespace GermanVocabApp.Api.VocabLists;
 public class VocabListsController : ControllerBase
 {
     private readonly IVocabListRepositoryAsync _repository;
-
+    
     public VocabListsController(IVocabListRepositoryAsync repository)
     {
         _repository = repository;
     }
 
-    //[HttpPost]
-    //public async Task<IActionResult> AddVocabList(VocabListCreationDto vocabListRequest)
-    //{
-    //    VocabList vocabList= _mapper.Map<VocabList>(vocabListRequest);
-    //    await _repository.Add(vocabList);
-    //    return CreatedAtRoute(VocabListsRoutes.Root, vocabList.Id);
-    //}
+    [HttpPost]
+    public async Task<IActionResult> AddVocabList(CreateVocabListRequest request)
+    {
+        CreateVocabListDto dto = request.ToDto();
+        Guid newListId = await _repository.Add(dto);
+        return CreatedAtRoute(VocabListsRoutes.Root, newListId);
+    }
 
     [HttpGet]
     public async Task<IActionResult> GetInfos()
@@ -34,7 +34,7 @@ public class VocabListsController : ControllerBase
     }
 
     [HttpGet]
-    [Route("{id:guid}", Name = VocabListsRoutes.Add)]
+    [Route("{id:guid}", Name = VocabListsRoutes.GetById)]
     public async Task<IActionResult> Get(Guid id)
     {
         VocabListDto? dto = await _repository.Get(id);
@@ -45,7 +45,7 @@ public class VocabListsController : ControllerBase
         }
 
         VocabListResponse response = dto.ToResponse();
-        return Ok(dto.ToResponse());
+        return Ok(response);
     }
 
     //[HttpPut]
@@ -68,7 +68,7 @@ public class VocabListsController : ControllerBase
 
     private struct VocabListsRoutes
     {
-        public const string Root = "Vocab Lists";
-        public const string Add = "VocabList.Add";
+        public const string Root = "VocabLists";
+        public const string GetById = "VocabLists.GetById";
     }
 }

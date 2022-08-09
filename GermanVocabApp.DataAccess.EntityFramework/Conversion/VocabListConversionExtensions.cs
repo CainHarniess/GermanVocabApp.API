@@ -1,10 +1,9 @@
 ﻿using GermanVocabApp.DataAccess.EntityFramework.Models;
 using GermanVocabApp.DataAccess.Shared.DataTransfer;
-using Microsoft.EntityFrameworkCore;
 
 namespace GermanVocabApp.DataAccess.EntityFramework.Conversion;
 
-public static class VocabListConversionExtensions
+internal static class VocabListConversionExtensions
 {
     public static VocabListInfoDto ToInfoDto(this VocabList entity)
     {
