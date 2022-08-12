@@ -1,6 +1,7 @@
-﻿using GermanVocabApp.Api.VocabLists.Models;
-using GermanVocabApp.Domain.Abstractions;
-using GermanVocabApp.Domain.VocabListAggregate;
+﻿using GermanVocabApp.Api.VocabLists.Conversion;
+using GermanVocabApp.Api.VocabLists.Models;
+using GermanVocabApp.DataAccess.Shared;
+using GermanVocabApp.DataAccess.Shared.DataTransfer;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GermanVocabApp.Api.VocabLists;
@@ -10,64 +11,64 @@ namespace GermanVocabApp.Api.VocabLists;
 public class VocabListsController : ControllerBase
 {
     private readonly IVocabListRepositoryAsync _repository;
-
+    
     public VocabListsController(IVocabListRepositoryAsync repository)
     {
         _repository = repository;
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddVocabList(VocabListRequestDto vocabListRequest)
+    public async Task<IActionResult> AddVocabList(CreateVocabListRequest request)
     {
-        VocabList vocabList = vocabListRequest.ToDomainModel();
-        await _repository.Add(vocabList);
-        return CreatedAtRoute(VocabListsRoutes.Root, vocabList.Id);
+        CreateVocabListDto dto = request.ToDto();
+        Guid newListId = await _repository.Add(dto);
+        return CreatedAtRoute(VocabListsRoutes.Root, newListId);
     }
 
     [HttpGet]
-    public async Task<IActionResult> Get()
+    public async Task<IActionResult> GetInfos()
     {
-        IEnumerable<VocabList> vocabLists = await _repository.GetAll();
-        IEnumerable<VocabListResponseDto> responseObjects = vocabLists.ToResponseDtos();
-        return Ok(responseObjects);
+        IEnumerable<VocabListInfoDto> vocabLists = await _repository.GetVocabListInfos();
+        IEnumerable<VocabListInfoResponse> responses = vocabLists.ToResponses();
+        return Ok(responses);
     }
 
     [HttpGet]
-    [Route("{id:guid}", Name = VocabListsRoutes.Add)]
+    [Route("{id:guid}", Name = VocabListsRoutes.GetById)]
     public async Task<IActionResult> Get(Guid id)
     {
-        try
+        VocabListDto? dto = await _repository.Get(id);
+
+        if (dto == null)
         {
-            VocabList? vocabList = await _repository.Get(id);
-            return Ok(vocabList!.ToResponseDto());
+            return NotFound();
         }
-        catch (KeyNotFoundException e)
-        {
-            return BadRequest(e.Message);
-        }
+
+        VocabListResponse response = dto.ToResponse();
+        return Ok(response);
     }
 
-    [HttpPut]
-    [Route("{id:guid}")]
-    public async Task<IActionResult> Update(Guid id, VocabListRequestDto vocabListRequest)
-    {
-        VocabList vocabList = vocabListRequest.ToDomainModel();
-        vocabList.Id = id;
+    //[HttpPut]
+    //[Route("{id:guid}")]
+    //public async Task<IActionResult> Update(Guid id, VocabListCreationDto vocabListRequest)
+    //{
+    //    VocabList vocabList = vocabListRequest.ToDomainModel();
+    //    vocabList.Id = id;
 
-        try
-        {
-            await _repository.Edit(vocabList);
-            return NoContent();
-        }
-        catch (KeyNotFoundException e)
-        {
-            return BadRequest(e.Message);
-        }
-    }
+    //    try
+    //    {
+    //        await _repository.Edit(vocabList);
+    //        return NoContent();
+    //    }
+    //    catch (KeyNotFoundException e)
+    //    {
+    //        return BadRequest(e.Message);
+    //    }
+    //}
 
     private struct VocabListsRoutes
     {
-        public const string Root = "Vocab Lists";
-        public const string Add = "VocabList.Add";
+        public const string Root = "VocabLists";
+        public const string GetById = "VocabLists.GetById";
     }
 }

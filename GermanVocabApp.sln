@@ -3,19 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32407.343
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GermanVocabApp.Api", "GermanVocabApp.Api\GermanVocabApp.Api.csproj", "{6179E8C7-4EB4-4DA2-A3BE-FC9F716A4074}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GermanVocabApp.Api", "GermanVocabApp.Api\GermanVocabApp.Api.csproj", "{6179E8C7-4EB4-4DA2-A3BE-FC9F716A4074}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GermanVocabApp.DataAccess.EntityFramework", "GermanVocabApp.DataAccess.EntityFramework\GermanVocabApp.DataAccess.EntityFramework.csproj", "{FFD4D0D5-2129-4677-8B59-7FF38DE65FEB}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GermanVocabApp.DataAccess.InMemory", "GermanVocabApp.DataAccess.InMemory\GermanVocabApp.DataAccess.InMemory.csproj", "{2B8B24CE-3A9F-4A04-9B89-C8E082A465E3}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GermanVocabApp.Domain", "GermanVocabApp.Domain\GermanVocabApp.Domain.csproj", "{06940CB8-8A38-41DA-9C0C-1BCF8EC4501E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GermanVocabApp.Domain.Abstractions", "GermanVocabApp.Domain.Abstractions\GermanVocabApp.Domain.Abstractions.csproj", "{9718EA5A-87C0-471C-BA3B-C7CCD5C620BC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GermanVocabApp.DataAccess.EntityFramework", "GermanVocabApp.DataAccess.EntityFramework\GermanVocabApp.DataAccess.EntityFramework.csproj", "{FFD4D0D5-2129-4677-8B59-7FF38DE65FEB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{AE5185CB-0027-43AA-B603-26487D2091AC}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{FAC50AE2-A970-4D6A-B323-1CF8212891CA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{A7CD964B-D532-4261-965D-53EFED352767}"
 EndProject
@@ -23,6 +15,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GermanVocabApp.Shared", "GermanVocabApp.Shared\GermanVocabApp.Shared.csproj", "{B00DD6D9-FD9A-4113-84B5-5D8D5D57DA24}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GermanVocabApp.DataAccess.Shared", "GermanVocabApp.DataAccess.Shared\GermanVocabApp.DataAccess.Shared.csproj", "{92B0C0AB-35A3-4B3A-B645-2CF589587C9C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,18 +34,14 @@ Global
 		{FFD4D0D5-2129-4677-8B59-7FF38DE65FEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FFD4D0D5-2129-4677-8B59-7FF38DE65FEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FFD4D0D5-2129-4677-8B59-7FF38DE65FEB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2B8B24CE-3A9F-4A04-9B89-C8E082A465E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2B8B24CE-3A9F-4A04-9B89-C8E082A465E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2B8B24CE-3A9F-4A04-9B89-C8E082A465E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2B8B24CE-3A9F-4A04-9B89-C8E082A465E3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{06940CB8-8A38-41DA-9C0C-1BCF8EC4501E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{06940CB8-8A38-41DA-9C0C-1BCF8EC4501E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{06940CB8-8A38-41DA-9C0C-1BCF8EC4501E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{06940CB8-8A38-41DA-9C0C-1BCF8EC4501E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9718EA5A-87C0-471C-BA3B-C7CCD5C620BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9718EA5A-87C0-471C-BA3B-C7CCD5C620BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9718EA5A-87C0-471C-BA3B-C7CCD5C620BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9718EA5A-87C0-471C-BA3B-C7CCD5C620BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B00DD6D9-FD9A-4113-84B5-5D8D5D57DA24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B00DD6D9-FD9A-4113-84B5-5D8D5D57DA24}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B00DD6D9-FD9A-4113-84B5-5D8D5D57DA24}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B00DD6D9-FD9A-4113-84B5-5D8D5D57DA24}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92B0C0AB-35A3-4B3A-B645-2CF589587C9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92B0C0AB-35A3-4B3A-B645-2CF589587C9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92B0C0AB-35A3-4B3A-B645-2CF589587C9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92B0C0AB-35A3-4B3A-B645-2CF589587C9C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -57,9 +49,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{6179E8C7-4EB4-4DA2-A3BE-FC9F716A4074} = {A7CD964B-D532-4261-965D-53EFED352767}
 		{FFD4D0D5-2129-4677-8B59-7FF38DE65FEB} = {AE5185CB-0027-43AA-B603-26487D2091AC}
-		{2B8B24CE-3A9F-4A04-9B89-C8E082A465E3} = {AE5185CB-0027-43AA-B603-26487D2091AC}
-		{06940CB8-8A38-41DA-9C0C-1BCF8EC4501E} = {FAC50AE2-A970-4D6A-B323-1CF8212891CA}
-		{9718EA5A-87C0-471C-BA3B-C7CCD5C620BC} = {FAC50AE2-A970-4D6A-B323-1CF8212891CA}
+		{92B0C0AB-35A3-4B3A-B645-2CF589587C9C} = {AE5185CB-0027-43AA-B603-26487D2091AC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {63843E0B-466C-46B2-BD69-C3421B111354}

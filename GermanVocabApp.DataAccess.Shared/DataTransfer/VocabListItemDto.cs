@@ -1,9 +1,7 @@
-﻿
-using GermanVocabApp.Shared.Data;
+﻿using GermanVocabApp.Shared.Data;
 
-namespace GermanVocabApp.DataAccess.EntityFramework.Models;
-
-public class VocabListItem : EntityBase
+namespace GermanVocabApp.DataAccess.Shared.DataTransfer;
+public class VocabListItemDto : EntityDtoBase
 {
     public WordType WordType { get; set; }
     public bool? IsWeakMasculineNoun { get; set; }
@@ -15,13 +13,13 @@ public class VocabListItem : EntityBase
     public AuxiliaryVerb? AuxiliaryVerb { get; set; }
     public string? Perfect { get; set; }
     public Gender? Gender { get; set; }
-    public string German { get; set; } // TODO remove default
+    public string German { get; set; }
     public string? Plural { get; set; }
     public string? Preposition { get; set; }
     public Case? PrepositionCase { get; set; }
     public string? Comparative { get; set; }
     public string? Superlative { get; set; }
-    public string English { get; set; } // TODO remove default
+    public string English { get; set; }
     public Guid VocabListId { get; set; }
-    public virtual VocabList VocabList { get; set; }
+    public virtual VocabListDto VocabList { get; set; }
 }

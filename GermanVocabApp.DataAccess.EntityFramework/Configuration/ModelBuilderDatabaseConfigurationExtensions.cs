@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace GermanVocabApp.DataAccess.EntityFramework.Configuration;
 
-internal static class ModelBuilderConfigurationExtensions
+internal static class ModelBuilderDatabaseConfigurationExtensions
 {
-    public static void ConfigureConventions(this ModelBuilder modelBuilder)
+    public static void ConfigureDatabaseConventions(this ModelBuilder modelBuilder)
     {
         modelBuilder.RemoveTablePluralisationConvention();
     }

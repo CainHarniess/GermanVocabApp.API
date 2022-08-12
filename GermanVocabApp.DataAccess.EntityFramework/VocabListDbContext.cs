@@ -25,7 +25,7 @@ public class VocabListDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.ConfigureConventions();
-        modelBuilder.Configure();
+        modelBuilder.ConfigureDatabaseConventions();
+        modelBuilder.ConfigureEntities();
     }
 }

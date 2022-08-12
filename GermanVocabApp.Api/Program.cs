@@ -1,7 +1,8 @@
 using GermanVocabApp.DataAccess.EntityFramework;
 using GermanVocabApp.DataAccess.EntityFramework.Repositories;
-using GermanVocabApp.Domain.Abstractions;
+using GermanVocabApp.DataAccess.Shared;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,10 +17,14 @@ builder.Services.AddDbContext<VocabListDbContext>(options =>
 {
     string connectionString = builder.Configuration.GetConnectionString("GermanVocabApp");
     options.UseSqlServer(connectionString);
+    options.LogTo(Console.WriteLine);
+    //StreamWriter sw = new StreamWriter("EfCoreLog.txt", append: true);
+    //options.LogTo(sw.WriteLine);
+    options.LogTo(log => Debug.WriteLine(log));
 },
 ServiceLifetime.Scoped);
 
-builder.Services.AddScoped<IVocabListRepositoryAsync, EfVocabListRepositoryAsync>();
+builder.Services.AddScoped<IVocabListRepositoryAsync, VocabListRepositoryAsync>();
 
 var app = builder.Build();
 
