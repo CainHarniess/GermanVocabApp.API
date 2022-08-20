@@ -5,7 +5,7 @@ public class VocabListItemDto : EntityDtoBase
 {
     public WordType WordType { get; set; }
     public bool? IsWeakMasculineNoun { get; set; }
-    public Case? ReflexiveCase { get; set; }
+    public ReflexiveCase? ReflexiveCase { get; set; }
     public bool? IsSeparable { get; set; }
     public bool? IsTransitive { get; set; }
     public string? ThirdPersonPresent { get; set; }
