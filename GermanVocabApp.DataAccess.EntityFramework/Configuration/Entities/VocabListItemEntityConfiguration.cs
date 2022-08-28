@@ -20,6 +20,12 @@ internal class VocabListItemEntityConfiguration : IEntityTypeConfiguration<Vocab
         builder.Property(n => n.ReflexiveCase)
                .HasConversion<string>();
 
+        builder.Property(n => n.Separability)
+               .HasConversion<string>();
+
+        builder.Property(n => n.Transitivity)
+               .HasConversion<string>();
+
         builder.Property(n => n.AuxiliaryVerb)
                .HasConversion<string>();
 
@@ -34,6 +40,12 @@ internal class VocabListItemEntityConfiguration : IEntityTypeConfiguration<Vocab
     {
         builder.Property(n => n.WordType)
                        .HasMaxLength(10);
+
+        builder.Property(n => n.Separability)
+               .HasMaxLength(15);
+
+        builder.Property(n => n.Transitivity)
+               .HasMaxLength(15);
 
         builder.Property(n => n.ReflexiveCase)
                .HasMaxLength(10);

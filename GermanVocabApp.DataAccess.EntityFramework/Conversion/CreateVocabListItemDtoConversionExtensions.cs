@@ -31,8 +31,8 @@ internal static class CreateVocabListItemDtoConversionExtensions
         {
             WordType = dto.WordType,
             ReflexiveCase = dto.ReflexiveCase,
-            IsSeparable = dto.IsSeparable,
-            IsTransitive = dto.IsTransitive,
+            Separability = dto.Separability,
+            Transitivity = dto.Transitivity,
             ThirdPersonPresent = dto.ThirdPersonPresent,
             ThirdPersonImperfect = dto.ThirdPersonImperfect,
             AuxiliaryVerb = dto.AuxiliaryVerb,
@@ -45,7 +45,6 @@ internal static class CreateVocabListItemDtoConversionExtensions
             Comparative = dto.Comparative,
             Superlative = dto.Superlative,
             English = dto.English,
-            VocabListId = dto.VocabListId,
             CreatedDate = creationTimeStamp,
             UpdatedDate = null,
             DeletedDate = null,

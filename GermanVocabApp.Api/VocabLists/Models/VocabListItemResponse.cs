@@ -8,8 +8,8 @@ internal class VocabListItemResponse
     public WordType WordType { get; set; }
     public bool? IsWeakMasculineNoun { get; set; }
     public ReflexiveCase? ReflexiveCase { get; set; }
-    public bool? IsSeparable { get; set; }
-    public bool? IsTransitive { get; set; }
+    public Separability? IsSeparable { get; set; }
+    public Transitivity? IsTransitive { get; set; }
     public string? ThirdPersonPresent { get; set; }
     public string? ThirdPersonImperfect { get; set; }
     public AuxiliaryVerb? AuxiliaryVerb { get; set; }

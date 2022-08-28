@@ -11,8 +11,8 @@ internal static class CreateVocabListItemRequestConversionExtensions
         {
             WordType = request.WordType,
             ReflexiveCase = request.ReflexiveCase,
-            IsSeparable = request.IsSeparable,
-            IsTransitive = request.IsTransitive,
+            Separability = request.Separability,
+            Transitivity = request.Transitivity,
             ThirdPersonPresent = request.ThirdPersonPresent,
             ThirdPersonImperfect = request.ThirdPersonImperfect,
             AuxiliaryVerb = request.AuxiliaryVerb,
