@@ -4,6 +4,7 @@ using GermanVocabApp.DataAccess.EntityFramework.Projection;
 using GermanVocabApp.DataAccess.Shared;
 using GermanVocabApp.DataAccess.Shared.DataTransfer;
 using Microsoft.EntityFrameworkCore;
+using Osiris.Utilities.Collections.Generic;
 
 namespace GermanVocabApp.DataAccess.EntityFramework.Repositories;
 
@@ -16,14 +17,16 @@ public class VocabListRepositoryAsync : IVocabListRepositoryAsync
         _context = context;
     }
 
-    public async Task<VocabListDto?> Get(Guid listId)
+    public async Task<VocabListDto?> Get(Guid id)
     {
         IQueryable<VocabList> query = _context.VocablLists
-                                              .Where(vl => vl.Id == listId
+                                              .AsNoTracking()
+                                              .Where(vl => vl.Id == id
                                                            && vl.DeletedDate == null)
                                               .Include(vl => vl.ListItems
                                                                .Where(li => li.DeletedDate == null));
 
+        // TODO: Refactor the below into a projection extension method.
         query = query.Select(vl => new VocabList()
                       {
                       Id = vl.Id,
@@ -72,6 +75,7 @@ public class VocabListRepositoryAsync : IVocabListRepositoryAsync
     {
         IEnumerable<VocabListInfoDto> listInfoDtos;
         listInfoDtos =  await _context.VocablLists
+                                      .AsNoTracking()
                                       .Where(vl => vl.DeletedDate == null)
                                       .ProjectToInfoDto()
                                       .ToArrayAsync();
@@ -97,5 +101,29 @@ public class VocabListRepositoryAsync : IVocabListRepositoryAsync
 
         VocabListDto retrievalDto = entity.ToDto();
         return retrievalDto;
+    }
+
+    public async Task<bool> HardDelete(Guid id)
+    {
+        VocabList list;
+        try
+        {
+            list = await _context.VocablLists
+                                 .Include(vl => vl.ListItems)
+                                 .FirstAsync(vl => vl.Id == id);
+        }
+        catch (InvalidOperationException)
+        {
+            return false;
+        }
+
+        if (list.ListItems.Any())
+        {
+            list.ListItems.ForEach((item) => _context.VocablListItems.Remove(item));
+        }
+        _context.VocablLists.Remove(list);
+
+        await _context.SaveChangesAsync();
+        return true;
     }
 }

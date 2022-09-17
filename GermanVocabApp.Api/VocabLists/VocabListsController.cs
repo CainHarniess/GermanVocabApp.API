@@ -36,7 +36,7 @@ public class VocabListsController : ControllerBase
         return Ok(responses);
     }
 
-    [HttpGet("{id:guid}")]
+    [HttpGet(ActionParameters.IdGuid)]
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     [ProducesResponseType((int)HttpStatusCode.OK)]
     public async Task<IActionResult> Get(Guid id)
@@ -49,5 +49,24 @@ public class VocabListsController : ControllerBase
         }
         VocabListResponse response = dto.ToResponse();
         return Ok(response);
+    }
+
+    [HttpDelete(ActionParameters.IdGuid)]
+    [ProducesResponseType((int)HttpStatusCode.NotFound)]
+    [ProducesResponseType((int)HttpStatusCode.NoContent)]
+    public async Task<IActionResult> HardDelete(Guid id)
+    {
+        bool result = await _repository.HardDelete(id);
+        
+        if (result == false)
+        {
+            return NotFound();
+        }
+        return NoContent();
+    }
+
+    private static class ActionParameters
+    {
+        public const string IdGuid = "{id:guid}";
     }
 }
