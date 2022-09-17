@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace GermanVocabApp.Api.VocabLists;
 
 [ApiController]
-[Route("api/vocab-lists", Name = VocabListsRoutes.Root)]
+[Route("api/vocab-lists")]
 public class VocabListsController : ControllerBase
 {
     private readonly IVocabListRepositoryAsync _repository;
@@ -18,11 +18,11 @@ public class VocabListsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddVocabList(CreateVocabListRequest request)
+    public async Task<IActionResult> Create(CreateVocabListRequest request)
     {
         CreateVocabListDto dto = request.ToDto();
         Guid newListId = await _repository.Add(dto);
-        return CreatedAtRoute(VocabListsRoutes.Root, newListId);
+        return CreatedAtAction(nameof(Get), new { id = newListId }, null);
     }
 
     [HttpGet]
@@ -34,7 +34,6 @@ public class VocabListsController : ControllerBase
     }
 
     [HttpGet]
-    [Route("{id:guid}", Name = VocabListsRoutes.GetById)]
     public async Task<IActionResult> Get(Guid id)
     {
         VocabListDto? dto = await _repository.Get(id);
@@ -65,10 +64,4 @@ public class VocabListsController : ControllerBase
     //        return BadRequest(e.Message);
     //    }
     //}
-
-    private struct VocabListsRoutes
-    {
-        public const string Root = "VocabLists";
-        public const string GetById = "VocabLists.GetById";
-    }
 }
