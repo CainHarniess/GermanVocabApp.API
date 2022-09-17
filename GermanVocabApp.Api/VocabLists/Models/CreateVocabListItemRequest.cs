@@ -1,12 +1,9 @@
 ﻿using GermanVocabApp.Shared.Data;
-using System.ComponentModel.DataAnnotations;
 
 namespace GermanVocabApp.Api.VocabLists.Models;
 
 public class CreateVocabListItemRequest
 {
-    //TODO: Remove this data annotation.
-    [EnumDataType(typeof(WordType))]
     public WordType WordType { get; set; }
     public bool? IsWeakMasculineNoun { get; set; }
     public ReflexiveCase? ReflexiveCase { get; set; }
