@@ -33,7 +33,7 @@ public class VocabListsController : ControllerBase
         return Ok(responses);
     }
 
-    [HttpGet]
+    [HttpGet("{id:guid}")]
     public async Task<IActionResult> Get(Guid id)
     {
         VocabListDto? dto = await _repository.Get(id);
@@ -46,22 +46,4 @@ public class VocabListsController : ControllerBase
         VocabListResponse response = dto.ToResponse();
         return Ok(response);
     }
-
-    //[HttpPut]
-    //[Route("{id:guid}")]
-    //public async Task<IActionResult> Update(Guid id, VocabListCreationDto vocabListRequest)
-    //{
-    //    VocabList vocabList = vocabListRequest.ToDomainModel();
-    //    vocabList.Id = id;
-
-    //    try
-    //    {
-    //        await _repository.Edit(vocabList);
-    //        return NoContent();
-    //    }
-    //    catch (KeyNotFoundException e)
-    //    {
-    //        return BadRequest(e.Message);
-    //    }
-    //}
 }
