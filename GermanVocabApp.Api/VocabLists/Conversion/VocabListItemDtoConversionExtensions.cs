@@ -18,8 +18,8 @@ internal static class VocabListItemDtoConversionExtensions
             WordType = dto.WordType,
             IsWeakMasculineNoun = dto.IsWeakMasculineNoun,
             ReflexiveCase = dto.ReflexiveCase,
-            IsSeparable = dto.Separability,
-            IsTransitive = dto.Transitivity,
+            Separability = dto.Separability,
+            Transitivity = dto.Transitivity,
             ThirdPersonPresent = dto.ThirdPersonPresent,
             ThirdPersonImperfect = dto.ThirdPersonImperfect,
             AuxiliaryVerb = dto.AuxiliaryVerb,
@@ -33,6 +33,7 @@ internal static class VocabListItemDtoConversionExtensions
             Superlative = dto.Superlative,
             English = dto.English,
             VocabListId = dto.VocabListId,
+            FixedPlurality = dto.FixedPlurality,
         };
     }
 }

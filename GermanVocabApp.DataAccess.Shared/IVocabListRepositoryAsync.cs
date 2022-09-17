@@ -8,6 +8,6 @@ namespace GermanVocabApp.DataAccess.Shared
 
         Task<VocabListDto?> Get(Guid listId);
 
-        Task<Guid> Add(CreateVocabListDto newList);
+        Task<VocabListDto> Add(CreateVocabListDto newList);
     }
 }

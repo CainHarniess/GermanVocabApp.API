@@ -24,4 +24,5 @@ public class VocabListItem : EntityBase
     public string English { get; set; } // TODO remove default
     public Guid VocabListId { get; set; }
     public virtual VocabList VocabList { get; set; }
+    public FixedPlurality? FixedPlurality { get; set; }
 }

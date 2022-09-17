@@ -45,6 +45,7 @@ internal static class CreateVocabListItemDtoConversionExtensions
             Comparative = dto.Comparative,
             Superlative = dto.Superlative,
             English = dto.English,
+            FixedPlurality = dto.FixedPlurality,
             CreatedDate = creationTimeStamp,
             UpdatedDate = null,
             DeletedDate = null,

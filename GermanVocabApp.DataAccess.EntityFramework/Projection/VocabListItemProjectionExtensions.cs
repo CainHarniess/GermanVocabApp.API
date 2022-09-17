@@ -3,7 +3,7 @@ using GermanVocabApp.DataAccess.Shared.DataTransfer;
 
 namespace GermanVocabApp.DataAccess.EntityFramework.Projection;
 
-public static class VocabListItemProjectionExtensions
+public static class VocabListProjectionExtensions
 {
     public static IQueryable<VocabListInfoDto> ProjectToInfoDto(this IQueryable<VocabList> query)
     {

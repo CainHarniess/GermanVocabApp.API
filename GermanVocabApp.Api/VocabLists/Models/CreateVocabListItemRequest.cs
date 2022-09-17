@@ -16,12 +16,12 @@ public class CreateVocabListItemRequest
     public Gender? Gender { get; set; }
     public string German { get; set; }
     public string? Plural { get; set; }
-    public FixedPlurality? FixedPlurality { get; set; }
     public string? Preposition { get; set; }
     public Case? PrepositionCase { get; set; }
     public string? Comparative { get; set; }
     public string? Superlative { get; set; }
     public string English { get; set; }
     public Guid? VocabListId { get; set; }
+    public FixedPlurality? FixedPlurality { get; set; }
 }
 

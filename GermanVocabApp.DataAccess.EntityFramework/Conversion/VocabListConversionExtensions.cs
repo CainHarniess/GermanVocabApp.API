@@ -26,11 +26,13 @@ internal static class VocabListConversionExtensions
 
         if (entity.ListItems == null)
         {
-            throw new NullReferenceException("VocabList entity ListItems property returned null." +
-                                             "\n\nIs a null value acceptable?");
+            dto.ListItems = Array.Empty<VocabListItemDto>();
+        }
+        else
+        {
+            dto.ListItems = entity.ListItems.ToDtos();
         }
 
-        dto.ListItems = entity.ListItems.ToDtos();
         return dto;
     }
 }

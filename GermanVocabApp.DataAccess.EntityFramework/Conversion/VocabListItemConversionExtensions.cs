@@ -32,6 +32,7 @@ internal static class VocabListItemConversionExtensions
             Superlative = entity.Superlative,
             English = entity.English,
             VocabListId = entity.VocabListId,
+            FixedPlurality = entity.FixedPlurality,
         };
     }
 }
