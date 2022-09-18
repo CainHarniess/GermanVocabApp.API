@@ -19,42 +19,43 @@ public class VocabListRepositoryAsync : IVocabListRepositoryAsync
 
     public async Task<VocabListDto?> Get(Guid id)
     {
+        // TODO: Refactor the below into a projection extension method.
         IQueryable<VocabList> query = _context.VocablLists
                                               .AsNoTracking()
                                               .Where(vl => vl.Id == id
-                                                           && vl.DeletedDate == null)
-                                              .Include(vl => vl.ListItems
-                                                               .Where(li => li.DeletedDate == null));
-
-        // TODO: Refactor the below into a projection extension method.
-        query = query.Select(vl => new VocabList()
-                      {
-                      Id = vl.Id,
-                      Name = vl.Name,
-                      Description = vl.Description,
-                      ListItems = vl.ListItems
-                                    .Select(li => new VocabListItem()
-                                    {
-                                        Id = li.Id,
-                                        WordType = li.WordType,
-                                        IsWeakMasculineNoun = li.IsWeakMasculineNoun,
-                                        ReflexiveCase = li.ReflexiveCase,
-                                        Separability = li.Separability,
-                                        Transitivity = li.Transitivity,
-                                        ThirdPersonPresent = li.ThirdPersonPresent,
-                                        ThirdPersonImperfect = li.ThirdPersonImperfect,
-                                        AuxiliaryVerb = li.AuxiliaryVerb,
-                                        Perfect = li.Perfect,
-                                        Gender = li.Gender,
-                                        German = li.German,
-                                        Plural = li.Plural,
-                                        Preposition = li.Preposition,
-                                        PrepositionCase = li.PrepositionCase,
-                                        Comparative = li.Comparative,
-                                        Superlative = li.Superlative,
-                                        English = li.English,
-                                        VocabListId = li.VocabListId,
-                                        FixedPlurality = li.FixedPlurality,
+                                                        && vl.DeletedDate == null)
+                                              .Select(vl => new VocabList()
+                                              {
+                                                  Id = vl.Id,
+                                                  Name = vl.Name,
+                                                  Description = vl.Description,
+                                                  ListItems = vl.ListItems
+                                                                .Where(li => li.VocabListId == id
+                                                                          && li.DeletedDate == null)
+                                                                .Select(li => new VocabListItem()
+                                                                {
+                                                                    Id = li.Id,
+                                                                    WordType = li.WordType,
+                                                                    IsWeakMasculineNoun = li.IsWeakMasculineNoun,
+                                                                    ReflexiveCase = li.ReflexiveCase,
+                                                                    Separability = li.Separability,
+                                                                    Transitivity = li.Transitivity,
+                                                                    ThirdPersonPresent = li.ThirdPersonPresent,
+                                                                    ThirdPersonImperfect = li.ThirdPersonImperfect,
+                                                                    AuxiliaryVerb = li.AuxiliaryVerb,
+                                                                    Perfect = li.Perfect,
+                                                                    Gender = li.Gender,
+                                                                    German = li.German,
+                                                                    Plural = li.Plural,
+                                                                    Preposition = li.Preposition,
+                                                                    PrepositionCase = li.PrepositionCase,
+                                                                    Comparative = li.Comparative,
+                                                                    Superlative = li.Superlative,
+                                                                    English = li.English,
+                                                                    VocabListId = li.VocabListId,
+                                                                    FixedPlurality = li.FixedPlurality,
+                                                                })
+                                              });
                                     }),
                       });
 
