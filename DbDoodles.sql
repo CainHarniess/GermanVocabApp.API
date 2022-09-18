@@ -20,7 +20,10 @@
 	,VLI.Superlative
 	,VLI.English
 	,VLI.FixedPlurality
+	,VLI.CreatedDate
+	,VLI.UpdatedDate
+	,VLI.DeletedDate
 FROM	dbo.VocabList	VL
 JOIN	dbo.VocabListItem	VLI
 	ON	VLI.VocabListID = VL.ID
-WHERE	VL.Name = 'WMN ReReTest'
+--WHERE	VL.Id = 'a5789d9b-c103-4416-7171-08da99c811a0'

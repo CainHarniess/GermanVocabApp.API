@@ -1,5 +1,7 @@
-﻿using GermanVocabApp.DataAccess.EntityFramework.Conversion;
+﻿using GermanVocabApp.Core.Exceptions;
+using GermanVocabApp.DataAccess.EntityFramework.Conversion;
 using GermanVocabApp.DataAccess.EntityFramework.Models;
+using GermanVocabApp.DataAccess.EntityFramework.ModificationExtension;
 using GermanVocabApp.DataAccess.EntityFramework.Projection;
 using GermanVocabApp.DataAccess.Shared;
 using GermanVocabApp.DataAccess.Shared.DataTransfer;
@@ -56,9 +58,6 @@ public class VocabListRepositoryAsync : IVocabListRepositoryAsync
                                                                     FixedPlurality = li.FixedPlurality,
                                                                 })
                                               });
-                                    }),
-                      });
-
         VocabList entity = await query.SingleOrDefaultAsync();
 
         if (entity == null)
@@ -77,7 +76,7 @@ public class VocabListRepositoryAsync : IVocabListRepositoryAsync
     public async Task<IEnumerable<VocabListInfoDto>> GetVocabListInfos()
     {
         IEnumerable<VocabListInfoDto> listInfoDtos;
-        listInfoDtos =  await _context.VocablLists
+        listInfoDtos = await _context.VocablLists
                                       .AsNoTracking()
                                       .Where(vl => vl.DeletedDate == null)
                                       .ProjectToInfoDto()
@@ -90,9 +89,10 @@ public class VocabListRepositoryAsync : IVocabListRepositoryAsync
         DateTime transactionTimeStamp = DateTime.UtcNow;
         VocabList entity;
 
+        // TODO: Refactor to add whole graph at once.
         entity = creationDto.ToEntityWithoutListItems(transactionTimeStamp);
         _context.Add(entity);
-        
+
         if (creationDto.ListItems.Any())
         {
             IEnumerable<VocabListItem> listItems;
@@ -105,6 +105,77 @@ public class VocabListRepositoryAsync : IVocabListRepositoryAsync
 
         VocabListDto retrievalDto = entity.ToDto();
         return retrievalDto;
+    }
+
+    public async Task Update(UpdateVocabListDto updateDto)
+    {
+        DateTime currentTimestamp = DateTime.UtcNow;
+        Guid listId = updateDto.Id;
+
+        VocabList existingList;
+        try
+        {
+            existingList = await _context.VocablLists
+                                         .Where(vl => vl.Id == listId
+                                                   && vl.DeletedDate == null)
+                                         .Include(vl => vl.ListItems
+                                                          .Where(li => li.DeletedDate == null))
+                                         .FirstAsync();
+        }
+        catch (InvalidOperationException)
+        {
+            throw new EntityNotFoundException($"{nameof(VocabList)} entity with ID {listId} not found.");
+        }
+
+        updateDto.CopyListDetails(existingList, currentTimestamp);
+
+        IEnumerable<VocabListItem> existingListItems = existingList.ListItems;
+        bool areAllListItemsDeleted = !updateDto.ListItems.Any() && existingListItems.Any();
+        if (areAllListItemsDeleted)
+        {
+            existingListItems.SoftDeleteAll(currentTimestamp);
+            await _context.SaveChangesAsync();
+            return;
+        }
+
+        Dictionary<Guid, UpdateVocabListItemDto> updatedListItems;
+        updatedListItems = updateDto.ListItems
+                                    .Where(li => li.Id.HasValue)
+                                    .ToDictionary(li => li.Id.Value);
+        existingListItems.SoftDeleteWhere(item => !updatedListItems.ContainsKey(item.Id), currentTimestamp);
+
+        Dictionary<Guid, VocabListItem> nonDeletedListItemEntities;
+        nonDeletedListItemEntities = existingListItems.Where(li => li.DeletedDate == null)
+                                                      .ToDictionary(li => li.Id);
+        updateDto.ListItems.ForEach(item =>
+        {
+            if (!item.Id.HasValue)
+            {
+                VocabListItem newListItem;
+                try
+                {
+                    newListItem = item.ToNewEntity(currentTimestamp);
+                }
+                catch (UnexpectedIdException e)
+                {
+                    throw e;
+                }
+                _context.Add(newListItem);
+                return;
+            }
+
+            Guid listItemId = item.Id.Value;
+            if (!nonDeletedListItemEntities.ContainsKey(listItemId))
+            {
+                throw new EntityNotFoundException($"Vocab list item with ID {listItemId} not found in "
+                                                + $"Vocab List with ID {listId}.");
+            }
+            VocabListItem existingListItem = nonDeletedListItemEntities[listItemId];
+            item.CopyTo(existingListItem, currentTimestamp);
+        });
+
+        await _context.SaveChangesAsync();
+        return;
     }
 
     public async Task<bool> HardDelete(Guid id)

@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Osiris\Osiris.Utilities.Collections.Generic\Osiris.Utilities.Collections.Generic.csproj" />
+    <ProjectReference Include="..\GermanVocabApp.Core\GermanVocabApp.Core.csproj" />
     <ProjectReference Include="..\GermanVocabApp.DataAccess.Shared\GermanVocabApp.DataAccess.Shared.csproj" />
     <ProjectReference Include="..\GermanVocabApp.Shared\GermanVocabApp.Shared.csproj" />
   </ItemGroup>

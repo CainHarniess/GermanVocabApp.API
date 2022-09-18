@@ -1,5 +1,7 @@
 ﻿using GermanVocabApp.DataAccess.EntityFramework.Models;
 using GermanVocabApp.DataAccess.Shared.DataTransfer;
+using GermanVocabApp.Shared.Data;
+using Osiris.Utilities.Collections.Generic;
 
 namespace GermanVocabApp.DataAccess.EntityFramework.Conversion;
 
