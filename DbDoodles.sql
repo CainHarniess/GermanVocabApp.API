@@ -1,23 +1,26 @@
 ﻿SELECT
-	*
-FROM	dbo.VocabList
-
-DELETE FROM	dbo.VocabListItem
-WHERE		VocabListId	IN
-(
-	 '2717B7A6-4192-470E-52F6-08DA98FD60B9'
-	,'B099306A-5B99-40CB-52F7-08DA98FD60B9'
-	,'BFF08625-D7CB-4BE2-52F8-08DA98FD60B9'
-	,'CD6D66A2-8BEC-4105-52F9-08DA98FD60B9'
-	,'7DE8C041-6256-4786-52FA-08DA98FD60B9'
-)
-DELETE FROM dbo.VocabList
-WHERE	ID	IN
-(
-	 '2717B7A6-4192-470E-52F6-08DA98FD60B9'
-	,'B099306A-5B99-40CB-52F7-08DA98FD60B9'
-	,'BFF08625-D7CB-4BE2-52F8-08DA98FD60B9'
-	,'CD6D66A2-8BEC-4105-52F9-08DA98FD60B9'
-	,'7DE8C041-6256-4786-52FA-08DA98FD60B9'
-)
-
+	 VL.Id
+	,VL.[Name]	VocabListName
+	,VLI.Id		VocabListId
+	,VLI.WordType
+	,VLI.IsWeakMasculineNoun
+	,VLI.ReflexiveCase
+	,VLI.Separability
+	,VLI.Transitivity
+	,VLI.ThirdPersonPresent
+	,VLI.ThirdPersonImperfect
+	,VLI.AuxiliaryVerb
+	,VLI.Perfect
+	,VLI.Gender
+	,VLI.German
+	,VLI.Plural
+	,VLI.Preposition
+	,VLI.PrepositionCase
+	,VLI.Comparative
+	,VLI.Superlative
+	,VLI.English
+	,VLI.FixedPlurality
+FROM	dbo.VocabList	VL
+JOIN	dbo.VocabListItem	VLI
+	ON	VLI.VocabListID = VL.ID
+WHERE	VL.Name = 'WMN ReReTest'

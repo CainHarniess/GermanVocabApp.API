@@ -10,6 +10,7 @@ internal static class CreateVocabListItemRequestConversionExtensions
         return new CreateVocabListItemDto()
         {
             WordType = request.WordType,
+            IsWeakMasculineNoun = request.IsWeakMasculineNoun,
             ReflexiveCase = request.ReflexiveCase,
             Separability = request.Separability,
             Transitivity = request.Transitivity,

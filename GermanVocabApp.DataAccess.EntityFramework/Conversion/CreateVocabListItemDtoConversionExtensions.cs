@@ -30,6 +30,7 @@ internal static class CreateVocabListItemDtoConversionExtensions
         return new VocabListItem()
         {
             WordType = dto.WordType,
+            IsWeakMasculineNoun = dto.IsWeakMasculineNoun,
             ReflexiveCase = dto.ReflexiveCase,
             Separability = dto.Separability,
             Transitivity = dto.Transitivity,

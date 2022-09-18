@@ -16,6 +16,7 @@ internal static class VocabListItemConversionExtensions
         {
             Id = entity.Id,
             WordType = entity.WordType,
+            IsWeakMasculineNoun = entity.IsWeakMasculineNoun,
             ReflexiveCase = entity.ReflexiveCase,
             Separability = entity.Separability,
             Transitivity = entity.Transitivity,

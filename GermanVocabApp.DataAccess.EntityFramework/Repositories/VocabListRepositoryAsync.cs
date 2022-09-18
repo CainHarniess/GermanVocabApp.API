@@ -35,6 +35,7 @@ public class VocabListRepositoryAsync : IVocabListRepositoryAsync
                       ListItems = vl.ListItems
                                     .Select(li => new VocabListItem()
                                     {
+                                        Id = li.Id,
                                         WordType = li.WordType,
                                         IsWeakMasculineNoun = li.IsWeakMasculineNoun,
                                         ReflexiveCase = li.ReflexiveCase,
@@ -93,8 +94,9 @@ public class VocabListRepositoryAsync : IVocabListRepositoryAsync
         
         if (creationDto.ListItems.Any())
         {
-            IEnumerable<VocabListItem> listItems = creationDto.ListItems
-                                                      .ToEntities(transactionTimeStamp, entity.Id);
+            IEnumerable<VocabListItem> listItems;
+            listItems = creationDto.ListItems
+                                   .ToEntities(transactionTimeStamp, entity.Id);
             _context.AddRange(listItems);
         }
 
