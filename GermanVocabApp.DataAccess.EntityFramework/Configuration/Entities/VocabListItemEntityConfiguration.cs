@@ -34,6 +34,9 @@ internal class VocabListItemEntityConfiguration : IEntityTypeConfiguration<Vocab
 
         builder.Property(n => n.PrepositionCase)
                .HasConversion<string>();
+
+        builder.Property(n => n.FixedPlurality)
+               .HasConversion<string>();
     }
    
     private static void ConfigureCharacterLengths(EntityTypeBuilder<VocabListItem> builder)
@@ -85,6 +88,9 @@ internal class VocabListItemEntityConfiguration : IEntityTypeConfiguration<Vocab
 
         builder.Property(n => n.English)
                .HasMaxLength(100);
+
+        builder.Property(n => n.FixedPlurality)
+               .HasMaxLength(10);
     }
 
 }

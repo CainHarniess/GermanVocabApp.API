@@ -53,6 +53,7 @@ public class VocabListRepositoryAsync : IVocabListRepositoryAsync
                                         Superlative = li.Superlative,
                                         English = li.English,
                                         VocabListId = li.VocabListId,
+                                        FixedPlurality = li.FixedPlurality,
                                     }),
                       });
 
