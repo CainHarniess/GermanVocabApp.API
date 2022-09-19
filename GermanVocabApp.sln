@@ -20,7 +20,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GermanVocabApp.Shared", "Ge
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GermanVocabApp.DataAccess.Shared", "GermanVocabApp.DataAccess.Shared\GermanVocabApp.DataAccess.Shared.csproj", "{92B0C0AB-35A3-4B3A-B645-2CF589587C9C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osiris.Utilities.Collections.Generic", "..\..\Osiris\Osiris.Utilities.Collections.Generic\Osiris.Utilities.Collections.Generic.csproj", "{20125E4B-23C5-49FA-9799-678066ADC128}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Osiris.Utilities.Collections.Generic", "..\..\Osiris\Osiris.Utilities.Collections.Generic\Osiris.Utilities.Collections.Generic.csproj", "{20125E4B-23C5-49FA-9799-678066ADC128}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GermanVocabApp.Core", "GermanVocabApp.Core\GermanVocabApp.Core.csproj", "{FECE6140-8529-4234-A8B9-98E265170AF3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -48,6 +50,10 @@ Global
 		{20125E4B-23C5-49FA-9799-678066ADC128}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{20125E4B-23C5-49FA-9799-678066ADC128}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{20125E4B-23C5-49FA-9799-678066ADC128}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FECE6140-8529-4234-A8B9-98E265170AF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FECE6140-8529-4234-A8B9-98E265170AF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FECE6140-8529-4234-A8B9-98E265170AF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FECE6140-8529-4234-A8B9-98E265170AF3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

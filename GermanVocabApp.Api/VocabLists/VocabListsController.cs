@@ -1,5 +1,6 @@
 ﻿using GermanVocabApp.Api.VocabLists.Conversion;
 using GermanVocabApp.Api.VocabLists.Models;
+using GermanVocabApp.Core.Exceptions;
 using GermanVocabApp.DataAccess.Shared;
 using GermanVocabApp.DataAccess.Shared.DataTransfer;
 using Microsoft.AspNetCore.Mvc;
@@ -20,10 +21,21 @@ public class VocabListsController : ControllerBase
 
     [HttpPost]
     [ProducesResponseType(typeof(VocabListResponse), (int)HttpStatusCode.Created)]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
     public async Task<IActionResult> Create(CreateVocabListRequest request)
     {
         CreateVocabListDto dto = request.ToDto();
         VocabListDto newListDto = await _repository.Add(dto);
+
+        try
+        {
+            ValidateCreatedDto(newListDto);
+        }
+        catch (UnexpectedNullIdException e)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+        }
+
         VocabListResponse responseBody = newListDto.ToResponse();
         return CreatedAtAction(nameof(Get), new { id = newListDto.Id }, responseBody);
     }
@@ -50,6 +62,28 @@ public class VocabListsController : ControllerBase
         VocabListResponse response = dto.ToResponse();
         return Ok(response);
     }
+    
+    [HttpPut(ActionParameters.IdGuid)]
+    [ProducesResponseType((int)HttpStatusCode.NotFound)]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+    [ProducesResponseType((int)HttpStatusCode.NoContent)]
+    public async Task<IActionResult> UpdateVocabList(Guid id, UpdateVocabListRequest request)
+    {
+        UpdateVocabListDto updateDto = request.ToDto(id);
+        try
+        {
+            await _repository.Update(updateDto);
+        }
+        catch (EntityNotFoundException e)
+        {
+            return NotFound(e.Message);
+        }
+        catch (UnexpectedIdException e)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+        }
+        return NoContent();
+    }
 
     [HttpDelete(ActionParameters.IdGuid)]
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
@@ -64,6 +98,16 @@ public class VocabListsController : ControllerBase
         }
         return NoContent();
     }
+
+
+    private void ValidateCreatedDto(VocabListDto newListDto)
+    {
+        if (newListDto.Id == null)
+        {
+            throw new UnexpectedNullIdException($"Instance of {nameof(VocabListDto)} created with a null ID when an ID is expected.");
+        }
+    }
+
 
     private static class ActionParameters
     {

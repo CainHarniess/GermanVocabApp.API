@@ -21,6 +21,5 @@ public class CreateVocabListItemDto
     public string? Comparative { get; set; }
     public string? Superlative { get; set; }
     public string English { get; set; }
-    public Guid? VocabListId { get; set; }
     public FixedPlurality? FixedPlurality { get; set; }
 }

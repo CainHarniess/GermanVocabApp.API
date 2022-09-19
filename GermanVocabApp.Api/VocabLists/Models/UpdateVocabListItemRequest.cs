@@ -1,15 +1,15 @@
-﻿using GermanVocabApp.Domain.Core;
-using GermanVocabApp.Domain.Data;
+﻿using GermanVocabApp.Shared.Data;
 
-namespace GermanVocabApp.Domain.VocabListAggregate;
+namespace GermanVocabApp.Api.VocabLists.Models;
 
-public class VocabListItem : Entity
+public class UpdateVocabListItemRequest
 {
+    public Guid? Id { get; set; }
     public WordType WordType { get; set; }
     public bool? IsWeakMasculineNoun { get; set; }
-    public Case? ReflexiveCase { get; set; }
-    public bool? IsSeparable { get; set; }
-    public bool? IsTransitive { get; set; }
+    public ReflexiveCase? ReflexiveCase { get; set; }
+    public Separability? Separability { get; set; }
+    public Transitivity? Transitivity { get; set; }
     public string? ThirdPersonPresent { get; set; }
     public string? ThirdPersonImperfect { get; set; }
     public AuxiliaryVerb? AuxiliaryVerb { get; set; }
@@ -22,5 +22,5 @@ public class VocabListItem : Entity
     public string? Comparative { get; set; }
     public string? Superlative { get; set; }
     public string English { get; set; }
-    public Guid VocabListId { get; set; }
+    public FixedPlurality? FixedPlurality { get; set; }
 }

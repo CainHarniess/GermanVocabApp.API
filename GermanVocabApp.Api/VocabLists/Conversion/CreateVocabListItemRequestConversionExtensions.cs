@@ -26,7 +26,6 @@ internal static class CreateVocabListItemRequestConversionExtensions
             Comparative = request.Comparative,
             Superlative = request.Superlative,
             English = request.English,
-            VocabListId = request.VocabListId,
             FixedPlurality = request.FixedPlurality,
         };
     }
