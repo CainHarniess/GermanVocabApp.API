@@ -7,7 +7,6 @@ using GermanVocabApp.DataAccess.Shared;
 using GermanVocabApp.DataAccess.Shared.DataTransfer;
 using Microsoft.EntityFrameworkCore;
 using Osiris.Utilities.Collections.Generic;
-using System.Collections.Generic;
 
 namespace GermanVocabApp.DataAccess.EntityFramework.Repositories;
 
@@ -118,6 +117,7 @@ public class VocabListRepositoryAsync : IVocabListRepositoryAsync
 
         updateDto.CopyListDetails(existingList, currentTimestamp);
 
+        //TODO: Refactor the below to a separate repository with unit of work pattern.
         IEnumerable<VocabListItem> existingListItems = existingList.ListItems;
         bool allItemsDeleted = CheckDeleteAllListItems(existingListItems, updateDto.ListItems, currentTimestamp);
         if (allItemsDeleted)
@@ -126,7 +126,7 @@ public class VocabListRepositoryAsync : IVocabListRepositoryAsync
             return;
         }
 
-        HandlePartialDelete(updateDto, currentTimestamp, existingListItems);
+        SoftDeletedRemovedListItems(updateDto, currentTimestamp, existingListItems);
 
         Dictionary<Guid, VocabListItem> nonDeletedListItemEntities;
         nonDeletedListItemEntities = existingListItems.Where(li => li.DeletedDate == null)
@@ -188,11 +188,12 @@ public class VocabListRepositoryAsync : IVocabListRepositoryAsync
         return false;
     }
 
-    private static void HandlePartialDelete(UpdateVocabListDto updateDto, DateTime currentTimestamp, IEnumerable<VocabListItem> existingListItems)
+    private static void SoftDeletedRemovedListItems(UpdateVocabListDto updateDto, DateTime currentTimestamp, IEnumerable<VocabListItem> existingListItems)
     {
-        Dictionary<Guid, UpdateVocabListItemDto> updatedListItems = updateDto.ListItems
-                                            .Where(li => li.Id.HasValue)
-                                            .ToDictionary(li => li.Id.Value);
+        Dictionary<Guid, UpdateVocabListItemDto> updatedListItems;
+        updatedListItems = updateDto.ListItems
+                                    .Where(li => li.Id.HasValue)
+                                    .ToDictionary(li => li.Id.Value);
 
         existingListItems.SoftDeleteWhere(item => !updatedListItems.ContainsKey(item.Id), currentTimestamp);
     }
