@@ -1,6 +1,7 @@
 ﻿SELECT
 	 VL.Id
 	,VL.[Name]	VocabListName
+	,VL.DeletedDate
 	,VLI.Id		VocabListId
 	,VLI.WordType
 	,VLI.IsWeakMasculineNoun
@@ -26,4 +27,4 @@
 FROM	dbo.VocabList	VL
 JOIN	dbo.VocabListItem	VLI
 	ON	VLI.VocabListID = VL.ID
---WHERE	VL.Id = 'a5789d9b-c103-4416-7171-08da99c811a0'
+WHERE	VL.Id = '59200d5a-c841-4e76-a030-08da99c8c827'

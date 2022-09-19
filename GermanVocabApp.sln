@@ -22,7 +22,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GermanVocabApp.DataAccess.S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Osiris.Utilities.Collections.Generic", "..\..\Osiris\Osiris.Utilities.Collections.Generic\Osiris.Utilities.Collections.Generic.csproj", "{20125E4B-23C5-49FA-9799-678066ADC128}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GermanVocabApp.Core", "GermanVocabApp.Core\GermanVocabApp.Core.csproj", "{FECE6140-8529-4234-A8B9-98E265170AF3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GermanVocabApp.Core", "GermanVocabApp.Core\GermanVocabApp.Core.csproj", "{FECE6140-8529-4234-A8B9-98E265170AF3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

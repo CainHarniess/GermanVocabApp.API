@@ -112,20 +112,8 @@ public class VocabListRepositoryAsync : IVocabListRepositoryAsync
         DateTime currentTimestamp = DateTime.UtcNow;
         Guid listId = updateDto.Id;
 
-        VocabList existingList;
-        try
-        {
-            existingList = await _context.VocablLists
-                                         .Where(vl => vl.Id == listId
-                                                   && vl.DeletedDate == null)
-                                         .Include(vl => vl.ListItems
-                                                          .Where(li => li.DeletedDate == null))
-                                         .FirstAsync();
-        }
-        catch (InvalidOperationException)
-        {
-            throw new EntityNotFoundException($"{nameof(VocabList)} entity with ID {listId} not found.");
-        }
+        VocabList existingList = await _context.VocablLists
+                                               .TryGetFirstActiveWithId(listId);
 
         updateDto.CopyListDetails(existingList, currentTimestamp);
 

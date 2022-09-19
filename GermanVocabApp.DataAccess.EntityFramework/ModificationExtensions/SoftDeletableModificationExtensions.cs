@@ -3,7 +3,7 @@ using Osiris.Utilities.Collections.Generic;
 
 namespace GermanVocabApp.DataAccess.EntityFramework.ModificationExtensions;
 
-internal static class SoftDeletableExtensions
+internal static class SoftDeletableModificationExtensions
 {
     public static void SoftDeleteAll(this IEnumerable<ISoftDeletable> entities, DateTime deletionTimestamp)
     {
