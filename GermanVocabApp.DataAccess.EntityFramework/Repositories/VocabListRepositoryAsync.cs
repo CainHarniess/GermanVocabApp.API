@@ -7,6 +7,7 @@ using GermanVocabApp.DataAccess.Shared;
 using GermanVocabApp.DataAccess.Shared.DataTransfer;
 using Microsoft.EntityFrameworkCore;
 using Osiris.Utilities.Collections.Generic;
+using System.Collections.Generic;
 
 namespace GermanVocabApp.DataAccess.EntityFramework.Repositories;
 
@@ -118,49 +119,19 @@ public class VocabListRepositoryAsync : IVocabListRepositoryAsync
         updateDto.CopyListDetails(existingList, currentTimestamp);
 
         IEnumerable<VocabListItem> existingListItems = existingList.ListItems;
-        bool areAllListItemsDeleted = !updateDto.ListItems.Any() && existingListItems.Any();
-        if (areAllListItemsDeleted)
+        bool allItemsDeleted = CheckDeleteAllListItems(existingListItems, updateDto.ListItems, currentTimestamp);
+        if (allItemsDeleted)
         {
-            existingListItems.SoftDeleteAll(currentTimestamp);
             await _context.SaveChangesAsync();
             return;
         }
 
-        Dictionary<Guid, UpdateVocabListItemDto> updatedListItems;
-        updatedListItems = updateDto.ListItems
-                                    .Where(li => li.Id.HasValue)
-                                    .ToDictionary(li => li.Id.Value);
-        existingListItems.SoftDeleteWhere(item => !updatedListItems.ContainsKey(item.Id), currentTimestamp);
+        HandlePartialDelete(updateDto, currentTimestamp, existingListItems);
 
         Dictionary<Guid, VocabListItem> nonDeletedListItemEntities;
         nonDeletedListItemEntities = existingListItems.Where(li => li.DeletedDate == null)
                                                       .ToDictionary(li => li.Id);
-        updateDto.ListItems.ForEach(item =>
-        {
-            if (!item.Id.HasValue)
-            {
-                VocabListItem newListItem;
-                try
-                {
-                    newListItem = item.ToNewEntity(currentTimestamp);
-                }
-                catch (UnexpectedIdException e)
-                {
-                    throw e;
-                }
-                _context.Add(newListItem);
-                return;
-            }
-
-            Guid listItemId = item.Id.Value;
-            if (!nonDeletedListItemEntities.ContainsKey(listItemId))
-            {
-                throw new EntityNotFoundException($"Vocab list item with ID {listItemId} not found in "
-                                                + $"Vocab List with ID {listId}.");
-            }
-            VocabListItem existingListItem = nonDeletedListItemEntities[listItemId];
-            item.CopyTo(existingListItem, currentTimestamp);
-        });
+        AddOrUpdateListItems(updateDto, currentTimestamp, nonDeletedListItemEntities);
 
         await _context.SaveChangesAsync();
         return;
@@ -188,5 +159,77 @@ public class VocabListRepositoryAsync : IVocabListRepositoryAsync
 
         await _context.SaveChangesAsync();
         return true;
+    }
+
+    private void AddOrUpdateListItems(UpdateVocabListDto updateDto, DateTime currentTimestamp, Dictionary<Guid, VocabListItem> nonDeletedListItemEntities)
+    {
+        updateDto.ListItems.ForEach(item =>
+        {
+            VocabListItem newListItem = CheckAddNewListItem(item, currentTimestamp);
+            if (newListItem != null)
+            {
+                _context.Add(newListItem);
+                return;
+            }
+
+            TryUpdateListItem(item, nonDeletedListItemEntities, currentTimestamp);
+        });
+    }
+
+    private static bool CheckDeleteAllListItems(IEnumerable<VocabListItem> existingListItems,
+        IEnumerable<UpdateVocabListItemDto> updatedListItems, DateTime transactionTimestamp)
+    {
+        bool areAllListItemsDeleted = !updatedListItems.Any() && existingListItems.Any();
+        if (areAllListItemsDeleted)
+        {
+            existingListItems.SoftDeleteAll(transactionTimestamp);
+            return true;
+        }
+        return false;
+    }
+
+    private static void HandlePartialDelete(UpdateVocabListDto updateDto, DateTime currentTimestamp, IEnumerable<VocabListItem> existingListItems)
+    {
+        Dictionary<Guid, UpdateVocabListItemDto> updatedListItems = updateDto.ListItems
+                                            .Where(li => li.Id.HasValue)
+                                            .ToDictionary(li => li.Id.Value);
+
+        existingListItems.SoftDeleteWhere(item => !updatedListItems.ContainsKey(item.Id), currentTimestamp);
+    }
+
+    private static VocabListItem? CheckAddNewListItem(UpdateVocabListItemDto updatedItemDto, DateTime transactionTimestamp)
+    {
+        if (updatedItemDto.Id.HasValue)
+        {
+            return null;
+        }
+        VocabListItem newListItem;
+        try
+        {
+            newListItem = updatedItemDto.ToNewEntity(transactionTimestamp);
+        }
+        catch (UnexpectedIdException e)
+        {
+            throw e;
+        }
+        return newListItem;
+    }
+
+    private static void TryUpdateListItem(UpdateVocabListItemDto updatedItem, Dictionary<Guid, VocabListItem> entities,
+        DateTime transactionTimestamp)
+    {
+        if (!updatedItem.Id.HasValue)
+        {
+            throw new InvalidOperationException("Cannot update list item with null ID value.");
+        }
+
+        Guid listItemId = updatedItem.Id.Value;
+        if (!entities.ContainsKey(listItemId))
+        {
+            throw new EntityNotFoundException($"Vocab list item with ID {listItemId} not found in "
+                                            + $"Vocab List with ID {updatedItem.VocabListId}.");
+        }
+        VocabListItem existingListItem = entities[listItemId];
+        updatedItem.CopyTo(existingListItem, transactionTimestamp);
     }
 }
