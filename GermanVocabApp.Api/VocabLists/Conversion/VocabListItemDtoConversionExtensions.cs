@@ -1,5 +1,4 @@
 ﻿using GermanVocabApp.Api.VocabLists.Models;
-using GermanVocabApp.Core.Exceptions;
 using GermanVocabApp.DataAccess.Shared.DataTransfer;
 
 namespace GermanVocabApp.Api.VocabLists.Conversion;
@@ -13,14 +12,9 @@ internal static class VocabListItemDtoConversionExtensions
 
     public static VocabListItemResponse ToResponse(this VocabListItemDto dto)
     {
-        if (!dto.Id.HasValue)
-        {
-            throw new UnexpectedNullIdException();
-        }
-
         return new VocabListItemResponse()
         {
-            Id = dto.Id.Value,
+            Id = dto.Id,
             WordType = dto.WordType,
             IsWeakMasculineNoun = dto.IsWeakMasculineNoun,
             ReflexiveCase = dto.ReflexiveCase,
