@@ -1,7 +1,7 @@
 ﻿using GermanVocabApp.Core.Exceptions;
 using GermanVocabApp.DataAccess.EntityFramework.Conversion;
 using GermanVocabApp.DataAccess.EntityFramework.Models;
-using GermanVocabApp.DataAccess.EntityFramework.ModificationExtension;
+using GermanVocabApp.DataAccess.EntityFramework.ModificationExtensions;
 using GermanVocabApp.DataAccess.EntityFramework.Projection;
 using GermanVocabApp.DataAccess.Shared;
 using GermanVocabApp.DataAccess.Shared.DataTransfer;

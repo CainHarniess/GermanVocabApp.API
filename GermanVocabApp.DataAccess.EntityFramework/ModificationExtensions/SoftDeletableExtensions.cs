@@ -1,7 +1,7 @@
 ﻿using GermanVocabApp.DataAccess.Shared.Abstractions;
 using Osiris.Utilities.Collections.Generic;
 
-namespace GermanVocabApp.DataAccess.EntityFramework.ModificationExtension;
+namespace GermanVocabApp.DataAccess.EntityFramework.ModificationExtensions;
 
 internal static class SoftDeletableExtensions
 {
