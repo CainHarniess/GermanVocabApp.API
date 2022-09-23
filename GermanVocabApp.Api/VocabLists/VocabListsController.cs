@@ -14,13 +14,16 @@ namespace GermanVocabApp.Api.VocabLists;
 [Route("api/vocab-lists")]
 public class VocabListsController : ControllerBase
 {
-    private readonly IValidator<CreateVocabListRequest> _createListValidator;
+    private readonly IValidator<CreateVocabListRequest> _creationValidator;
+    private readonly IValidator<UpdateVocabListRequest> _updateValidator;
     private readonly IVocabListRepositoryAsync _repository;
 
     public VocabListsController(IValidator<CreateVocabListRequest> createListValidator,
+                                IValidator<UpdateVocabListRequest> updateValidator,
                                 IVocabListRepositoryAsync repository)
     {
-        _createListValidator = createListValidator;
+        _creationValidator = createListValidator;
+        _updateValidator = updateValidator;
         _repository = repository;
     }
 
@@ -30,12 +33,11 @@ public class VocabListsController : ControllerBase
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
     public async Task<IActionResult> Create(CreateVocabListRequest request)
     {
-        ValidationResult result = _createListValidator.Validate(request);
+        ValidationResult result = _creationValidator.Validate(request);
         if (!result.IsValid)
         {
             return BadRequest(result.Errors);
         }
-
 
         CreateVocabListDto dto = request.ToDto();
         VocabListDto newListDto = await _repository.Add(dto);
@@ -77,11 +79,18 @@ public class VocabListsController : ControllerBase
     }
     
     [HttpPut(ActionParameters.IdGuid)]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest)]
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
     [ProducesResponseType((int)HttpStatusCode.NoContent)]
     public async Task<IActionResult> UpdateVocabList(Guid id, UpdateVocabListRequest request)
     {
+        ValidationResult result = _updateValidator.Validate(request);
+        if (!result.IsValid)
+        {
+            return BadRequest(result.Errors);
+        }
+
         UpdateVocabListDto updateDto = request.ToDto(id);
         try
         {
