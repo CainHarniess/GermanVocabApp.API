@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using GermanVocabApp.Api.VocabLists.Models;
+using GermanVocabApp.Shared.Validation;
 
 namespace GermanVocabApp.Api.VocabLists.Validation;
 
@@ -7,7 +8,10 @@ public class CreateVocabListRequestValidator : AbstractValidator<CreateVocabList
 {
     public CreateVocabListRequestValidator()
     {
-        RuleFor(c => c.Name).MinimumLength(3).MaximumLength(100);
-        RuleFor(c => c.Description).MinimumLength(3).MaximumLength(250);
+        RuleFor(c => c.Name).MinimumLength(VocabListValidationData.NameMinLength)
+                            .MaximumLength(VocabListValidationData.NameMaxLength);
+
+        RuleFor(c => c.Description).MinimumLength(VocabListValidationData.DescriptionMinLength)
+                                   .MaximumLength(VocabListValidationData.DescriptionMaxLength);
     }
 }
