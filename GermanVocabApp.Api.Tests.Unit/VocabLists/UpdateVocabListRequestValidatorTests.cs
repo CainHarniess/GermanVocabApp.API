@@ -1,7 +1,8 @@
 using FluentValidation.TestHelper;
 using GermanVocabApp.Api.VocabLists.Models;
-using GermanVocabApp.Api.VocabLists.Validation;
-namespace GermanVocabApp.Api.Tests.Unit;
+using GermanVocabApp.Api.VocabLists.Validation.VocabLists;
+
+namespace GermanVocabApp.Api.Tests.Unit.VocabLists;
 
 public class UpdateVocabListRequestValidatorTests
 {

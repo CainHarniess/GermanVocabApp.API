@@ -2,11 +2,11 @@
 using GermanVocabApp.Api.VocabLists.Models;
 using GermanVocabApp.Shared.Validation;
 
-namespace GermanVocabApp.Api.VocabLists.Validation;
+namespace GermanVocabApp.Api.VocabLists.Validation.VocabLists;
 
-public class CreateVocabListRequestValidator : AbstractValidator<CreateVocabListRequest>
+public class UpdateVocabListRequestValidator : AbstractValidator<UpdateVocabListRequest>
 {
-    public CreateVocabListRequestValidator()
+    public UpdateVocabListRequestValidator()
     {
         RuleFor(c => c.Name).MinimumLength(VocabListValidationData.NameMinLength)
                             .MaximumLength(VocabListValidationData.NameMaxLength);

@@ -1,4 +1,5 @@
 ﻿using GermanVocabApp.DataAccess.EntityFramework.Models;
+using GermanVocabApp.Shared.Validation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -15,7 +16,7 @@ internal class VocabListItemEntityConfiguration : IEntityTypeConfiguration<Vocab
     private static void ConfigureConversions(EntityTypeBuilder<VocabListItem> builder)
     {
         builder.Property(n => n.WordType)
-                       .HasConversion<string>();
+               .HasConversion<string>();
 
         builder.Property(n => n.ReflexiveCase)
                .HasConversion<string>();
@@ -69,7 +70,7 @@ internal class VocabListItemEntityConfiguration : IEntityTypeConfiguration<Vocab
                .HasMaxLength(10);
 
         builder.Property(n => n.German)
-               .HasMaxLength(100);
+               .HasMaxLength(VocabListItemValidationData.GermanMaxLength);
 
         builder.Property(n => n.Plural)
                .HasMaxLength(100);
@@ -87,7 +88,7 @@ internal class VocabListItemEntityConfiguration : IEntityTypeConfiguration<Vocab
                .HasMaxLength(100);
 
         builder.Property(n => n.English)
-               .HasMaxLength(100);
+               .HasMaxLength(VocabListItemValidationData.EnglishMaxLength);
 
         builder.Property(n => n.FixedPlurality)
                .HasMaxLength(10);
