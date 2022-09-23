@@ -16,7 +16,7 @@ internal static class VocabListDbSetQueryExtensions
         }
         catch (InvalidOperationException e)
         {
-            throw new EntityNotFoundException($"No active {nameof(VocabList)} entity satisfying the provided predicate.", e);
+            throw new EntityNotFoundException($"No active {nameof(VocabList)} entity with ID ${id}.", e);
         }
     }
 

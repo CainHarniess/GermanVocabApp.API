@@ -1,4 +1,6 @@
-﻿using GermanVocabApp.Api.VocabLists.Conversion;
+﻿using FluentValidation;
+using FluentValidation.Results;
+using GermanVocabApp.Api.VocabLists.Conversion;
 using GermanVocabApp.Api.VocabLists.Models;
 using GermanVocabApp.Core.Exceptions;
 using GermanVocabApp.DataAccess.Shared;
@@ -12,18 +14,29 @@ namespace GermanVocabApp.Api.VocabLists;
 [Route("api/vocab-lists")]
 public class VocabListsController : ControllerBase
 {
+    private readonly IValidator<CreateVocabListRequest> _createListValidator;
     private readonly IVocabListRepositoryAsync _repository;
-    
-    public VocabListsController(IVocabListRepositoryAsync repository)
+
+    public VocabListsController(IValidator<CreateVocabListRequest> createListValidator,
+                                IVocabListRepositoryAsync repository)
     {
+        _createListValidator = createListValidator;
         _repository = repository;
     }
 
     [HttpPost]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest)]
     [ProducesResponseType(typeof(VocabListResponse), (int)HttpStatusCode.Created)]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
     public async Task<IActionResult> Create(CreateVocabListRequest request)
     {
+        ValidationResult result = _createListValidator.Validate(request);
+        if (!result.IsValid)
+        {
+            return BadRequest(result.Errors);
+        }
+
+
         CreateVocabListDto dto = request.ToDto();
         VocabListDto newListDto = await _repository.Add(dto);
 

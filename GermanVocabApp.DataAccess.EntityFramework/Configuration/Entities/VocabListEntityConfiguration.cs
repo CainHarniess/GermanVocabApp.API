@@ -1,4 +1,5 @@
 ﻿using GermanVocabApp.DataAccess.EntityFramework.Models;
+using GermanVocabApp.Shared.Validation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -13,9 +14,9 @@ internal class VocabListEntityConfiguration : IEntityTypeConfiguration<VocabList
                .OnDelete(DeleteBehavior.NoAction);
 
         builder.Property(vl => vl.Name)
-               .HasMaxLength(100);
+               .HasMaxLength(VocabListValidationData.NameMaxLength);
 
         builder.Property(vl => vl.Description)
-               .HasMaxLength(250);
+               .HasMaxLength(VocabListValidationData.DescriptionMaxLength);
     }
 }
