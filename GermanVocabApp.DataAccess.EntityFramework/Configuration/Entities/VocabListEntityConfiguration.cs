@@ -15,7 +15,7 @@ internal class VocabListEntityConfiguration : IEntityTypeConfiguration<VocabList
         builder.Property(vl => vl.Name)
                .HasMaxLength(100);
 
-        builder.Property(vl => vl.Name)
+        builder.Property(vl => vl.Description)
                .HasMaxLength(250);
     }
 }
