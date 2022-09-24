@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "GermanVocabApp.DataAccess.Shared": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:64673;http://localhost:64674"
+    }
+  }
+}

@@ -70,7 +70,7 @@ internal class VocabListItemEntityConfiguration : IEntityTypeConfiguration<Vocab
                .HasMaxLength(10);
 
         builder.Property(n => n.German)
-               .HasMaxLength(VocabListItemValidationData.GermanMaxLength);
+               .HasMaxLength(ListItemValidationData.GermanMaxLength);
 
         builder.Property(n => n.Plural)
                .HasMaxLength(100);
@@ -88,7 +88,7 @@ internal class VocabListItemEntityConfiguration : IEntityTypeConfiguration<Vocab
                .HasMaxLength(100);
 
         builder.Property(n => n.English)
-               .HasMaxLength(VocabListItemValidationData.EnglishMaxLength);
+               .HasMaxLength(ListItemValidationData.EnglishMaxLength);
 
         builder.Property(n => n.FixedPlurality)
                .HasMaxLength(10);

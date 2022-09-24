@@ -14,9 +14,9 @@ internal class VocabListEntityConfiguration : IEntityTypeConfiguration<VocabList
                .OnDelete(DeleteBehavior.NoAction);
 
         builder.Property(vl => vl.Name)
-               .HasMaxLength(VocabListValidationData.NameMaxLength);
+               .HasMaxLength(ListValidationData.NameMaxLength);
 
         builder.Property(vl => vl.Description)
-               .HasMaxLength(VocabListValidationData.DescriptionMaxLength);
+               .HasMaxLength(ListValidationData.DescriptionMaxLength);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using GermanVocabApp.Api.VocabLists.Models;
 using GermanVocabApp.Shared.Validation;
+using Osiris.FluentValidation;
 
 namespace GermanVocabApp.Api.VocabLists.Validation.VocabListItems;
 
@@ -8,10 +9,10 @@ public abstract class CreateVocabListItemRequestValidator : AbstractValidator<Cr
 {
     protected CreateVocabListItemRequestValidator()
     {
-        RuleFor(w => w.German).MinimumLength(VocabListItemValidationData.EnglishMinLength)
-                              .MaximumLength(VocabListItemValidationData.EnglishMaxLength);
+        RuleFor(w => w.German).NotNullEmptyNorWhiteSpace();
+        RuleFor(w => w.German).StringLengthRange(ListItemValidationData.EnglishMinLength, ListItemValidationData.EnglishMaxLength);
 
-        RuleFor(w => w.English).MinimumLength(VocabListItemValidationData.GermanMinLength)
-                               .MaximumLength(VocabListItemValidationData.GermanMaxLength);
+        RuleFor(w => w.English).NotNullEmptyNorWhiteSpace();
+        RuleFor(w => w.English).StringLengthRange(ListItemValidationData.GermanMinLength, ListItemValidationData.GermanMaxLength);
     }
 }

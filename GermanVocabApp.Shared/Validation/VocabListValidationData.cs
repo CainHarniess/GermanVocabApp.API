@@ -1,5 +1,5 @@
 ﻿namespace GermanVocabApp.Shared.Validation;
-public static class VocabListValidationData
+public struct ListValidationData
 {
     public const int NameMinLength = 3;
     public const int NameMaxLength = 100;
@@ -8,7 +8,19 @@ public static class VocabListValidationData
     public const int DescriptionMaxLength = 250;
 }
 
-public static class VocabListItemValidationData
+public struct ListItemValidationData
+{
+    public const int GermanMinLength = 3;
+    public const int GermanMaxLength = 100;
+
+    public const int EnglishMinLength = 3;
+    public const int EnglishMaxLength = 100;
+
+    public const int PrepositionMinLength = 2;
+    public const int PrepositionMaxLength = 25;
+}
+
+public struct VerbValidationData
 {
     public const int VerbMinLength = 3;
     public const int VerbMaxLength = 25;
