@@ -1,3 +1,6 @@
+using GermanVocabApp.Api.VocabLists.Models;
+using GermanVocabApp.Api.VocabLists.Validation;
+using GermanVocabApp.Core.Validation.DependencyInjection;
 using GermanVocabApp.DataAccess.EntityFramework;
 using GermanVocabApp.DataAccess.EntityFramework.Repositories;
 using GermanVocabApp.DataAccess.Shared;
@@ -29,6 +32,12 @@ builder.Services.AddDbContext<VocabListDbContext>(options =>
     options.LogTo(log => Debug.WriteLine(log));
 },
 ServiceLifetime.Scoped);
+
+builder.Services.AddSingleton<IValidator<CreateVocabListItemRequest>, CreateItemValidator>();
+builder.Services.AddSingleton<IValidator<CreateVocabListRequest>, CreateListValidator>();
+
+builder.Services.AddSingleton<IValidator<UpdateVocabListItemRequest>, UpdateItemValidator>();
+builder.Services.AddSingleton<IValidator<UpdateVocabListRequest>, UpdateListValidator>();
 
 builder.Services.AddScoped<IVocabListRepositoryAsync, VocabListRepositoryAsync>();
 

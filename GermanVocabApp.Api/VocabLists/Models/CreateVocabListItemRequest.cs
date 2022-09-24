@@ -2,7 +2,7 @@
 
 namespace GermanVocabApp.Api.VocabLists.Models;
 
-public class CreateVocabListItemRequest
+public class CreateVocabListItemRequest : IListItemRequest
 {
     public WordType WordType { get; set; }
     public bool? IsWeakMasculineNoun { get; set; }

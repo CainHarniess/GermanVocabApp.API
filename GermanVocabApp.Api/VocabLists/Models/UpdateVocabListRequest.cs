@@ -1,6 +1,6 @@
 ﻿namespace GermanVocabApp.Api.VocabLists.Models;
 
-public class UpdateVocabListRequest
+public class UpdateVocabListRequest : IListRequest<UpdateVocabListItemRequest>
 {
     public string Name { get; set; }
     public string? Description { get; set; }
