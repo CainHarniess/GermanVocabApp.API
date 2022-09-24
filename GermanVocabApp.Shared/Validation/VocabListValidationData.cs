@@ -16,8 +16,17 @@ public struct ListItemValidationData
     public const int EnglishMinLength = 3;
     public const int EnglishMaxLength = 100;
 
+    public const int PluralMinLength = 3;
+    public const int PluralMaxLength = 25;
+
     public const int PrepositionMinLength = 2;
     public const int PrepositionMaxLength = 25;
+}
+
+public struct NounValidationData
+{
+    public const int PluralMinLength = 3;
+    public const int PluralMaxLength = 25;
 }
 
 public struct VerbValidationData

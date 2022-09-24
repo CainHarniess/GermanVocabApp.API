@@ -223,6 +223,48 @@ public abstract class AbstractNounRequestValidatorTests<TNounValidator, TNounReq
     }
     #endregion
 
+    #region Plural
+    [Theory]
+    [InlineData(StringData.Empty)]
+    [InlineData(StringData.CharString1)]
+    [InlineData(StringData.CharString2)]
+    [InlineData(StringData.CharString26)]
+    public void Plural_ShouldHaveValidationError_WhenInvalidLength(string value)
+    {
+        Request.Plural = value;
+        var result = Validator.TestValidate(Request);
+        result.ShouldHaveValidationErrorFor(request => request.Plural);
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("abc")]
+    [InlineData(StringData.CharString25)]
+    public void Plural_ShouldNotHaveValidationError_WhenNull_OrValidLength(string? value)
+    {
+        Request.Plural = value;
+        var result = Validator.TestValidate(Request);
+        result.ShouldNotHaveValidationErrorFor(request => request.Plural);
+    }
+    #endregion
+
+    #region PrepositionCase
+
+    [Theory(Skip = "Not yet implemented")]
+    [InlineData(null)]
+    public void PrepositionCase_ShouldNotHaveValidationError_WhenNull_AndPrepositionCaseNull(string? value)
+    {
+
+    }
+
+    [Theory(Skip = "Not yet implemented")]
+    [InlineData(null)]
+    public void PrepositionCase_ShouldHaveValidationError_WhenNull_AndPrepositionNotNull(string? value)
+    {
+
+    }
+    #endregion
+
     #region Comparative
     [Fact]
     public void Comparative_ShouldNotHaveValidationError_WhenNull()

@@ -5,7 +5,7 @@ using GermanVocabApp.Shared.Data;
 namespace GermanVocabApp.Api.Tests.Unit.VocabListItems;
 
 public class CreateVerbListItemValidatorTests
-    : AbstractVerbListItemRequestValidatorTests<CreateVerbRequestValidator, CreateVocabListItemRequest>
+    : AbstractVerbRequestValidatorTests<CreateVerbRequestValidator, CreateVocabListItemRequest>
 {
     protected override CreateVerbRequestValidator CreateValidator()
     {

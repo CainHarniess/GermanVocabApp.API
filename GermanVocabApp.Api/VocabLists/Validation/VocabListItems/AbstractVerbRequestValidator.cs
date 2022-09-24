@@ -32,6 +32,6 @@ public abstract class AbstractVerbRequestValidator<TRequest> : AbstractListItemR
                                                   VerbValidationData.VerbMaxLength);
 
         RuleFor(v => v.Preposition).StringLengthRange(ListItemValidationData.PrepositionMinLength,
-                                                      ListItemValidationData.PrepositionMaxLength);
+                                                      ListItemValidationData.PluralMaxLength);
     }
 }

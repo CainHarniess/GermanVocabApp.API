@@ -11,7 +11,8 @@ public abstract class AbstractNounRequestValidator<TNounRequest> : AbstractListI
     protected override void ConfigureStringLengthRules()
     {
         base.ConfigureStringLengthRules();
-        RuleFor(n => n.Preposition).StringLengthRange(ListItemValidationData.PrepositionMinLength, ListItemValidationData.PrepositionMaxLength);
+        RuleFor(n => n.Preposition).StringLengthRange(ListItemValidationData.PrepositionMinLength, ListItemValidationData.PluralMaxLength);
+        RuleFor(n => n.Plural).StringLengthRange(NounValidationData.PluralMinLength, NounValidationData.PluralMaxLength);
     }
 
     protected override void ConfigureNullabilityRules()

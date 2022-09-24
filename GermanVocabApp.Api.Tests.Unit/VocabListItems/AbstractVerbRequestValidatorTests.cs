@@ -5,12 +5,12 @@ using GermanVocabApp.Shared.Data;
 
 namespace GermanVocabApp.Api.Tests.Unit.VocabListItems;
 
-public abstract class AbstractVerbListItemRequestValidatorTests<TVerbValidator, TVerbRequest> 
+public abstract class AbstractVerbRequestValidatorTests<TVerbValidator, TVerbRequest> 
     : AbstractListItemRequestValidatorTests<TVerbValidator, TVerbRequest>
     where TVerbValidator : AbstractListItemRequestValidator<TVerbRequest>
     where TVerbRequest : IListItemRequest
 {
-    protected AbstractVerbListItemRequestValidatorTests() : base()
+    protected AbstractVerbRequestValidatorTests() : base()
     {
         Request.WordType = WordType.Verb;
     }
