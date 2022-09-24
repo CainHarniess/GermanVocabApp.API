@@ -1,9 +1,8 @@
-﻿using GermanVocabApp.Api.VocabLists.Contracts;
-using GermanVocabApp.Shared.Data;
+﻿using GermanVocabApp.Shared.Data;
 
-namespace GermanVocabApp.Api.VocabLists.Models;
+namespace GermanVocabApp.Api.VocabLists.Contracts;
 
-public class CreateVocabListItemRequest : IVocabListItemRequest
+public interface IVocabListItemRequest
 {
     public WordType WordType { get; set; }
     public bool? IsWeakMasculineNoun { get; set; }
@@ -24,4 +23,3 @@ public class CreateVocabListItemRequest : IVocabListItemRequest
     public string English { get; set; }
     public FixedPlurality? FixedPlurality { get; set; }
 }
-
