@@ -1,12 +1,20 @@
 ﻿using FluentValidation;
 using GermanVocabApp.Api.VocabLists.Contracts;
+using GermanVocabApp.Shared.Validation;
+using Osiris.FluentValidation;
 
 namespace GermanVocabApp.Api.VocabLists.Validation.VocabListItems;
 
 public abstract class AbstractNounRequestValidator<TNounRequest> : AbstractListItemRequestValidator<TNounRequest>
     where TNounRequest : IListItemRequest
 {
-    protected AbstractNounRequestValidator() : base()
+    protected override void ConfigureStringLengthRules()
+    {
+        base.ConfigureStringLengthRules();
+        RuleFor(n => n.Preposition).StringLengthRange(ListItemValidationData.PrepositionMinLength, ListItemValidationData.PrepositionMaxLength);
+    }
+
+    protected override void ConfigureNullabilityRules()
     {
         RuleFor(n => n.IsWeakMasculineNoun).NotNull();
         RuleFor(n => n.ReflexiveCase).Null();

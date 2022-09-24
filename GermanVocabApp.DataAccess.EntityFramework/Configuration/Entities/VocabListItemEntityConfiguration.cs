@@ -82,10 +82,10 @@ internal class VocabListItemEntityConfiguration : IEntityTypeConfiguration<Vocab
                .HasMaxLength(10);
 
         builder.Property(n => n.Comparative)
-               .HasMaxLength(100);
+               .HasMaxLength(ModifierValidationData.ComparativeMaxLength);
 
         builder.Property(n => n.Superlative)
-               .HasMaxLength(100);
+               .HasMaxLength(ModifierValidationData.SuperlativeMaxLength);
 
         builder.Property(n => n.English)
                .HasMaxLength(ListItemValidationData.EnglishMaxLength);

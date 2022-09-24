@@ -8,14 +8,7 @@ namespace GermanVocabApp.Api.VocabLists.Validation.VocabListItems;
 public abstract class AbstractVerbRequestValidator<TRequest> : AbstractListItemRequestValidator<TRequest>
     where TRequest : IListItemRequest
 {
-    protected AbstractVerbRequestValidator()
-        : base()
-    {
-        ConfigureNullabilityRules();
-        ConfigureStringLengthRules();
-    }
-
-    private void ConfigureNullabilityRules()
+    protected override void ConfigureNullabilityRules()
     {
         RuleFor(v => v.IsWeakMasculineNoun).Null();
         RuleFor(v => v.Separability).NotNull().IsInEnum();
@@ -28,8 +21,9 @@ public abstract class AbstractVerbRequestValidator<TRequest> : AbstractListItemR
         RuleFor(v => v.FixedPlurality).Null();
     }
 
-    private void ConfigureStringLengthRules()
+    protected override void ConfigureStringLengthRules()
     {
+        base.ConfigureStringLengthRules();
         RuleFor(v => v.ThirdPersonPresent).StringLengthRange(VerbValidationData.VerbMinLength,
                                                              VerbValidationData.VerbMaxLength);
         RuleFor(v => v.ThirdPersonImperfect).StringLengthRange(VerbValidationData.VerbMinLength,

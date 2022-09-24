@@ -11,9 +11,16 @@ public abstract class AbstractListItemRequestValidator<TRequest> : AbstractValid
     protected AbstractListItemRequestValidator()
     {
         RuleFor(w => w.German).NotNullEmptyNorWhiteSpace();
-        RuleFor(w => w.German).StringLengthRange(ListItemValidationData.EnglishMinLength, ListItemValidationData.EnglishMaxLength);
-
         RuleFor(w => w.English).NotNullEmptyNorWhiteSpace();
+
+        ConfigureNullabilityRules();
+        ConfigureStringLengthRules();
+    }
+
+    protected abstract void ConfigureNullabilityRules();
+    protected virtual void ConfigureStringLengthRules()
+    {
+        RuleFor(w => w.German).StringLengthRange(ListItemValidationData.EnglishMinLength, ListItemValidationData.EnglishMaxLength);
         RuleFor(w => w.English).StringLengthRange(ListItemValidationData.GermanMinLength, ListItemValidationData.GermanMaxLength);
     }
 }
