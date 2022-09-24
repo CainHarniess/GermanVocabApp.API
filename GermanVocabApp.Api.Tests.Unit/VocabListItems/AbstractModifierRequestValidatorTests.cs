@@ -5,17 +5,17 @@ using GermanVocabApp.Shared.Data;
 
 namespace GermanVocabApp.Api.Tests.Unit.VocabListItems;
 
-public abstract class AbstractNounRequestValidatorTests<TNounValidator, TNounRequest>
-    : AbstractListItemRequestValidatorTests<TNounValidator, TNounRequest>
-    where TNounValidator : AbstractListItemRequestValidator<TNounRequest>
-    where TNounRequest : IListItemRequest
+public abstract class AbstractModifierRequestValidatorTests<TModifierValidator, TModifierRequest>
+    : AbstractListItemRequestValidatorTests<TModifierValidator, TModifierRequest>
+    where TModifierValidator : AbstractListItemRequestValidator<TModifierRequest>
+    where TModifierRequest : IListItemRequest
 {
-    protected AbstractNounRequestValidatorTests() : base()
+    public AbstractModifierRequestValidatorTests() : base()
     {
-        Request.WordType = WordType.Noun;
+
     }
 
-    #region IsWeakmasculineNoun
+    #region IsWeakMasculineNoun
     [Theory]
     [InlineData(true)]
     [InlineData(false)]
@@ -23,16 +23,15 @@ public abstract class AbstractNounRequestValidatorTests<TNounValidator, TNounReq
     {
         Request.IsWeakMasculineNoun = value;
         var result = Validator.TestValidate(Request);
-        result.ShouldNotHaveValidationErrorFor(request => request.IsWeakMasculineNoun);
+        result.ShouldHaveValidationErrorFor(request => request.IsWeakMasculineNoun);
     }
 
-    [Theory]
-    [InlineData(null)]
-    public void IsWeakMasculineNoun_ShouldHaveValidationError_WhenNull(bool? value)
+    [Fact]
+    public void IsWeakMasculineNoun_ShouldNotHaveValidationError_WhenNull()
     {
-        Request.IsWeakMasculineNoun = value;
+        Request.IsWeakMasculineNoun = null;
         var result = Validator.TestValidate(Request);
-        result.ShouldHaveValidationErrorFor(request => request.IsWeakMasculineNoun);
+        result.ShouldNotHaveValidationErrorFor(request => request.IsWeakMasculineNoun);
     }
     #endregion
 
@@ -179,23 +178,45 @@ public abstract class AbstractNounRequestValidatorTests<TNounValidator, TNounReq
     #endregion
 
     #region Gender
-    [Fact]
-    public void Gender_ShouldHaveValidationError_WhenNull()
-    {
-        Request.Gender = null;
-        var result = Validator.TestValidate(Request);
-        result.ShouldHaveValidationErrorFor(request => request.Gender);
-    }
-
     [Theory]
     [InlineData(Gender.Masculine)]
     [InlineData(Gender.Feminine)]
     [InlineData(Gender.Neuter)]
-    public void Gender_ShouldNotHaveValidationError_WhenNotNull(Gender value)
+    public void Gender_ShouldHaveValidationError_WhenNotNull(Gender value)
     {
         Request.Gender = value;
         var result = Validator.TestValidate(Request);
+        result.ShouldHaveValidationErrorFor(request => request.Gender);
+    }
+
+    [Fact]
+    public void Gender_ShouldNotHaveValidationError_WhenNull()
+    {
+        Request.Gender = null;
+        var result = Validator.TestValidate(Request);
         result.ShouldNotHaveValidationErrorFor(request => request.Gender);
+    }
+    #endregion
+
+    #region Plural
+    [Theory]
+    [InlineData(StringData.Empty)]
+    [InlineData(StringData.Whitespace)]
+    [InlineData("abc")]
+    [InlineData(StringData.CharString25)]
+    public void Plural_ShouldHaveValidationError_WhenNotNull(string? value)
+    {
+        Request.Plural = value;
+        var result = Validator.TestValidate(Request);
+        result.ShouldHaveValidationErrorFor(request => request.Plural);
+    }
+
+    [Fact]
+    public void Plural_ShouldNotHaveValidationError_WhenNull()
+    {
+        Request.Plural = null;
+        var result = Validator.TestValidate(Request);
+        result.ShouldNotHaveValidationErrorFor(request => request.Plural);
     }
     #endregion
 
@@ -204,81 +225,107 @@ public abstract class AbstractNounRequestValidatorTests<TNounValidator, TNounReq
     [InlineData(StringData.Empty)]
     [InlineData(StringData.CharString1)]
     [InlineData(StringData.CharString26)]
-    public void Preposition_ShouldHaveValidationError_WhenInvalidLength(string? value)
+    public void Preposition_ShouldHaveValidationError_WhenNotNull(string? value)
     {
         Request.Preposition = value;
         var result = Validator.TestValidate(Request);
         result.ShouldHaveValidationErrorFor(request => request.Preposition);
     }
 
-    [Theory]
-    [InlineData(null)]
-    [InlineData("abc")]
-    [InlineData(StringData.CharString25)]
-    public void Preposition_ShouldNotHaveValidationError_WhenNull_OrValidLength(string? value)
+    [Fact]
+    public void Preposition_ShouldNotHaveValidationError_WhenNull()
     {
-        Request.Preposition = value;
         var result = Validator.TestValidate(Request);
         result.ShouldNotHaveValidationErrorFor(request => request.Preposition);
     }
     #endregion
 
-    #region Comparative
-    [Fact]
-    public void Comparative_ShouldNotHaveValidationError_WhenNull()
+    #region PrepositionCase
+    [Theory]
+    [InlineData(Case.Nominative)]
+    [InlineData(Case.Accusative)]
+    [InlineData(Case.Dative)]
+    [InlineData(Case.Genetive)]
+    public void PrepositionCase_ShouldHaveValidationError_WhenNotNull(Case value)
     {
-        Request.Comparative = null;
+        Request.PrepositionCase = value;
         var result = Validator.TestValidate(Request);
-        result.ShouldNotHaveValidationErrorFor(request => request.Comparative);
+        result.ShouldHaveValidationErrorFor(request => request.PrepositionCase);
     }
 
+    [Fact]
+    public void PrepositionCase_ShouldNotHaveValidationError_WhenNull()
+    {
+        var result = Validator.TestValidate(Request);
+        result.ShouldNotHaveValidationErrorFor(request => request.PrepositionCase);
+    }
+    #endregion
+
+    #region Comparative
     [Theory]
     [InlineData(StringData.Empty)]
     [InlineData(StringData.CharString1)]
-    public void Comparative_ShouldHaveValidationError_WhenNotNull(string value)
+    [InlineData(StringData.CharString2)]
+    [InlineData(StringData.CharString101)]
+    public void Comparative_ShouldHaveValidationError_WhenInvalidLength(string? value)
     {
         Request.Comparative = value;
         var result = Validator.TestValidate(Request);
         result.ShouldHaveValidationErrorFor(request => request.Comparative);
     }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("abc")]
+    [InlineData(StringData.CharString100)]
+    public void Comparative_ShouldNotHaveValidationError_WhenNull_OrValidLength(string? value)
+    {
+        Request.Comparative = value;
+        var result = Validator.TestValidate(Request);
+        result.ShouldNotHaveValidationErrorFor(request => request.Comparative);
+    }
     #endregion
 
     #region Superlative
-    [Fact]
-    public void Superlative_ShouldNotHaveValidationError_WhenNull()
-    {
-        Request.Superlative = null;
-        var result = Validator.TestValidate(Request);
-        result.ShouldNotHaveValidationErrorFor(request => request.Superlative);
-    }
-
     [Theory]
     [InlineData(StringData.Empty)]
     [InlineData(StringData.CharString1)]
-    public void Superlative_ShouldHaveValidationError_WhenNotNull(string value)
+    [InlineData(StringData.CharString2)]
+    [InlineData(StringData.CharString101)]
+    public void Superlative_ShouldHaveValidationError_WhenInvalidLength(string? value)
     {
         Request.Superlative = value;
         var result = Validator.TestValidate(Request);
         result.ShouldHaveValidationErrorFor(request => request.Superlative);
-    } 
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("abc")]
+    [InlineData(StringData.CharString100)]
+    public void Superlative_ShouldNotHaveValidationError_WhenNull_OrValidLength(string? value)
+    {
+        Request.Superlative = value;
+        var result = Validator.TestValidate(Request);
+        result.ShouldNotHaveValidationErrorFor(request => request.Superlative);
+    }
     #endregion
 
     #region FixedPlurality
-    [Fact]
-    public void FixedPlurality_ShouldHaveValidationError_WhenNull()
-    {
-        Request.FixedPlurality = null;
-        var result = Validator.TestValidate(Request);
-        result.ShouldHaveValidationErrorFor(request => request.FixedPlurality);
-    }
-
     [Theory]
     [InlineData(FixedPlurality.None)]
     [InlineData(FixedPlurality.Singular)]
     [InlineData(FixedPlurality.Plural)]
-    public void FixedPlurality_ShouldNotHaveValidationError_WhenNotNull(FixedPlurality value)
+    public void FixedPlurality_ShouldHaveValidationError_WhenNotNull(FixedPlurality value)
     {
         Request.FixedPlurality = value;
+        var result = Validator.TestValidate(Request);
+        result.ShouldHaveValidationErrorFor(request => request.FixedPlurality);
+    }
+
+    [Fact]
+    public void FixedPlurality_ShouldNotHaveValidationError_WhenNull()
+    {
         var result = Validator.TestValidate(Request);
         result.ShouldNotHaveValidationErrorFor(request => request.FixedPlurality);
     }

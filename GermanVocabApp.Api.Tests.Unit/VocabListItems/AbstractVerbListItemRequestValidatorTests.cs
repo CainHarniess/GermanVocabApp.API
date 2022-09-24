@@ -12,7 +12,7 @@ public abstract class AbstractVerbListItemRequestValidatorTests<TVerbValidator, 
 {
     protected AbstractVerbListItemRequestValidatorTests() : base()
     {
-
+        Request.WordType = WordType.Verb;
     }
 
     #region IsWeakMasculineNoun

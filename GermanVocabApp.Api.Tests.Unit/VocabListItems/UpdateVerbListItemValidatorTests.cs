@@ -14,9 +14,6 @@ public class UpdateVerbListItemValidatorTests
 
     protected override UpdateVocabListItemRequest CreateRequest()
     {
-        return new UpdateVocabListItemRequest()
-        {
-            WordType = WordType.Verb,
-        };
+        return new UpdateVocabListItemRequest();
     }
 }

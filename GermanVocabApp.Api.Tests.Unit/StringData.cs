@@ -4,6 +4,7 @@ internal struct StringData
     public const string Empty = "";
     public const string Whitespace = " ";
     public const string CharString1 = "a";
+    public const string CharString2 = "ab";
     public const string CharString25 = "abcdeabcdeabcdeabcdeabcde";
     public const string CharString26 = "abcdeabcdeabcdeabcdeabcdea";
     public const string CharString99 = "abcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcd";

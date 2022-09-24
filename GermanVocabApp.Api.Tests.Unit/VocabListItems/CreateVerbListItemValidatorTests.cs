@@ -14,9 +14,6 @@ public class CreateVerbListItemValidatorTests
 
     protected override CreateVocabListItemRequest CreateRequest()
     {
-        return new CreateVocabListItemRequest()
-        {
-            WordType = WordType.Verb,
-        };
+        return new CreateVocabListItemRequest();
     }
 }
