@@ -1,11 +1,12 @@
 ﻿using FluentValidation;
+using GermanVocabApp.Api.VocabLists.Contracts;
 
 namespace GermanVocabApp.Api.VocabLists.Validation.VocabListItems;
 
-public class CreateNounRequestValidator : CreateVocabListItemRequestValidator
+public abstract class AbstractNounRequestValidator<TNounRequest> : AbstractListItemRequestValidator<TNounRequest>
+    where TNounRequest : IListItemRequest
 {
-    public CreateNounRequestValidator()
-        : base()
+    protected AbstractNounRequestValidator() : base()
     {
         RuleFor(n => n.IsWeakMasculineNoun).NotNull();
         RuleFor(n => n.ReflexiveCase).Null();

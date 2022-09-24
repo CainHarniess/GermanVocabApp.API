@@ -1,22 +1,28 @@
-using FluentValidation.TestHelper;
-using GermanVocabApp.Api.VocabLists.Models;
+﻿using FluentValidation.TestHelper;
+using GermanVocabApp.Api.VocabLists.Contracts;
 using GermanVocabApp.Api.VocabLists.Validation.VocabListItems;
 
 namespace GermanVocabApp.Api.Tests.Unit.VocabListItems;
 
-public abstract class CreateListItemRequestValidatorTests<T>
-    where T : CreateVocabListItemRequestValidator
+public abstract class AbstractListItemRequestValidatorTests<TValidator, TRequest>
+    where TValidator : AbstractListItemRequestValidator<TRequest>
+    where TRequest : IListItemRequest
 {
-    protected T _validator;
-    protected CreateVocabListItemRequest _request;
+    private readonly TValidator _validator;
+    private readonly TRequest _request;
 
-    protected CreateListItemRequestValidatorTests()
+    protected AbstractListItemRequestValidatorTests()
     {
-        _validator = Create();
-        _request = new();
+        _validator = CreateValidator();
+        _request = CreateRequest();
     }
 
-    abstract protected T Create();
+    abstract protected TValidator CreateValidator();
+
+    abstract protected TRequest CreateRequest();
+
+    protected TValidator Validator => _validator;
+    protected TRequest Request => _request;
 
     #region German
     [Theory]

@@ -3,7 +3,7 @@ using GermanVocabApp.Shared.Data;
 
 namespace GermanVocabApp.Api.VocabLists.Models;
 
-public class CreateVocabListItemRequest : IVocabListItemRequest
+public class CreateVocabListItemRequest : IListItemRequest
 {
     public WordType WordType { get; set; }
     public bool? IsWeakMasculineNoun { get; set; }

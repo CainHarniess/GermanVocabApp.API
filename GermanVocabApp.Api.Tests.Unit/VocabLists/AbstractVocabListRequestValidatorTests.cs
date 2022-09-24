@@ -5,11 +5,11 @@ using GermanVocabApp.Api.VocabLists.Validation.VocabLists;
 namespace GermanVocabApp.Api.Tests.Unit.VocabLists;
 
 public abstract class AbstractVocabListRequestValidatorTests<TValidator, TRequest>
-    where TValidator : AbstractVocabListRequestValidator<TRequest>
+    where TValidator : AbstractListRequestValidator<TRequest>
     where TRequest : IVocabListRequest
 {
-    private TValidator _validator;
-    private TRequest _request;
+    private readonly TValidator _validator;
+    private readonly TRequest _request;
 
     protected AbstractVocabListRequestValidatorTests()
     {

@@ -2,9 +2,9 @@
 
 namespace GermanVocabApp.Api.VocabLists.Validation.VocabLists;
 
-public class UpdateVocabListRequestValidator : AbstractVocabListRequestValidator<UpdateVocabListRequest>
+public class UpdateListRequestValidator : AbstractListRequestValidator<UpdateVocabListRequest>
 {
-    public UpdateVocabListRequestValidator() : base()
+    public UpdateListRequestValidator() : base()
     {
 
     }

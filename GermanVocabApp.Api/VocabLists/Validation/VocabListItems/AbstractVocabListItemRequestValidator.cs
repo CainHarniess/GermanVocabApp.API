@@ -1,13 +1,14 @@
 ﻿using FluentValidation;
-using GermanVocabApp.Api.VocabLists.Models;
+using GermanVocabApp.Api.VocabLists.Contracts;
 using GermanVocabApp.Shared.Validation;
 using Osiris.FluentValidation;
 
 namespace GermanVocabApp.Api.VocabLists.Validation.VocabListItems;
 
-public abstract class CreateVocabListItemRequestValidator : AbstractValidator<CreateVocabListItemRequest>
+public abstract class AbstractListItemRequestValidator<TRequest> : AbstractValidator<TRequest>
+    where TRequest : IListItemRequest
 {
-    protected CreateVocabListItemRequestValidator()
+    protected AbstractListItemRequestValidator()
     {
         RuleFor(w => w.German).NotNullEmptyNorWhiteSpace();
         RuleFor(w => w.German).StringLengthRange(ListItemValidationData.EnglishMinLength, ListItemValidationData.EnglishMaxLength);

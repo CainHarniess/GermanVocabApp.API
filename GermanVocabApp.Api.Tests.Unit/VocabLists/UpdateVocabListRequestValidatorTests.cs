@@ -3,15 +3,15 @@ using GermanVocabApp.Api.VocabLists.Validation.VocabLists;
 
 namespace GermanVocabApp.Api.Tests.Unit.VocabLists;
 
-public class UpdateVocabListRequestValidatorTests : AbstractVocabListRequestValidatorTests<UpdateVocabListRequestValidator, UpdateVocabListRequest>
+public class UpdateVocabListRequestValidatorTests : AbstractVocabListRequestValidatorTests<UpdateListRequestValidator, UpdateVocabListRequest>
 {
     protected override UpdateVocabListRequest CreateRequest()
     {
         return new UpdateVocabListRequest();
     }
 
-    protected override UpdateVocabListRequestValidator CreateValidator()
+    protected override UpdateListRequestValidator CreateValidator()
     {
-        return new UpdateVocabListRequestValidator();
+        return new UpdateListRequestValidator();
     }
 }

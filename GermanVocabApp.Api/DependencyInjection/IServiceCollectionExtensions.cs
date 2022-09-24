@@ -10,8 +10,8 @@ public static class IServiceCollectionExtensions
 {
     internal static IServiceCollection ConfigureInjections(this IServiceCollection services)
     {
-        services.AddScoped<IValidator<CreateVocabListRequest>, CreateVocabListRequestValidator>();
-        services.AddScoped<IValidator<UpdateVocabListRequest>, UpdateVocabListRequestValidator>();
+        services.AddScoped<IValidator<CreateVocabListRequest>, CreateListRequestValidator>();
+        services.AddScoped<IValidator<UpdateVocabListRequest>, UpdateListRequestValidator>();
         services.AddScoped<IVocabListRepositoryAsync, VocabListRepositoryAsync>();
         return services;
         

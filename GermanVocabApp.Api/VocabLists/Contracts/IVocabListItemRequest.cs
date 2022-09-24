@@ -2,7 +2,7 @@
 
 namespace GermanVocabApp.Api.VocabLists.Contracts;
 
-public interface IVocabListItemRequest
+public interface IListItemRequest
 {
     public WordType WordType { get; set; }
     public bool? IsWeakMasculineNoun { get; set; }

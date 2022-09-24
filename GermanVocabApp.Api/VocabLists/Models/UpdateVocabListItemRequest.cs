@@ -1,8 +1,9 @@
-﻿using GermanVocabApp.Shared.Data;
+﻿using GermanVocabApp.Api.VocabLists.Contracts;
+using GermanVocabApp.Shared.Data;
 
 namespace GermanVocabApp.Api.VocabLists.Models;
 
-public class UpdateVocabListItemRequest
+public class UpdateVocabListItemRequest : IListItemRequest
 {
     public Guid? Id { get; set; }
     public WordType WordType { get; set; }

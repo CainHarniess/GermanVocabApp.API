@@ -1,19 +1,18 @@
 ﻿using FluentValidation.TestHelper;
+using GermanVocabApp.Api.VocabLists.Contracts;
 using GermanVocabApp.Api.VocabLists.Validation.VocabListItems;
 using GermanVocabApp.Shared.Data;
 
 namespace GermanVocabApp.Api.Tests.Unit.VocabListItems;
 
-public class CreateVerbRequestValidator_NullTests : CreateListItemRequestValidatorTests<CreateVerbRequestValidator>
+public abstract class AbstractVerbListItemRequestValidatorTests<TVerbValidator, TVerbRequest> 
+    : AbstractListItemRequestValidatorTests<TVerbValidator, TVerbRequest>
+    where TVerbValidator : AbstractListItemRequestValidator<TVerbRequest>
+    where TVerbRequest : IListItemRequest
 {
-    public CreateVerbRequestValidator_NullTests() : base()
+    protected AbstractVerbListItemRequestValidatorTests() : base()
     {
-        _request.WordType = WordType.Verb;
-    }
 
-    protected override CreateVerbRequestValidator Create()
-    {
-        return new CreateVerbRequestValidator();
     }
 
     #region IsWeakMasculineNoun
@@ -22,16 +21,16 @@ public class CreateVerbRequestValidator_NullTests : CreateListItemRequestValidat
     [InlineData(false)]
     public void IsWeakMasculineNoun_ShouldHaveValidationError_WhenNotNull(bool value)
     {
-        _request.IsWeakMasculineNoun = value;
-        var result = _validator.TestValidate(_request);
+        Request.IsWeakMasculineNoun = value;
+        var result = Validator.TestValidate(Request);
         result.ShouldHaveValidationErrorFor(request => request.IsWeakMasculineNoun);
     }
 
     [Fact]
     public void IsWeakMasculineNoun_ShouldNotHaveValidationError_WhenNull()
     {
-        _request.IsWeakMasculineNoun = null;
-        var result = _validator.TestValidate(_request);
+        Request.IsWeakMasculineNoun = null;
+        var result = Validator.TestValidate(Request);
         result.ShouldNotHaveValidationErrorFor(request => request.IsWeakMasculineNoun);
     }
     #endregion
@@ -43,8 +42,8 @@ public class CreateVerbRequestValidator_NullTests : CreateListItemRequestValidat
     [InlineData(null)]
     public void ReflexiveCase_ShouldNotHaveValidationError_WhenNull_OrValidValue(ReflexiveCase? value)
     {
-        _request.ReflexiveCase = value;
-        var result = _validator.TestValidate(_request);
+        Request.ReflexiveCase = value;
+        var result = Validator.TestValidate(Request);
         result.ShouldNotHaveValidationErrorFor(request => request.ReflexiveCase);
     }
     #endregion
@@ -57,8 +56,8 @@ public class CreateVerbRequestValidator_NullTests : CreateListItemRequestValidat
     [InlineData(StringData.CharString26)]
     public void ThirdPersonPresent_ShouldHaveValidationError_WhenInvalidLength(string? value)
     {
-        _request.ThirdPersonPresent = value;
-        var result = _validator.TestValidate(_request);
+        Request.ThirdPersonPresent = value;
+        var result = Validator.TestValidate(Request);
         result.ShouldHaveValidationErrorFor(request => request.ThirdPersonPresent);
     }
 
@@ -68,8 +67,8 @@ public class CreateVerbRequestValidator_NullTests : CreateListItemRequestValidat
     [InlineData(StringData.CharString25)]
     public void ThirdPersonPresent_ShouldNotHaveValidationError_WhenNull_OrValidLength(string? value)
     {
-        _request.ThirdPersonPresent = value;
-        var result = _validator.TestValidate(_request);
+        Request.ThirdPersonPresent = value;
+        var result = Validator.TestValidate(Request);
         result.ShouldNotHaveValidationErrorFor(request => request.ThirdPersonPresent);
     }
     #endregion
@@ -82,8 +81,8 @@ public class CreateVerbRequestValidator_NullTests : CreateListItemRequestValidat
     [InlineData(StringData.CharString26)]
     public void ThirdPersonImperfect_ShouldHaveValidationError_WhenInvalidLength(string? value)
     {
-        _request.ThirdPersonImperfect = value;
-        var result = _validator.TestValidate(_request);
+        Request.ThirdPersonImperfect = value;
+        var result = Validator.TestValidate(Request);
         result.ShouldHaveValidationErrorFor(request => request.ThirdPersonImperfect);
     }
 
@@ -93,8 +92,8 @@ public class CreateVerbRequestValidator_NullTests : CreateListItemRequestValidat
     [InlineData(StringData.CharString25)]
     public void ThirdPersonImperfect_ShouldNotHaveValidationError_WhenNull_OrValidLength(string? value)
     {
-        _request.ThirdPersonImperfect = value;
-        var result = _validator.TestValidate(_request);
+        Request.ThirdPersonImperfect = value;
+        var result = Validator.TestValidate(Request);
         result.ShouldNotHaveValidationErrorFor(request => request.ThirdPersonImperfect);
     }
     #endregion
@@ -105,24 +104,24 @@ public class CreateVerbRequestValidator_NullTests : CreateListItemRequestValidat
     [InlineData(AuxiliaryVerb.Sein)]
     public void AuxiliaryVerb_ShouldNotHaveValidationError_WhenNotNull_AndValidEnum(AuxiliaryVerb value)
     {
-        _request.AuxiliaryVerb = value;
-        var result = _validator.TestValidate(_request);
+        Request.AuxiliaryVerb = value;
+        var result = Validator.TestValidate(Request);
         result.ShouldNotHaveValidationErrorFor(request => request.AuxiliaryVerb);
     }
 
     [Fact]
     public void AuxiliaryVerb_ShouldHaveValidationError_WhenNull()
     {
-        _request.AuxiliaryVerb = null;
-        var result = _validator.TestValidate(_request);
+        Request.AuxiliaryVerb = null;
+        var result = Validator.TestValidate(Request);
         result.ShouldHaveValidationErrorFor(request => request.AuxiliaryVerb);
-    } 
+    }
 
     [Fact]
     public void AuxiliaryVerb_ShouldHaveValidationError_InvalidValue()
     {
-        _request.AuxiliaryVerb = (AuxiliaryVerb)99;
-        var result = _validator.TestValidate(_request);
+        Request.AuxiliaryVerb = (AuxiliaryVerb)99;
+        var result = Validator.TestValidate(Request);
         result.ShouldHaveValidationErrorFor(request => request.AuxiliaryVerb);
     }
     #endregion
@@ -135,8 +134,8 @@ public class CreateVerbRequestValidator_NullTests : CreateListItemRequestValidat
     [InlineData(StringData.CharString26)]
     public void Perfect_ShouldHaveValidationError_WhenInvalidLength(string? value)
     {
-        _request.Perfect = value;
-        var result = _validator.TestValidate(_request);
+        Request.Perfect = value;
+        var result = Validator.TestValidate(Request);
         result.ShouldHaveValidationErrorFor(request => request.Perfect);
     }
 
@@ -146,8 +145,8 @@ public class CreateVerbRequestValidator_NullTests : CreateListItemRequestValidat
     [InlineData(StringData.CharString25)]
     public void Perfect_ShouldNotHaveValidationError_WhenNull_OrValidLength(string? value)
     {
-        _request.Perfect = value;
-        var result = _validator.TestValidate(_request);
+        Request.Perfect = value;
+        var result = Validator.TestValidate(Request);
         result.ShouldNotHaveValidationErrorFor(request => request.Perfect);
     }
     #endregion
@@ -159,16 +158,16 @@ public class CreateVerbRequestValidator_NullTests : CreateListItemRequestValidat
     [InlineData(Separability.Inseparable)]
     public void Separability_ShouldNotHaveValidationError_WhenNotNull(Separability value)
     {
-        _request.Separability = value;
-        var result = _validator.TestValidate(_request);
+        Request.Separability = value;
+        var result = Validator.TestValidate(Request);
         result.ShouldNotHaveValidationErrorFor(request => request.Separability);
     }
 
     [Fact]
     public void Separability_ShouldHaveValidationError_WhenNull()
     {
-        _request.Separability = null;
-        var result = _validator.TestValidate(_request);
+        Request.Separability = null;
+        var result = Validator.TestValidate(Request);
         result.ShouldHaveValidationErrorFor(request => request.Separability);
     }
     #endregion
@@ -180,16 +179,16 @@ public class CreateVerbRequestValidator_NullTests : CreateListItemRequestValidat
     [InlineData(Transitivity.Both)]
     public void Transitivity_ShouldNotHaveValidationError_WhenNotNull(Transitivity value)
     {
-        _request.Transitivity = value;
-        var result = _validator.TestValidate(_request);
+        Request.Transitivity = value;
+        var result = Validator.TestValidate(Request);
         result.ShouldNotHaveValidationErrorFor(request => request.Transitivity);
     }
 
     [Fact]
     public void Transitivity_ShouldHaveValidationError_WhenNull()
     {
-        _request.Transitivity = null;
-        var result = _validator.TestValidate(_request);
+        Request.Transitivity = null;
+        var result = Validator.TestValidate(Request);
         result.ShouldHaveValidationErrorFor(request => request.Transitivity);
     }
     #endregion
@@ -201,16 +200,16 @@ public class CreateVerbRequestValidator_NullTests : CreateListItemRequestValidat
     [InlineData(Gender.Neuter)]
     public void Gender_ShouldHaveValidationError_WhenNotNull(Gender value)
     {
-        _request.Gender = value;
-        var result = _validator.TestValidate(_request);
+        Request.Gender = value;
+        var result = Validator.TestValidate(Request);
         result.ShouldHaveValidationErrorFor(request => request.Gender);
     }
 
     [Fact]
     public void Gender_ShouldNotHaveValidationError_WhenNull()
     {
-        _request.Gender = null;
-        var result = _validator.TestValidate(_request);
+        Request.Gender = null;
+        var result = Validator.TestValidate(Request);
         result.ShouldNotHaveValidationErrorFor(request => request.Gender);
     }
     #endregion
@@ -223,16 +222,16 @@ public class CreateVerbRequestValidator_NullTests : CreateListItemRequestValidat
     [InlineData(StringData.CharString25)]
     public void Plural_ShouldHaveValidationError_WhenNotNull(string? value)
     {
-        _request.Plural = value;
-        var result = _validator.TestValidate(_request);
+        Request.Plural = value;
+        var result = Validator.TestValidate(Request);
         result.ShouldHaveValidationErrorFor(request => request.Plural);
     }
 
     [Fact]
     public void Plural_ShouldNotHaveValidationError_WhenNull()
     {
-        _request.Plural = null;
-        var result = _validator.TestValidate(_request);
+        Request.Plural = null;
+        var result = Validator.TestValidate(Request);
         result.ShouldNotHaveValidationErrorFor(request => request.Plural);
     }
     #endregion
@@ -244,8 +243,8 @@ public class CreateVerbRequestValidator_NullTests : CreateListItemRequestValidat
     [InlineData(StringData.CharString26)]
     public void Preposition_ShouldHaveValidationError_WhenInvalidLength(string? value)
     {
-        _request.Preposition = value;
-        var result = _validator.TestValidate(_request);
+        Request.Preposition = value;
+        var result = Validator.TestValidate(Request);
         result.ShouldHaveValidationErrorFor(request => request.Preposition);
     }
 
@@ -255,14 +254,14 @@ public class CreateVerbRequestValidator_NullTests : CreateListItemRequestValidat
     [InlineData(StringData.CharString25)]
     public void Preposition_ShouldNotHaveValidationError_WhenNull_OrValidLength(string? value)
     {
-        _request.Preposition = value;
-        var result = _validator.TestValidate(_request);
+        Request.Preposition = value;
+        var result = Validator.TestValidate(Request);
         result.ShouldNotHaveValidationErrorFor(request => request.Preposition);
     }
     #endregion
 
     #region PrepositionCase
-    
+
     [Theory(Skip = "Not yet implemented")]
     [InlineData(null)]
     public void PrepositionCase_ShouldNotHaveValidationError_WhenNull_AndPrepositionCaseNull(string? value)
@@ -270,7 +269,7 @@ public class CreateVerbRequestValidator_NullTests : CreateListItemRequestValidat
 
     }
 
-    [Theory (Skip = "Not yet implemented")]
+    [Theory(Skip = "Not yet implemented")]
     [InlineData(null)]
     public void PrepositionCase_ShouldHaveValidationError_WhenNull_AndPrepositionNotNull(string? value)
     {
@@ -286,16 +285,16 @@ public class CreateVerbRequestValidator_NullTests : CreateListItemRequestValidat
     [InlineData(StringData.CharString25)]
     public void Comparative_ShouldHaveValidationError_WhenNotNull(string? value)
     {
-        _request.Comparative = value;
-        var result = _validator.TestValidate(_request);
+        Request.Comparative = value;
+        var result = Validator.TestValidate(Request);
         result.ShouldHaveValidationErrorFor(request => request.Comparative);
     }
 
     [Fact]
     public void Comparative_ShouldNotHaveValidationError_WhenNull()
     {
-        _request.Comparative = null;
-        var result = _validator.TestValidate(_request);
+        Request.Comparative = null;
+        var result = Validator.TestValidate(Request);
         result.ShouldNotHaveValidationErrorFor(request => request.Comparative);
     }
 
@@ -305,16 +304,16 @@ public class CreateVerbRequestValidator_NullTests : CreateListItemRequestValidat
     [InlineData(StringData.CharString25)]
     public void Superlative_ShouldHaveValidationError_WhenNotNull(string? value)
     {
-        _request.Superlative = value;
-        var result = _validator.TestValidate(_request);
+        Request.Superlative = value;
+        var result = Validator.TestValidate(Request);
         result.ShouldHaveValidationErrorFor(request => request.Superlative);
     }
 
     [Fact]
     public void Superlative_ShouldNotHaveValidationError_WhenNull()
     {
-        _request.Superlative = null;
-        var result = _validator.TestValidate(_request);
+        Request.Superlative = null;
+        var result = Validator.TestValidate(Request);
         result.ShouldNotHaveValidationErrorFor(request => request.Superlative);
     }
     #endregion
@@ -326,17 +325,17 @@ public class CreateVerbRequestValidator_NullTests : CreateListItemRequestValidat
     [InlineData(FixedPlurality.Plural)]
     public void FixedPlurality_ShouldHaveValidationError_WhenNotNull(FixedPlurality value)
     {
-        _request.FixedPlurality = value;
-        var result = _validator.TestValidate(_request);
+        Request.FixedPlurality = value;
+        var result = Validator.TestValidate(Request);
         result.ShouldHaveValidationErrorFor(request => request.FixedPlurality);
     }
 
     [Fact]
     public void FixedPlurality_ShouldNotHaveValidationError_WhenNull()
     {
-        _request.FixedPlurality = null;
-        var result = _validator.TestValidate(_request);
+        Request.FixedPlurality = null;
+        var result = Validator.TestValidate(Request);
         result.ShouldNotHaveValidationErrorFor(request => request.FixedPlurality);
-    } 
+    }
     #endregion
 }

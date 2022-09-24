@@ -5,10 +5,10 @@ using Osiris.FluentValidation;
 
 namespace GermanVocabApp.Api.VocabLists.Validation.VocabLists;
 
-public abstract class AbstractVocabListRequestValidator<TListRequest> : AbstractValidator<TListRequest>
+public abstract class AbstractListRequestValidator<TListRequest> : AbstractValidator<TListRequest>
     where TListRequest : IVocabListRequest
 {
-    public AbstractVocabListRequestValidator()
+    public AbstractListRequestValidator()
     {
         RuleFor(c => c.Name).NotNull();
         RuleFor(c => c.Name).StringLengthRange(ListValidationData.NameMinLength, ListValidationData.NameMaxLength);
