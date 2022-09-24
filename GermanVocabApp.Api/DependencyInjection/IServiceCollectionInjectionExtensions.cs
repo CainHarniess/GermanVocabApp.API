@@ -1,5 +1,6 @@
 ﻿using GermanVocabApp.Api.VocabLists.Models;
-using GermanVocabApp.Api.VocabLists.Validation;
+using GermanVocabApp.Api.VocabLists.Validation.ListItems;
+using GermanVocabApp.Api.VocabLists.Validation.VocabLists;
 using GermanVocabApp.Core.Validation.DependencyInjection;
 using GermanVocabApp.DataAccess.EntityFramework;
 using GermanVocabApp.DataAccess.EntityFramework.Repositories;

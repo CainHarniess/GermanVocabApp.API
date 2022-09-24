@@ -2,7 +2,7 @@
 using GermanVocabApp.Core.Validation;
 using GermanVocabApp.Core.Validation.DependencyInjection;
 
-namespace GermanVocabApp.Api.VocabLists.Validation;
+namespace GermanVocabApp.Api.VocabLists.Validation.ListItems;
 
 public class AbstractItemValidator<TItem> : Validator<TItem>
     where TItem : IListItemRequest

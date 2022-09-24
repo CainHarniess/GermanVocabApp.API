@@ -2,7 +2,7 @@
 using GermanVocabApp.Core.Validation;
 using GermanVocabApp.Core.Validation.DependencyInjection;
 
-namespace GermanVocabApp.Api.VocabLists.Validation;
+namespace GermanVocabApp.Api.VocabLists.Validation.VocabLists;
 
 public abstract class AbstractListValidator<TList, TItem> : Validator<TList>
     where TList : IListRequest<TItem>
@@ -17,8 +17,8 @@ public abstract class AbstractListValidator<TList, TItem> : Validator<TList>
 
     public override IValidationResult Validate(TList target)
     {
-        ValidationResult result = new ValidationResult(false);
-        ValidationError error = new ValidationError("Your request is invalid");
+        var result = new ValidationResult(false);
+        var error = new ValidationError("Your request is invalid");
         result.Errors.Add(error);
         return result;
 
