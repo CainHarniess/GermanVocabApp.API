@@ -5,11 +5,10 @@ using GermanVocabApp.Api.VocabLists.Contracts;
 
 namespace GermanVocabApp.Api.VocabLists.Validation;
 
-public class VocabListRequestValidator
+public class VocabListRequestValidator : IValidator<IListRequest>
 {
     private readonly FluentListValidator _listValidator;
     private readonly WordValidatorFactory _wordValidatorFactory;
-
 
     public VocabListRequestValidator()
     {
