@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using GermanVocabApp.Api.VocabLists.Contracts;
+using GermanVocabApp.Core.Contracts;
 
 namespace GermanVocabApp.Api.FluentValidation.FluentValidators;
 

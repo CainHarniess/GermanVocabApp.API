@@ -1,7 +1,8 @@
-﻿using GermanVocabApp.Api.VocabLists.Conversion;
+﻿using FluentValidation.Results;
+using GermanVocabApp.Api.VocabLists.Conversion;
 using GermanVocabApp.Api.VocabLists.Models;
+using GermanVocabApp.Core.Contracts;
 using GermanVocabApp.Core.Exceptions;
-using GermanVocabApp.Core.Validation.DependencyInjection;
 using GermanVocabApp.DataAccess.Shared;
 using GermanVocabApp.DataAccess.Shared.DataTransfer;
 using Microsoft.AspNetCore.Mvc;
@@ -14,15 +15,12 @@ namespace GermanVocabApp.Api.VocabLists;
 public class VocabListsController : ControllerBase
 {
     private readonly IVocabListRepositoryAsync _repository;
-    private readonly IValidator<CreateVocabListRequest> _creationValidator;
-    private readonly IValidator<UpdateVocabListRequest> _updateValidator;
+    private readonly IValidator<IListRequest> _validator;
 
-    public VocabListsController(IValidator<CreateVocabListRequest> creationValidator,
-        IValidator<UpdateVocabListRequest> updateValidator,
+    public VocabListsController(IValidator<IListRequest> validator,
         IVocabListRepositoryAsync repository)
     {
-        _creationValidator = creationValidator;
-        _updateValidator = updateValidator;
+        _validator = validator;
         _repository = repository;
     }
 
@@ -32,7 +30,7 @@ public class VocabListsController : ControllerBase
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
     public async Task<IActionResult> Create(CreateVocabListRequest request)
     {
-        IValidationResult result = _creationValidator.Validate(request);
+        ValidationResult result = _validator.Validate(request);
 
         if (!result.IsValid)
         {
@@ -85,7 +83,7 @@ public class VocabListsController : ControllerBase
     [ProducesResponseType((int)HttpStatusCode.NoContent)]
     public async Task<IActionResult> UpdateVocabList(Guid id, UpdateVocabListRequest request)
     {
-        IValidationResult result = _updateValidator.Validate(request);
+        ValidationResult result = _updateValidator.Validate(request);
 
         if (!result.IsValid)
         {

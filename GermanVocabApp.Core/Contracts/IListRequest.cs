@@ -1,4 +1,4 @@
-﻿namespace GermanVocabApp.Api.VocabLists.Contracts;
+﻿namespace GermanVocabApp.Core.Contracts;
 
 public interface IListRequest<TItem>
     where TItem : IListItemRequest

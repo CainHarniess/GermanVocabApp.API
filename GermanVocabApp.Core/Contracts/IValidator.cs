@@ -1,6 +1,6 @@
 ﻿using FluentValidation.Results;
 
-namespace GermanVocabApp.Api.VocabLists.Contracts;
+namespace GermanVocabApp.Core.Contracts;
 
 public interface IValidator<T>
 {

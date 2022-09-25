@@ -1,4 +1,4 @@
-﻿using GermanVocabApp.Api.VocabLists.Contracts;
+﻿using GermanVocabApp.Core.Contracts;
 
 namespace GermanVocabApp.Api.VocabLists.Models;
 

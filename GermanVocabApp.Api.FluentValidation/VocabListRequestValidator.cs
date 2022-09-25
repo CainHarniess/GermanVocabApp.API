@@ -1,7 +1,7 @@
 ﻿using FluentValidation.Results;
 using GermanVocabApp.Api.FluentValidation;
 using GermanVocabApp.Api.FluentValidation.FluentValidators;
-using GermanVocabApp.Api.VocabLists.Contracts;
+using GermanVocabApp.Core.Contracts;
 
 namespace GermanVocabApp.Api.VocabLists.Validation;
 

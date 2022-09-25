@@ -1,6 +1,6 @@
 ﻿using GermanVocabApp.Shared.Data;
 
-namespace GermanVocabApp.Api.VocabLists.Contracts;
+namespace GermanVocabApp.Core.Contracts;
 
 public interface IListItemRequest
 {
