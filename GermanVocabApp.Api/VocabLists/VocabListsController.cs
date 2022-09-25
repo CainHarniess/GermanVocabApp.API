@@ -15,12 +15,15 @@ namespace GermanVocabApp.Api.VocabLists;
 public class VocabListsController : ControllerBase
 {
     private readonly IVocabListRepositoryAsync _repository;
-    private readonly IValidator<IListRequest> _validator;
+    private readonly IValidator<IListRequest<CreateVocabListItemRequest>> _creationValidator;
+    private readonly IValidator<IListRequest<UpdateVocabListItemRequest>> _updateValidator;
 
-    public VocabListsController(IValidator<IListRequest> validator,
+    public VocabListsController(IValidator<IListRequest<CreateVocabListItemRequest>> creationValidator,
+        IValidator<IListRequest<UpdateVocabListItemRequest>> updateValidator,
         IVocabListRepositoryAsync repository)
     {
-        _validator = validator;
+        _creationValidator = creationValidator;
+        _updateValidator = updateValidator;
         _repository = repository;
     }
 
@@ -30,8 +33,7 @@ public class VocabListsController : ControllerBase
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
     public async Task<IActionResult> Create(CreateVocabListRequest request)
     {
-        ValidationResult result = _validator.Validate(request);
-
+        ValidationResult result = _creationValidator.Validate(request);
         if (!result.IsValid)
         {
             return BadRequest(result.Errors);
@@ -84,10 +86,9 @@ public class VocabListsController : ControllerBase
     public async Task<IActionResult> UpdateVocabList(Guid id, UpdateVocabListRequest request)
     {
         ValidationResult result = _updateValidator.Validate(request);
-
         if (!result.IsValid)
         {
-            return BadRequest();
+            return BadRequest(result.Errors);
         }
 
         UpdateVocabListDto updateDto = request.ToDto(id);
