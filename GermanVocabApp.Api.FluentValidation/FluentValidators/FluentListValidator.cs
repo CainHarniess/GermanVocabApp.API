@@ -1,11 +1,11 @@
 ﻿using FluentValidation;
 using GermanVocabApp.Api.VocabLists.Contracts;
 
-namespace GermanVocabApp.Api.FluentValidation.Lists;
+namespace GermanVocabApp.Api.FluentValidation.FluentValidators;
 
-public class ListRequestValidator : AbstractValidator<IListRequest>
+internal class FluentListValidator : AbstractValidator<IListRequest>
 {
-    public ListRequestValidator() : base()
+    public FluentListValidator() : base()
     {
         RuleFor(l => l.Name).NotNull().MinimumLength(3).MaximumLength(100);
         RuleFor(l => l.Description).MinimumLength(3).MaximumLength(100);

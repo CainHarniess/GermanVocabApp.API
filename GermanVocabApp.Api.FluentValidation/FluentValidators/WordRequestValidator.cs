@@ -1,11 +1,11 @@
 ﻿using FluentValidation;
 using GermanVocabApp.Api.VocabLists.Contracts;
 
-namespace GermanVocabApp.Api.FluentValidation.Words;
+namespace GermanVocabApp.Api.FluentValidation.FluentValidators;
 
-public class WordRequestValidator : AbstractValidator<IListItemRequest>
+internal abstract class FluentWordValidator : AbstractValidator<IListItemRequest>
 {
-    public WordRequestValidator()
+    protected FluentWordValidator()
     {
         RuleFor(w => w.WordType).NotNull();
         RuleFor(w => w.German).NotNull().MinimumLength(3).MaximumLength(100);

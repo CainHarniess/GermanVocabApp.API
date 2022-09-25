@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 
-namespace GermanVocabApp.Api.FluentValidation.Words;
+namespace GermanVocabApp.Api.FluentValidation.FluentValidators;
 
-public class NounRequestValidator : WordRequestValidator
+internal class FluentNounValidator : FluentWordValidator
 {
-    public NounRequestValidator() : base()
+    public FluentNounValidator() : base()
     {
         RuleFor(n => n.IsWeakMasculineNoun).NotNull();
         RuleFor(n => n.ReflexiveCase).Null();
