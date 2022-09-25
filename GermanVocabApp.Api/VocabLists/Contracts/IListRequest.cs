@@ -1,4 +1,4 @@
-﻿namespace GermanVocabApp.Api.VocabLists.Models;
+﻿namespace GermanVocabApp.Api.VocabLists.Contracts;
 
 public interface IListRequest<TItem>
     where TItem : IListItemRequest
@@ -6,4 +6,10 @@ public interface IListRequest<TItem>
     public string Name { get; set; }
     public string? Description { get; set; }
     public IEnumerable<TItem> ListItems { get; set; }
+}
+
+public interface IListRequest
+{
+    public string Name { get; set; }
+    public string? Description { get; set; }
 }

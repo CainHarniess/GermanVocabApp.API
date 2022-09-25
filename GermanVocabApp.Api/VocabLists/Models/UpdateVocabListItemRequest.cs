@@ -1,4 +1,5 @@
-﻿using GermanVocabApp.Shared.Data;
+﻿using GermanVocabApp.Api.VocabLists.Contracts;
+using GermanVocabApp.Shared.Data;
 
 namespace GermanVocabApp.Api.VocabLists.Models;
 

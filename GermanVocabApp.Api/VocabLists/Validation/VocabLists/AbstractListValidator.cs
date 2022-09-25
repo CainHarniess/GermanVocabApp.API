@@ -1,4 +1,4 @@
-﻿using GermanVocabApp.Api.VocabLists.Models;
+﻿using GermanVocabApp.Api.VocabLists.Contracts;
 using GermanVocabApp.Core.Validation;
 using GermanVocabApp.Core.Validation.DependencyInjection;
 

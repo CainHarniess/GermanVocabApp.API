@@ -1,4 +1,6 @@
-﻿namespace GermanVocabApp.Api.VocabLists.Models;
+﻿using GermanVocabApp.Api.VocabLists.Contracts;
+
+namespace GermanVocabApp.Api.VocabLists.Models;
 
 public class CreateVocabListRequest : IListRequest<CreateVocabListItemRequest>
 {
