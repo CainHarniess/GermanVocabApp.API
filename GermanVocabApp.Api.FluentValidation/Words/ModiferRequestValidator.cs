@@ -2,9 +2,9 @@
 
 namespace GermanVocabApp.Api.FluentValidation.Words;
 
-public class ModiferValidator : WordRequestValidator
+public class ModiferRequestValidator : WordRequestValidator
 {
-    public ModiferValidator() : base()
+    public ModiferRequestValidator() : base()
     {
         RuleFor(m => m.IsWeakMasculineNoun).Null();
         RuleFor(m => m.ReflexiveCase).Null();
