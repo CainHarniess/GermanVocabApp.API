@@ -222,6 +222,50 @@ public class FluentNounValidatorTests : FluentWordValidatorTests<FluentNounValid
     }
     #endregion
 
+    #region PrepositionCase
+    [Fact]
+    public void PrepositionCase_ShouldNotHaveValidationError_WhenNull_AndPrepositionCaseNull()
+    {
+        Mock.Setup(r => r.Preposition).Returns(() => null);
+        Mock.Setup(r => r.PrepositionCase).Returns(() => null);
+        var result = Validator.TestValidate(Mock.Object);
+        result.ShouldNotHaveValidationErrorFor(request => request.PrepositionCase);
+    }
+
+    [Fact]
+    public void PrepositionCase_ShouldHaveValidationError_WhenNotNull_AndPrepositionNull()
+    {
+        Mock.Setup(r => r.Preposition).Returns(() => null);
+        Mock.Setup(r => r.PrepositionCase).Returns(() => It.IsAny<Case>());
+        var result = Validator.TestValidate(Mock.Object);
+        result.ShouldHaveValidationErrorFor(request => request.PrepositionCase);
+    }
+
+    [Theory]
+    [InlineData(StringData.Whitespace)]
+    [InlineData(StringData.Empty)]
+    [InlineData(StringData.CharString1)]
+    public void PrepositionCase_ShouldHaveValidationError_WhenNull_AndPrepositionNotNull(string? prepositionValue)
+    {
+        Mock.Setup(r => r.Preposition).Returns(() => prepositionValue);
+        Mock.Setup(r => r.PrepositionCase).Returns(() => null);
+        var result = Validator.TestValidate(Mock.Object);
+        result.ShouldHaveValidationErrorFor(request => request.PrepositionCase);
+    }
+
+    [Theory]
+    [InlineData(StringData.Whitespace)]
+    [InlineData(StringData.Empty)]
+    [InlineData(StringData.CharString1)]
+    public void PrepositionCase_ShouldNotHaveValidationError_WhenNotNull_AndPrepositionNotNull(string? prepositionValue)
+    {
+        Mock.Setup(r => r.Preposition).Returns(prepositionValue);
+        Mock.Setup(r => r.PrepositionCase).Returns(() => It.IsAny<Case>());
+        var result = Validator.TestValidate(Mock.Object);
+        result.ShouldNotHaveValidationErrorFor(request => request.PrepositionCase);
+    }
+    #endregion
+
     #region Plural
     [Theory]
     [InlineData(StringData.Empty)]
@@ -245,28 +289,54 @@ public class FluentNounValidatorTests : FluentWordValidatorTests<FluentNounValid
         var result = Validator.TestValidate(Mock.Object);
         result.ShouldNotHaveValidationErrorFor(request => request.Plural);
     }
-    #endregion
 
-    #region PrepositionCase
     [Fact]
-    public void PrepositionCase_ShouldNotHaveValidationError_WhenNull_AndPrepositionCaseNull()
+    public void Plural_ShouldHaveValidationError_WhenNull_AndAlwaysPlural()
     {
-        Mock.Setup(r => r.Preposition).Returns(() => null);
-        Mock.Setup(r => r.PrepositionCase).Returns(() => null);
+        Mock.Setup(r => r.FixedPlurality).Returns(FixedPlurality.Plural);
+        Mock.Setup(r => r.Plural).Returns(() => null);
         var result = Validator.TestValidate(Mock.Object);
-        result.ShouldNotHaveValidationErrorFor(request => request.PrepositionCase);
+        result.ShouldHaveValidationErrorFor(request => request.Plural);
+    }
+
+    [Theory]
+    [InlineData("abc")]
+    public void Plural_ShouldNotHaveValidationError_WhenNotNull_AndAlwaysPlural(string? value)
+    {
+        Mock.Setup(r => r.FixedPlurality).Returns(FixedPlurality.Plural);
+        Mock.Setup(r => r.Plural).Returns(value);
+        var result = Validator.TestValidate(Mock.Object);
+        result.ShouldNotHaveValidationErrorFor(request => request.Plural);
+    }
+
+    [Fact]
+    public void Plural_ShouldNotHaveValidationError_WhenNull_AndAlwaysSingular()
+    {
+        Mock.Setup(r => r.FixedPlurality).Returns(FixedPlurality.Singular);
+        Mock.Setup(r => r.Plural).Returns(() => null);
+        var result = Validator.TestValidate(Mock.Object);
+        result.ShouldNotHaveValidationErrorFor(request => request.Plural);
     }
 
     [Theory]
     [InlineData(StringData.Whitespace)]
     [InlineData(StringData.Empty)]
     [InlineData(StringData.CharString1)]
-    public void PrepositionCase_ShouldHaveValidationError_WhenNull_AndPrepositionNotNull(string? prepositionValue)
+    public void Plural_ShouldHaveValidationError_WhenNotNull_AndAlwaysSingular(string? value)
     {
-        Mock.Setup(r => r.Preposition).Returns(() => prepositionValue);
-        Mock.Setup(r => r.PrepositionCase).Returns(() => null);
+        Mock.Setup(r => r.FixedPlurality).Returns(FixedPlurality.Singular);
+        Mock.Setup(r => r.Plural).Returns(value);
         var result = Validator.TestValidate(Mock.Object);
-        result.ShouldHaveValidationErrorFor(request => request.PrepositionCase);
+        result.ShouldHaveValidationErrorFor(request => request.Plural);
+    }
+
+    [Fact]
+    public void Plural_ShouldNotHaveValidationError_WhenNoFixedPlurality()
+    {
+        Mock.Setup(r => r.FixedPlurality).Returns(FixedPlurality.Singular);
+        Mock.Setup(r => r.Plural).Returns(() => It.IsAny<string>());
+        var result = Validator.TestValidate(Mock.Object);
+        result.ShouldNotHaveValidationErrorFor(request => request.Plural);
     }
     #endregion
 

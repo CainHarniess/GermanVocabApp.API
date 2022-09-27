@@ -1,9 +1,10 @@
 ﻿using FluentValidation.TestHelper;
-using GermanVocabApp.Api.FluentValidation.Tests.Unit;
 using GermanVocabApp.Api.FluentValidation.Validators;
+using GermanVocabApp.Api.Tests.Unit.VocabListItems;
 using GermanVocabApp.Shared.Data;
+using Moq;
 
-namespace GermanVocabApp.Api.Tests.Unit.VocabListItems;
+namespace GermanVocabApp.Api.FluentValidation.Tests.Unit;
 
 public class FluentVerbValidatorTests : FluentWordValidatorTests<FluentVerbValidator>
 {
@@ -267,6 +268,15 @@ public class FluentVerbValidatorTests : FluentWordValidatorTests<FluentVerbValid
         result.ShouldNotHaveValidationErrorFor(request => request.PrepositionCase);
     }
 
+    [Fact]
+    public void PrepositionCase_ShouldHaveValidationError_WhenNotNull_AndPrepositionNull()
+    {
+        Mock.Setup(r => r.Preposition).Returns(() => null);
+        Mock.Setup(r => r.PrepositionCase).Returns(() => It.IsAny<Case>());
+        var result = Validator.TestValidate(Mock.Object);
+        result.ShouldHaveValidationErrorFor(request => request.PrepositionCase);
+    }
+
     [Theory]
     [InlineData(StringData.Whitespace)]
     [InlineData(StringData.Empty)]
@@ -277,6 +287,18 @@ public class FluentVerbValidatorTests : FluentWordValidatorTests<FluentVerbValid
         Mock.Setup(r => r.PrepositionCase).Returns(() => null);
         var result = Validator.TestValidate(Mock.Object);
         result.ShouldHaveValidationErrorFor(request => request.PrepositionCase);
+    }
+
+    [Theory]
+    [InlineData(StringData.Whitespace)]
+    [InlineData(StringData.Empty)]
+    [InlineData(StringData.CharString1)]
+    public void PrepositionCase_ShouldNotHaveValidationError_WhenNotNull_AndPrepositionNotNull(string? prepositionValue)
+    {
+        Mock.Setup(r => r.Preposition).Returns(prepositionValue);
+        Mock.Setup(r => r.PrepositionCase).Returns(() => It.IsAny<Case>());
+        var result = Validator.TestValidate(Mock.Object);
+        result.ShouldNotHaveValidationErrorFor(request => request.PrepositionCase);
     }
     #endregion
 
