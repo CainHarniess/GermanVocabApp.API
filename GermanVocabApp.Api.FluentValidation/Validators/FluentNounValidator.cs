@@ -23,5 +23,8 @@ public class FluentNounValidator : FluentWordValidator
 
         RuleFor(n => n.Preposition).StringLengthRange(ListItemConstraints.PrepositionMinLength, ListItemConstraints.PluralMaxLength);
         RuleFor(n => n.Plural).StringLengthRange(NounConstraints.PluralMinLength, NounConstraints.PluralMaxLength);
+
+        RuleFor(n => n.PrepositionCase).NotNull().When(n => n.Preposition != null);
+        RuleFor(n => n.PrepositionCase).Null().When(n => n.Preposition == null);
     }
 }

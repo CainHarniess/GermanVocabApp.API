@@ -2,6 +2,7 @@ using FluentValidation.TestHelper;
 using GermanVocabApp.Api.FluentValidation.Validators;
 using GermanVocabApp.Api.Tests.Unit.VocabListItems;
 using GermanVocabApp.Shared.Data;
+using Moq;
 
 namespace GermanVocabApp.Api.FluentValidation.Tests.Unit;
 
@@ -96,7 +97,7 @@ public class FluentNounValidatorTests : FluentWordValidatorTests<FluentNounValid
     }
     #endregion
 
-    #region ThidPersonPresent
+    #region ThirdPersonPresent
     [Fact]
     public void ThirdPersonPresent_ShouldNotHaveValidationError_WhenNull()
     {
@@ -247,19 +248,25 @@ public class FluentNounValidatorTests : FluentWordValidatorTests<FluentNounValid
     #endregion
 
     #region PrepositionCase
-
-    [Theory(Skip = "Not yet implemented")]
-    [InlineData(null)]
-    public void PrepositionCase_ShouldNotHaveValidationError_WhenNull_AndPrepositionCaseNull(string? value)
+    [Fact]
+    public void PrepositionCase_ShouldNotHaveValidationError_WhenNull_AndPrepositionCaseNull()
     {
-
+        Mock.Setup(r => r.Preposition).Returns(() => null);
+        Mock.Setup(r => r.PrepositionCase).Returns(() => null);
+        var result = Validator.TestValidate(Mock.Object);
+        result.ShouldNotHaveValidationErrorFor(request => request.PrepositionCase);
     }
 
-    [Theory(Skip = "Not yet implemented")]
-    [InlineData(null)]
-    public void PrepositionCase_ShouldHaveValidationError_WhenNull_AndPrepositionNotNull(string? value)
+    [Theory]
+    [InlineData(StringData.Whitespace)]
+    [InlineData(StringData.Empty)]
+    [InlineData(StringData.CharString1)]
+    public void PrepositionCase_ShouldHaveValidationError_WhenNull_AndPrepositionNotNull(string? prepositionValue)
     {
-
+        Mock.Setup(r => r.Preposition).Returns(() => prepositionValue);
+        Mock.Setup(r => r.PrepositionCase).Returns(() => null);
+        var result = Validator.TestValidate(Mock.Object);
+        result.ShouldHaveValidationErrorFor(request => request.PrepositionCase);
     }
     #endregion
 
