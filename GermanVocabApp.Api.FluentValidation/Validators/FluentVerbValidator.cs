@@ -4,7 +4,7 @@ using Osiris.FluentValidation;
 
 namespace GermanVocabApp.Api.FluentValidation.Validators;
 
-internal class FluentVerbValidator : FluentWordValidator
+public class FluentVerbValidator : FluentWordValidator
 {
     public FluentVerbValidator() : base()
     {
