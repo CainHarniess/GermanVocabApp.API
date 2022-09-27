@@ -5,6 +5,7 @@ using GermanVocabApp.Core.Contracts;
 
 namespace GermanVocabApp.Api.VocabLists.Validation;
 
+// TODO: Write unit tests.
 public class VocabListValidationController<TItem> : IValidationController<IListRequest<TItem>>
     where TItem : IListItemRequest
 {

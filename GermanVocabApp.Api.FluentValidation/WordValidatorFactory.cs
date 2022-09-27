@@ -3,6 +3,8 @@ using GermanVocabApp.Core.Contracts;
 using GermanVocabApp.Shared.Data;
 
 namespace GermanVocabApp.Api.FluentValidation;
+
+// TODO: Write unit tests.
 public class WordValidatorFactory
 {
     private Dictionary<WordType, FluentWordValidator> _validators;
