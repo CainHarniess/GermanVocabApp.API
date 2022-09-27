@@ -1,4 +1,6 @@
-﻿using GermanVocabApp.Api.VocabLists.Models;
+﻿using GermanVocabApp.Api.FluentValidation;
+using GermanVocabApp.Api.FluentValidation.Validators;
+using GermanVocabApp.Api.VocabLists.Models;
 using GermanVocabApp.Api.VocabLists.Validation;
 using GermanVocabApp.Core.Contracts;
 using GermanVocabApp.DataAccess.EntityFramework;
@@ -13,6 +15,14 @@ public static class IServiceCollectionInjectionExtensions
 {
     public static IServiceCollection AddValidationDependencies(this IServiceCollection services)
     {
+        services.AddSingleton<WordValidatorFactory>();
+
+        services.AddSingleton<FluentListValidator<CreateVocabListItemRequest>>();
+        services.AddSingleton<FluentListValidator<UpdateVocabListItemRequest>>();
+
+        //services.AddSingleton<VocabListValidationController<CreateVocabListItemRequest>>();
+        //services.AddSingleton<VocabListValidationController<UpdateVocabListItemRequest>>();
+        
         services.AddSingleton<IValidationController<IListRequest<CreateVocabListItemRequest>>, VocabListValidationController<CreateVocabListItemRequest>>();
         services.AddSingleton<IValidationController<IListRequest<UpdateVocabListItemRequest>>, VocabListValidationController<UpdateVocabListItemRequest>>();
         return services;

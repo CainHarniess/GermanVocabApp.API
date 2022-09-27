@@ -3,7 +3,7 @@ using GermanVocabApp.Core.Contracts;
 using GermanVocabApp.Shared.Data;
 
 namespace GermanVocabApp.Api.FluentValidation;
-internal class WordValidatorFactory
+public class WordValidatorFactory
 {
     private Dictionary<WordType, FluentWordValidator> _validators;
 

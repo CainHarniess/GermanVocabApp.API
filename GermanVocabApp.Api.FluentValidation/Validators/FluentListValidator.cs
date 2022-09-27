@@ -3,7 +3,7 @@ using GermanVocabApp.Core.Contracts;
 
 namespace GermanVocabApp.Api.FluentValidation.Validators;
 
-internal class FluentListValidator<TItem> : AbstractValidator<IListRequest<TItem>>
+public class FluentListValidator<TItem> : AbstractValidator<IListRequest<TItem>>
     where TItem : IListItemRequest
 {
     public FluentListValidator() : base()

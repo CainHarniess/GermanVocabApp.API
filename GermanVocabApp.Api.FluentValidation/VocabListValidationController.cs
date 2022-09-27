@@ -11,13 +11,7 @@ public class VocabListValidationController<TItem> : IValidationController<IListR
     private readonly FluentListValidator<TItem> _listValidator;
     private readonly WordValidatorFactory _wordValidatorFactory;
 
-    public VocabListValidationController()
-    {
-        _listValidator = new FluentListValidator<TItem>();
-        _wordValidatorFactory = new WordValidatorFactory();
-    }
-
-    internal VocabListValidationController(FluentListValidator<TItem> listValidator, WordValidatorFactory wordValidatorFactory)
+    public VocabListValidationController(FluentListValidator<TItem> listValidator, WordValidatorFactory wordValidatorFactory)
     {
         _listValidator = listValidator;
         _wordValidatorFactory = wordValidatorFactory;
