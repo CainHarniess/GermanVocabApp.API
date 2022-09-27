@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace GermanVocabApp.Api.FluentValidation.FluentValidators;
+namespace GermanVocabApp.Api.FluentValidation.Validators;
 
 internal class FluentVerbValidator : FluentWordValidator
 {

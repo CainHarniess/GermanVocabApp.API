@@ -15,11 +15,11 @@ namespace GermanVocabApp.Api.VocabLists;
 public class VocabListsController : ControllerBase
 {
     private readonly IVocabListRepositoryAsync _repository;
-    private readonly IValidator<IListRequest<CreateVocabListItemRequest>> _creationValidator;
-    private readonly IValidator<IListRequest<UpdateVocabListItemRequest>> _updateValidator;
+    private readonly IValidationController<IListRequest<CreateVocabListItemRequest>> _creationValidator;
+    private readonly IValidationController<IListRequest<UpdateVocabListItemRequest>> _updateValidator;
 
-    public VocabListsController(IValidator<IListRequest<CreateVocabListItemRequest>> creationValidator,
-        IValidator<IListRequest<UpdateVocabListItemRequest>> updateValidator,
+    public VocabListsController(IValidationController<IListRequest<CreateVocabListItemRequest>> creationValidator,
+        IValidationController<IListRequest<UpdateVocabListItemRequest>> updateValidator,
         IVocabListRepositoryAsync repository)
     {
         _creationValidator = creationValidator;
@@ -36,7 +36,7 @@ public class VocabListsController : ControllerBase
         ValidationResult result = _creationValidator.Validate(request);
         if (!result.IsValid)
         {
-            return BadRequest(result.Errors);
+            return BadRequest(result.ToDictionary());
         }
 
         CreateVocabListDto dto = request.ToDto();

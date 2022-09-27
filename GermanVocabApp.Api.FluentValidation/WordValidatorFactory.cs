@@ -1,4 +1,4 @@
-﻿using GermanVocabApp.Api.FluentValidation.FluentValidators;
+﻿using GermanVocabApp.Api.FluentValidation.Validators;
 using GermanVocabApp.Core.Contracts;
 using GermanVocabApp.Shared.Data;
 

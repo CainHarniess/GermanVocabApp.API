@@ -2,7 +2,7 @@
 
 namespace GermanVocabApp.Core.Contracts;
 
-public interface IValidator<T>
+public interface IValidationController<T>
 {
     public ValidationResult Validate(T target);
 }

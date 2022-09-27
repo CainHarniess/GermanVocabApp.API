@@ -13,8 +13,8 @@ public static class IServiceCollectionInjectionExtensions
 {
     public static IServiceCollection AddValidationDependencies(this IServiceCollection services)
     {
-        services.AddSingleton<IValidator<IListRequest<CreateVocabListItemRequest>>, VocabListRequestValidator<CreateVocabListItemRequest>>();
-        services.AddSingleton<IValidator<IListRequest<UpdateVocabListItemRequest>>, VocabListRequestValidator<UpdateVocabListItemRequest>>();
+        services.AddSingleton<IValidationController<IListRequest<CreateVocabListItemRequest>>, VocabListValidationController<CreateVocabListItemRequest>>();
+        services.AddSingleton<IValidationController<IListRequest<UpdateVocabListItemRequest>>, VocabListValidationController<UpdateVocabListItemRequest>>();
         return services;
     }
 

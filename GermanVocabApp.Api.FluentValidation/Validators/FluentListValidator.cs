@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using GermanVocabApp.Core.Contracts;
 
-namespace GermanVocabApp.Api.FluentValidation.FluentValidators;
+namespace GermanVocabApp.Api.FluentValidation.Validators;
 
 internal class FluentListValidator<TItem> : AbstractValidator<IListRequest<TItem>>
     where TItem : IListItemRequest
