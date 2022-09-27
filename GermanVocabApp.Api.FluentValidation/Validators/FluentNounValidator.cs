@@ -1,4 +1,6 @@
 ﻿using FluentValidation;
+using GermanVocabApp.Shared.Constraints;
+using Osiris.FluentValidation;
 
 namespace GermanVocabApp.Api.FluentValidation.Validators;
 
@@ -18,5 +20,8 @@ internal class FluentNounValidator : FluentWordValidator
         RuleFor(n => n.Comparative).Null();
         RuleFor(n => n.Superlative).Null();
         RuleFor(n => n.FixedPlurality).NotNull();
+
+        RuleFor(n => n.Preposition).StringLengthRange(ListItemConstraints.PrepositionMinLength, ListItemConstraints.PluralMaxLength);
+        RuleFor(n => n.Plural).StringLengthRange(NounConstraints.PluralMinLength, NounConstraints.PluralMaxLength);
     }
 }
