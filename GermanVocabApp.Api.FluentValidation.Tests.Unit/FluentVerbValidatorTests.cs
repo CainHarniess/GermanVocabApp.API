@@ -5,7 +5,7 @@ using GermanVocabApp.Shared.Data;
 
 namespace GermanVocabApp.Api.Tests.Unit.VocabListItems;
 
-public abstract class FluentVerbValidatorTests : FluentWordValidatorTests<FluentVerbValidator>
+public class FluentVerbValidatorTests : FluentWordValidatorTests<FluentVerbValidator>
 {
     protected override FluentVerbValidator CreateValidator()
     {
