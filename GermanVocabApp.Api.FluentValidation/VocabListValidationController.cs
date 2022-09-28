@@ -1,5 +1,5 @@
-﻿using FluentValidation.Results;
-using GermanVocabApp.Api.FluentValidation;
+﻿using FluentValidation;
+using FluentValidation.Results;
 using GermanVocabApp.Api.FluentValidation.Validators;
 using GermanVocabApp.Core.Contracts;
 
@@ -9,10 +9,10 @@ namespace GermanVocabApp.Api.VocabLists.Validation;
 public class VocabListValidationController<TItem> : IValidationController<IListRequest<TItem>>
     where TItem : IListItemRequest
 {
-    private readonly FluentListValidator<TItem> _listValidator;
-    private readonly WordValidatorFactory _wordValidatorFactory;
+    private readonly IValidator<IListRequest<TItem>> _listValidator;
+    private readonly IFactory<FluentWordValidator, IListItemRequest> _wordValidatorFactory;
 
-    public VocabListValidationController(FluentListValidator<TItem> listValidator, WordValidatorFactory wordValidatorFactory)
+    public VocabListValidationController(IValidator<IListRequest<TItem>> listValidator, IFactory<FluentWordValidator, IListItemRequest> wordValidatorFactory)
     {
         _listValidator = listValidator;
         _wordValidatorFactory = wordValidatorFactory;
