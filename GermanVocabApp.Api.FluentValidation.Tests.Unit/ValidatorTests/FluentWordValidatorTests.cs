@@ -3,7 +3,7 @@ using GermanVocabApp.Api.FluentValidation.Validators;
 using GermanVocabApp.Core.Contracts;
 using Moq;
 
-namespace GermanVocabApp.Api.FluentValidation.Tests.Unit;
+namespace GermanVocabApp.Api.FluentValidation.Tests.Unit.ValidatorTests;
 
 public abstract class FluentWordValidatorTests<TValidator>
     where TValidator : FluentWordValidator

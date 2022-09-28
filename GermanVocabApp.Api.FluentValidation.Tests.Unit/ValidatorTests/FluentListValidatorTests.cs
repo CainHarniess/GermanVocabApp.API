@@ -4,7 +4,7 @@ using GermanVocabApp.Api.VocabLists.Models;
 using GermanVocabApp.Core.Contracts;
 using Moq;
 
-namespace GermanVocabApp.Api.Tests.Unit.VocabLists;
+namespace GermanVocabApp.Api.FluentValidation.Tests.Unit.ValidatorTests;
 
 public abstract class FluentListValidatorTests
 {

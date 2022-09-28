@@ -4,6 +4,7 @@ using GermanVocabApp.Shared.Data;
 
 namespace GermanVocabApp.Api.FluentValidation;
 
+// TODO: Write unit tests.
 public class WordValidatorFactory : IFactory<FluentWordValidator, IListItemRequest>
 {
     private Dictionary<WordType, FluentWordValidator> _validators;
