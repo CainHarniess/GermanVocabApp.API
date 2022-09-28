@@ -1,6 +1,5 @@
 using FluentValidation.TestHelper;
 using GermanVocabApp.Api.FluentValidation.Validators;
-using GermanVocabApp.Api.Tests.Unit.VocabListItems;
 using GermanVocabApp.Shared.Data;
 using Moq;
 

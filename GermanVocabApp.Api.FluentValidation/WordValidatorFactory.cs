@@ -21,6 +21,18 @@ public class WordValidatorFactory
         };
     }
 
+    internal WordValidatorFactory()
+    {
+        FluentModifierValidator modifierValidator = new FluentModifierValidator();
+        _validators = new Dictionary<WordType, FluentWordValidator>()
+        {
+            { WordType.Noun, new FluentNounValidator() },
+            { WordType.Verb, new FluentVerbValidator() },
+            { WordType.Adjective, modifierValidator },
+            { WordType.Adverb, modifierValidator },
+        };
+    }
+
     public FluentWordValidator Create(IListItemRequest request)
     {
         WordType wordType = request.WordType;

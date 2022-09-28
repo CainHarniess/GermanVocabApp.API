@@ -1,10 +1,9 @@
 ﻿using FluentValidation.TestHelper;
-using GermanVocabApp.Api.FluentValidation.Tests.Unit;
 using GermanVocabApp.Api.FluentValidation.Validators;
 using GermanVocabApp.Core.Contracts;
 using Moq;
 
-namespace GermanVocabApp.Api.Tests.Unit.VocabListItems;
+namespace GermanVocabApp.Api.FluentValidation.Tests.Unit;
 
 public abstract class FluentWordValidatorTests<TValidator>
     where TValidator : FluentWordValidator
