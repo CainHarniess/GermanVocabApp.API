@@ -15,14 +15,15 @@ public static class IServiceCollectionInjectionExtensions
 {
     public static IServiceCollection AddValidationDependencies(this IServiceCollection services)
     {
+        services.AddSingleton<FluentNounValidator>();
+        services.AddSingleton<FluentVerbValidator>();
+        services.AddSingleton<FluentModifierValidator>();
+
         services.AddSingleton<WordValidatorFactory>();
 
         services.AddSingleton<FluentListValidator<CreateVocabListItemRequest>>();
         services.AddSingleton<FluentListValidator<UpdateVocabListItemRequest>>();
 
-        //services.AddSingleton<VocabListValidationController<CreateVocabListItemRequest>>();
-        //services.AddSingleton<VocabListValidationController<UpdateVocabListItemRequest>>();
-        
         services.AddSingleton<IValidationController<IListRequest<CreateVocabListItemRequest>>, VocabListValidationController<CreateVocabListItemRequest>>();
         services.AddSingleton<IValidationController<IListRequest<UpdateVocabListItemRequest>>, VocabListValidationController<UpdateVocabListItemRequest>>();
         return services;

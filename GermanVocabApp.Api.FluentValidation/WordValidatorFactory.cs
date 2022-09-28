@@ -9,17 +9,16 @@ public class WordValidatorFactory
 {
     private Dictionary<WordType, FluentWordValidator> _validators;
 
-    public WordValidatorFactory()
+    public WordValidatorFactory(FluentNounValidator nounValidator, FluentVerbValidator verbValidator,
+                                FluentModifierValidator modifierValidator)
     {
-        _validators = new Dictionary<WordType, FluentWordValidator>(4);
-
-        _validators.Add(WordType.Noun, new FluentNounValidator());
-        _validators.Add(WordType.Verb, new FluentVerbValidator());
-
-        var modiferValidator = new FluentModifierValidator();
-
-        _validators.Add(WordType.Adjective, modiferValidator);
-        _validators.Add(WordType.Adverb, modiferValidator);
+        _validators = new Dictionary<WordType, FluentWordValidator>()
+        {
+            { WordType.Noun, nounValidator },
+            { WordType.Verb, verbValidator },
+            { WordType.Adjective, modifierValidator },
+            { WordType.Adverb, modifierValidator },
+        };
     }
 
     public FluentWordValidator Create(IListItemRequest request)
