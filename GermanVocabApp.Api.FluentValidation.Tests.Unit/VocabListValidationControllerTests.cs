@@ -8,15 +8,16 @@ using Osiris.FluentValidation.Testing;
 namespace GermanVocabApp.Api.FluentValidation.Tests.Unit;
 public class VocabListValidationControllerTests
 {
-    private VocabListValidationController<IListItemRequest> _validationController;
-    private Mock<IValidator<IListRequest<IListItemRequest>>> _mockListValidator;
-    private Mock<IFactory<IValidator<IListItemRequest>, IListItemRequest>> _mockWordValidatorFactory;
-    private Mock<IValidator<IListItemRequest>> _mockItemValidator;
-    private Mock<IListRequest<IListItemRequest>> _mockList;
-    private Mock<IListItemRequest> _mockItem;
-
     private InlineValidator<int> _passingListValidator;
     private InlineValidator<int> _failingListValidator;
+    
+    private Mock<IValidator<IListRequest<IListItemRequest>>> _mockListValidator;
+    private Mock<IAggregateValidator<IListItemRequest>> _mockAggregateValidator;
+
+
+    private VocabListValidationController<IListItemRequest> _validationController;
+    private Mock<IListRequest<IListItemRequest>> _mockList;
+    private Mock<IListItemRequest> _mockItem;
 
     private ValidationResult _passResult;
     private ValidationResult _failResult;
@@ -24,22 +25,41 @@ public class VocabListValidationControllerTests
     public VocabListValidationControllerTests()
     {
         _passingListValidator = StubFluentValidator.CreatePassing<int>();
-        _failingListValidator = StubFluentValidator.CreateFailing<int>();
-        _mockListValidator = new Mock<IValidator<IListRequest<IListItemRequest>>>();
-
-        _mockItemValidator = new Mock<IValidator<IListItemRequest>>();
-        _mockWordValidatorFactory = new Mock<IFactory<IValidator<IListItemRequest>, IListItemRequest>>();
-        _mockWordValidatorFactory.Setup(f => f.Create(It.IsAny<IListItemRequest>()))
-            .Returns(_mockItemValidator.Object);
-
-        _validationController = new(_mockListValidator.Object, _mockWordValidatorFactory.Object);
+        _passResult = _passingListValidator.Validate(It.IsAny<int>());
         
+        _failingListValidator = StubFluentValidator.CreateFailing<int>();
+        _failResult = _failingListValidator.Validate(It.IsAny<int>());
+
+        _mockListValidator = new Mock<IValidator<IListRequest<IListItemRequest>>>();
+        _mockAggregateValidator = new Mock<IAggregateValidator<IListItemRequest>>();
+
         _mockList = new Mock<IListRequest<IListItemRequest>>();
         _mockItem = new Mock<IListItemRequest>();
 
-        _passingListValidator = StubFluentValidator.CreatePassing<int>();
-        _passResult = _passingListValidator.Validate(It.IsAny<int>());
-        _failResult = _failingListValidator.Validate(It.IsAny<int>());
+        _validationController = new(_mockListValidator.Object, _mockAggregateValidator.Object);
+    }
+
+    [Theory]
+    [InlineData(0, 0)]
+    [InlineData(1, 1)]
+    [InlineData(5, 1)]
+    public void Validate_ShouldCallItemValidatorCorrectNumberOfTimes(int listItemCount, int expectedCallCount)
+    {
+        _mockListValidator.Setup(lv => lv.Validate(It.IsAny<IListRequest<IListItemRequest>>()))
+            .Returns(_passResult);
+
+        _mockAggregateValidator.Setup(av => av.Validate(It.IsAny<IList<IListItemRequest>>()));
+
+        IListItemRequest[] items = new IListItemRequest[listItemCount];
+        for (int i = 0; i < listItemCount; i++)
+        {
+            items[i] = _mockItem.Object;
+        }
+        _mockList.Setup(l => l.ListItems).Returns(items);
+
+        ValidationResult testResult = _validationController.Validate(_mockList.Object);
+
+        _mockAggregateValidator.Verify(av => av.Validate(It.IsAny<IList<IListItemRequest>>()), Times.Exactly(expectedCallCount));
     }
 
     [Fact]
@@ -71,8 +91,9 @@ public class VocabListValidationControllerTests
     {
         _mockListValidator.Setup(lv => lv.Validate(It.IsAny<IListRequest<IListItemRequest>>()))
             .Returns(_passResult);
-        _mockItemValidator.Setup(iv => iv.Validate(It.IsAny<IListItemRequest>()))
-            .Returns(_passResult);
+
+        _mockAggregateValidator.Setup(av => av.Validate(It.IsAny<IList<IListItemRequest>>()))
+            .Returns(Array.Empty<ValidationFailure>);
 
         _mockList.Setup(l => l.ListItems).Returns(new[] { _mockItem.Object, _mockItem.Object });
 
@@ -85,10 +106,9 @@ public class VocabListValidationControllerTests
     {
         _mockListValidator.Setup(lv => lv.Validate(It.IsAny<IListRequest<IListItemRequest>>()))
             .Returns(_passResult);
-        _mockItemValidator.Setup(iv => iv.Validate(It.IsAny<IListItemRequest>()))
-            .Returns(_failResult);
-        _mockWordValidatorFactory.Setup(f => f.Create(It.IsAny<IListItemRequest>()))
-            .Returns(_mockItemValidator.Object);
+
+        _mockAggregateValidator.Setup(av => av.Validate(It.IsAny<IList<IListItemRequest>>()))
+            .Returns(new[] { _failResult.Errors[0] });
 
         _mockList.Setup(l => l.ListItems).Returns(new[] { _mockItem.Object });
 
@@ -101,8 +121,9 @@ public class VocabListValidationControllerTests
     {
         _mockListValidator.Setup(lv => lv.Validate(It.IsAny<IListRequest<IListItemRequest>>()))
             .Returns(_failResult);
-        _mockItemValidator.Setup(iv => iv.Validate(It.IsAny<IListItemRequest>()))
-            .Returns(_passResult);
+
+        _mockAggregateValidator.Setup(av => av.Validate(It.IsAny<IList<IListItemRequest>>()))
+            .Returns(Array.Empty<ValidationFailure>);
 
         _mockList.Setup(l => l.ListItems).Returns(new[] { _mockItem.Object });
 
@@ -115,8 +136,9 @@ public class VocabListValidationControllerTests
     {
         _mockListValidator.Setup(lv => lv.Validate(It.IsAny<IListRequest<IListItemRequest>>()))
             .Returns(_failResult);
-        _mockItemValidator.Setup(iv => iv.Validate(It.IsAny<IListItemRequest>()))
-            .Returns(_failResult);
+
+        _mockAggregateValidator.Setup(av => av.Validate(It.IsAny<IList<IListItemRequest>>()))
+            .Returns(new[] { _failResult.Errors[0] });
 
         _mockList.Setup(l => l.ListItems).Returns(new[] { _mockItem.Object });
 

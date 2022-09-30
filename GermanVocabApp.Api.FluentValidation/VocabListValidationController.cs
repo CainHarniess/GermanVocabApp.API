@@ -1,21 +1,19 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
-using GermanVocabApp.Api.FluentValidation.Validators;
 using GermanVocabApp.Core.Contracts;
 
 namespace GermanVocabApp.Api.VocabLists.Validation;
 
-// TODO: Write unit tests.
 public class VocabListValidationController<TItem> : IValidationController<IListRequest<TItem>>
     where TItem : IListItemRequest
 {
     private readonly IValidator<IListRequest<TItem>> _listValidator;
-    private readonly IFactory<IValidator<IListItemRequest>, IListItemRequest> _wordValidatorFactory;
+    private readonly IAggregateValidator<TItem> _listItemValidator;
 
-    public VocabListValidationController(IValidator<IListRequest<TItem>> listValidator, IFactory<IValidator<IListItemRequest>, IListItemRequest> wordValidatorFactory)
+    public VocabListValidationController(IValidator<IListRequest<TItem>> listValidator, IAggregateValidator<TItem> listItemValidator)
     {
         _listValidator = listValidator;
-        _wordValidatorFactory = wordValidatorFactory;
+        _listItemValidator = listItemValidator;
     }
 
     public ValidationResult Validate(IListRequest<TItem> target)
@@ -28,7 +26,7 @@ public class VocabListValidationController<TItem> : IValidationController<IListR
         }
 
         TItem[] items = target.ListItems.ToArray();
-        List<ValidationFailure> itemErrors = ValidateItems(items);
+        ValidationFailure[] itemErrors = _listItemValidator.Validate(items);
 
         if (!itemErrors.Any())
         {
@@ -36,27 +34,5 @@ public class VocabListValidationController<TItem> : IValidationController<IListR
         }
         result.Errors.AddRange(itemErrors);
         return result;
-    }
-
-    private List<ValidationFailure> ValidateItems(TItem[] items)
-    {
-        List<ValidationFailure> itemErrors = new List<ValidationFailure>(items.Length);
-
-        for (int i = 0; i < items.Length; i++)
-        {
-            TItem item = items[i];
-
-            IValidator<IListItemRequest> validator = _wordValidatorFactory.Create(item);
-            ValidationResult itemResult = validator.Validate(item);
-
-            if (itemResult.IsValid)
-            {
-                continue;
-            }
-
-            itemErrors.AddRange(itemResult.Errors);
-        }
-
-        return itemErrors;
     }
 }

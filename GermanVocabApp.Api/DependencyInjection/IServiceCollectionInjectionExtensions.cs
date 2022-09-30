@@ -24,6 +24,8 @@ public static class IServiceCollectionInjectionExtensions
         services.AddSingleton<IValidator<IListRequest<UpdateVocabListItemRequest>>, FluentListValidator<UpdateVocabListItemRequest>>();
         services.AddSingleton<IFactory<IValidator<IListItemRequest>, IListItemRequest>, WordValidatorFactory>();
 
+        services.AddSingleton<IAggregateValidator<IListItemRequest>, AggregateListItemValidator<IListItemRequest>>();
+
         services.AddSingleton<FluentListValidator<CreateVocabListItemRequest>>();
         services.AddSingleton<FluentListValidator<UpdateVocabListItemRequest>>();
 
