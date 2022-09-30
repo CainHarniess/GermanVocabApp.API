@@ -1,11 +1,9 @@
-﻿using GermanVocabApp.Core.Contracts;
-using GermanVocabApp.Shared.Data;
+﻿using GermanVocabApp.Shared.Data;
 
-namespace GermanVocabApp.Api.VocabLists.Models;
+namespace GermanVocabApp.Core.Contracts;
 
-public class UpdateVocabListItemRequest : IListItemRequest
+public interface IListItemRequest
 {
-    public Guid? Id { get; set; }
     public WordType WordType { get; set; }
     public bool? IsWeakMasculineNoun { get; set; }
     public ReflexiveCase? ReflexiveCase { get; set; }
@@ -25,3 +23,4 @@ public class UpdateVocabListItemRequest : IListItemRequest
     public string English { get; set; }
     public FixedPlurality? FixedPlurality { get; set; }
 }
+

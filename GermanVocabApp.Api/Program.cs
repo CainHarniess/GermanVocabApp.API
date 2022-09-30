@@ -1,8 +1,4 @@
-using GermanVocabApp.DataAccess.EntityFramework;
-using GermanVocabApp.DataAccess.EntityFramework.Repositories;
-using GermanVocabApp.DataAccess.Shared;
-using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
+using GermanVocabApp.Api.DependencyInjection;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,18 +15,9 @@ builder.Services.AddControllers()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<VocabListDbContext>(options =>
-{
-    string connectionString = builder.Configuration.GetConnectionString("GermanVocabApp");
-    options.UseSqlServer(connectionString);
-    options.LogTo(Console.WriteLine);
-    //StreamWriter sw = new StreamWriter("EfCoreLog.txt", append: true);
-    //options.LogTo(sw.WriteLine);
-    options.LogTo(log => Debug.WriteLine(log));
-},
-ServiceLifetime.Scoped);
-
-builder.Services.AddScoped<IVocabListRepositoryAsync, VocabListRepositoryAsync>();
+builder.Services.AddEntityFrameworkDependencies(builder);
+builder.Services.AddValidationDependencies();
+builder.Services.AddDataAccessDependencies();
 
 var app = builder.Build();
 

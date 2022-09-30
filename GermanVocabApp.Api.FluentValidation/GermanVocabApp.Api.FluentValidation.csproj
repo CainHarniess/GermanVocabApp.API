@@ -11,7 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GermanVocabApp.Shared\GermanVocabApp.Shared.csproj" />
+    <ProjectReference Include="..\..\..\Osiris\Osiris.FluentValidation\Osiris.FluentValidation.csproj" />
+    <ProjectReference Include="..\GermanVocabApp.Core\GermanVocabApp.Core.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,5 +1,7 @@
-﻿using GermanVocabApp.Api.VocabLists.Conversion;
+﻿using FluentValidation.Results;
+using GermanVocabApp.Api.VocabLists.Conversion;
 using GermanVocabApp.Api.VocabLists.Models;
+using GermanVocabApp.Core.Contracts;
 using GermanVocabApp.Core.Exceptions;
 using GermanVocabApp.DataAccess.Shared;
 using GermanVocabApp.DataAccess.Shared.DataTransfer;
@@ -13,17 +15,30 @@ namespace GermanVocabApp.Api.VocabLists;
 public class VocabListsController : ControllerBase
 {
     private readonly IVocabListRepositoryAsync _repository;
-    
-    public VocabListsController(IVocabListRepositoryAsync repository)
+    private readonly IValidationController<IListRequest<CreateVocabListItemRequest>> _creationValidator;
+    private readonly IValidationController<IListRequest<UpdateVocabListItemRequest>> _updateValidator;
+
+    public VocabListsController(IValidationController<IListRequest<CreateVocabListItemRequest>> creationValidator,
+        IValidationController<IListRequest<UpdateVocabListItemRequest>> updateValidator,
+        IVocabListRepositoryAsync repository)
     {
+        _creationValidator = creationValidator;
+        _updateValidator = updateValidator;
         _repository = repository;
     }
 
     [HttpPost]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest)]
     [ProducesResponseType(typeof(VocabListResponse), (int)HttpStatusCode.Created)]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
     public async Task<IActionResult> Create(CreateVocabListRequest request)
     {
+        ValidationResult result = _creationValidator.Validate(request);
+        if (!result.IsValid)
+        {
+            return BadRequest(result.ToDictionary());
+        }
+
         CreateVocabListDto dto = request.ToDto();
         VocabListDto newListDto = await _repository.Add(dto);
 
@@ -64,11 +79,18 @@ public class VocabListsController : ControllerBase
     }
     
     [HttpPut(ActionParameters.IdGuid)]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest)]
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
     [ProducesResponseType((int)HttpStatusCode.NoContent)]
     public async Task<IActionResult> UpdateVocabList(Guid id, UpdateVocabListRequest request)
     {
+        ValidationResult result = _updateValidator.Validate(request);
+        if (!result.IsValid)
+        {
+            return BadRequest(result.Errors);
+        }
+
         UpdateVocabListDto updateDto = request.ToDto(id);
         try
         {
