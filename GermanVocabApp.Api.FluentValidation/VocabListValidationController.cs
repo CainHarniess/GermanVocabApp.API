@@ -10,9 +10,9 @@ public class VocabListValidationController<TItem> : IValidationController<IListR
     where TItem : IListItemRequest
 {
     private readonly IValidator<IListRequest<TItem>> _listValidator;
-    private readonly IFactory<FluentWordValidator, IListItemRequest> _wordValidatorFactory;
+    private readonly IFactory<IValidator<IListItemRequest>, IListItemRequest> _wordValidatorFactory;
 
-    public VocabListValidationController(IValidator<IListRequest<TItem>> listValidator, IFactory<FluentWordValidator, IListItemRequest> wordValidatorFactory)
+    public VocabListValidationController(IValidator<IListRequest<TItem>> listValidator, IFactory<IValidator<IListItemRequest>, IListItemRequest> wordValidatorFactory)
     {
         _listValidator = listValidator;
         _wordValidatorFactory = wordValidatorFactory;
@@ -46,7 +46,7 @@ public class VocabListValidationController<TItem> : IValidationController<IListR
         {
             TItem item = items[i];
 
-            FluentWordValidator validator = _wordValidatorFactory.Create(item);
+            IValidator<IListItemRequest> validator = _wordValidatorFactory.Create(item);
             ValidationResult itemResult = validator.Validate(item);
 
             if (itemResult.IsValid)

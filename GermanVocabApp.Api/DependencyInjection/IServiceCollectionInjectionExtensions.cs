@@ -22,7 +22,7 @@ public static class IServiceCollectionInjectionExtensions
 
         services.AddSingleton<IValidator<IListRequest<CreateVocabListItemRequest>>, FluentListValidator<CreateVocabListItemRequest>>();
         services.AddSingleton<IValidator<IListRequest<UpdateVocabListItemRequest>>, FluentListValidator<UpdateVocabListItemRequest>>();
-        services.AddSingleton<IFactory<FluentWordValidator, IListItemRequest>, WordValidatorFactory>();
+        services.AddSingleton<IFactory<IValidator<IListItemRequest>, IListItemRequest>, WordValidatorFactory>();
 
         services.AddSingleton<FluentListValidator<CreateVocabListItemRequest>>();
         services.AddSingleton<FluentListValidator<UpdateVocabListItemRequest>>();

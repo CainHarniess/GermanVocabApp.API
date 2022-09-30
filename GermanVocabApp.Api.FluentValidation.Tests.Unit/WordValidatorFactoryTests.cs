@@ -1,4 +1,5 @@
-﻿using GermanVocabApp.Api.FluentValidation.Validators;
+﻿using FluentValidation;
+using GermanVocabApp.Api.FluentValidation.Validators;
 using GermanVocabApp.Core.Contracts;
 using GermanVocabApp.Shared.Data;
 using Moq;
@@ -23,7 +24,7 @@ public class WordValidatorFactoryTests
     {
         Mock<IListItemRequest> mockListItem = new Mock<IListItemRequest>();
         mockListItem.Setup(li => li.WordType).Returns(wordType);
-        FluentWordValidator result = _factory.Create(mockListItem.Object);
+        IValidator<IListItemRequest> result = _factory.Create(mockListItem.Object);
         Assert.IsType(expectedType, result);
     }
 

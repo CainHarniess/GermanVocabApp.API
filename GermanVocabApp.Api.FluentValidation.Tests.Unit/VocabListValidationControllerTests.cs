@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
-using GermanVocabApp.Api.FluentValidation.Validators;
 using GermanVocabApp.Api.VocabLists.Validation;
 using GermanVocabApp.Core.Contracts;
 using Moq;
@@ -11,7 +10,7 @@ public class VocabListValidationControllerTests
 {
     private VocabListValidationController<IListItemRequest> _validationController;
     private Mock<IValidator<IListRequest<IListItemRequest>>> _mockListValidator;
-    private Mock<IFactory<FluentWordValidator, IListItemRequest>> _mockWordValidatorFactory;
+    private Mock<IFactory<IValidator<IListItemRequest>, IListItemRequest>> _mockWordValidatorFactory;
     private Mock<IValidator<IListItemRequest>> _mockItemValidator;
     private Mock<IListRequest<IListItemRequest>> _mockList;
     private Mock<IListItemRequest> _mockItem;
@@ -29,9 +28,9 @@ public class VocabListValidationControllerTests
         _mockListValidator = new Mock<IValidator<IListRequest<IListItemRequest>>>();
 
         _mockItemValidator = new Mock<IValidator<IListItemRequest>>();
-        _mockWordValidatorFactory = new Mock<IFactory<FluentWordValidator, IListItemRequest>>();
-        //_mockWordValidatorFactory.Setup(f => f.Create(It.IsAny<IListItemRequest>()))
-        //                         .Returns((FluentWordValidator)_mockItemValidator.Object);
+        _mockWordValidatorFactory = new Mock<IFactory<IValidator<IListItemRequest>, IListItemRequest>>();
+        _mockWordValidatorFactory.Setup(f => f.Create(It.IsAny<IListItemRequest>()))
+            .Returns(_mockItemValidator.Object);
 
         _validationController = new(_mockListValidator.Object, _mockWordValidatorFactory.Object);
         
@@ -67,17 +66,61 @@ public class VocabListValidationControllerTests
         Assert.False(testResult.IsValid);
     }
 
-    //[Fact]
-    //public void Validate_ShouldReturnValidResult_WhenListValid_AndListItemsValid()
-    //{
-    //    _mockListValidator.Setup(lv => lv.Validate(It.IsAny<IListRequest<IListItemRequest>>()))
-    //        .Returns(_passResult);
-    //    _mockItemValidator.Setup(iv => iv.Validate(It.IsAny<IListItemRequest>()))
-    //        .Returns(_passResult);
+    [Fact]
+    public void Validate_ShouldReturnValidResult_WhenListValid_AndListItemsValid()
+    {
+        _mockListValidator.Setup(lv => lv.Validate(It.IsAny<IListRequest<IListItemRequest>>()))
+            .Returns(_passResult);
+        _mockItemValidator.Setup(iv => iv.Validate(It.IsAny<IListItemRequest>()))
+            .Returns(_passResult);
 
-    //    _mockList.Setup(l => l.ListItems).Returns(new[]{ _mockItem.Object, _mockItem.Object });
+        _mockList.Setup(l => l.ListItems).Returns(new[] { _mockItem.Object, _mockItem.Object });
 
-    //    ValidationResult testResult = _validationController.Validate(_mockList.Object);
-    //    Assert.True(testResult.IsValid);
-    //}
+        ValidationResult testResult = _validationController.Validate(_mockList.Object);
+        Assert.True(testResult.IsValid);
+    }
+
+    [Fact]
+    public void Validate_ShouldReturnInvalidResult_WhenListValid_AndListItemsNotValid()
+    {
+        _mockListValidator.Setup(lv => lv.Validate(It.IsAny<IListRequest<IListItemRequest>>()))
+            .Returns(_passResult);
+        _mockItemValidator.Setup(iv => iv.Validate(It.IsAny<IListItemRequest>()))
+            .Returns(_failResult);
+        _mockWordValidatorFactory.Setup(f => f.Create(It.IsAny<IListItemRequest>()))
+            .Returns(_mockItemValidator.Object);
+
+        _mockList.Setup(l => l.ListItems).Returns(new[] { _mockItem.Object });
+
+        ValidationResult testResult = _validationController.Validate(_mockList.Object);
+        Assert.False(testResult.IsValid);
+    }
+
+    [Fact]
+    public void Validate_ShouldReturnInvalidResult_WhenListNotValid_AndListItemsValid()
+    {
+        _mockListValidator.Setup(lv => lv.Validate(It.IsAny<IListRequest<IListItemRequest>>()))
+            .Returns(_failResult);
+        _mockItemValidator.Setup(iv => iv.Validate(It.IsAny<IListItemRequest>()))
+            .Returns(_passResult);
+
+        _mockList.Setup(l => l.ListItems).Returns(new[] { _mockItem.Object });
+
+        ValidationResult testResult = _validationController.Validate(_mockList.Object);
+        Assert.False(testResult.IsValid);
+    }
+
+    [Fact]
+    public void Validate_ShouldReturnInvalidResult_WhenListNotValid_AndListItemsNotValid()
+    {
+        _mockListValidator.Setup(lv => lv.Validate(It.IsAny<IListRequest<IListItemRequest>>()))
+            .Returns(_failResult);
+        _mockItemValidator.Setup(iv => iv.Validate(It.IsAny<IListItemRequest>()))
+            .Returns(_failResult);
+
+        _mockList.Setup(l => l.ListItems).Returns(new[] { _mockItem.Object });
+
+        ValidationResult testResult = _validationController.Validate(_mockList.Object);
+        Assert.False(testResult.IsValid);
+    }
 }
