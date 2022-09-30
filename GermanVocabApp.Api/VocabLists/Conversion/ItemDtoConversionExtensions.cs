@@ -1,9 +1,10 @@
 ﻿using GermanVocabApp.Api.VocabLists.Models;
+using GermanVocabApp.Core.Exceptions;
 using GermanVocabApp.DataAccess.Shared.DataTransfer;
 
 namespace GermanVocabApp.Api.VocabLists.Conversion;
 
-internal static class VocabListItemDtoConversionExtensions
+internal static class ItemDtoConversionExtensions
 {
     public static IEnumerable<VocabListItemResponse> ToResponses(this IEnumerable<VocabListItemDto> dtos)
     {
@@ -12,9 +13,17 @@ internal static class VocabListItemDtoConversionExtensions
 
     public static VocabListItemResponse ToResponse(this VocabListItemDto dto)
     {
+        if (!dto.Id.HasValue)
+        {
+            throw new UnexpectedNullIdException("Expect non-null list item ID when copying to response object.");
+        }
+        if (!dto.VocabListId.HasValue)
+        {
+            throw new UnexpectedNullIdException("Expect list item to have non-null list ID when copying to response object.");
+        }
         return new VocabListItemResponse()
         {
-            Id = dto.Id,
+            Id = dto.Id.Value,
             WordType = dto.WordType,
             IsWeakMasculineNoun = dto.IsWeakMasculineNoun,
             ReflexiveCase = dto.ReflexiveCase,
@@ -32,19 +41,19 @@ internal static class VocabListItemDtoConversionExtensions
             Comparative = dto.Comparative,
             Superlative = dto.Superlative,
             English = dto.English,
-            VocabListId = dto.VocabListId,
+            VocabListId = dto.VocabListId.Value,
             FixedPlurality = dto.FixedPlurality,
         };
     }
 
-    public static IEnumerable<UpdateVocabListItemRequest> ToUpdateRequests(this IEnumerable<VocabListItemDto> dtos)
+    public static IEnumerable<ItemRequest> ToUpdateRequests(this IEnumerable<VocabListItemDto> dtos)
     {
-        return dtos.Select(dto => dto.ToUpdateRequest());
+        return dtos.Select(dto => dto.ToRequest());
     }
 
-    public static UpdateVocabListItemRequest ToUpdateRequest(this VocabListItemDto dto)
+    public static ItemRequest ToRequest(this VocabListItemDto dto)
     {
-        return new UpdateVocabListItemRequest()
+        return new ItemRequest()
         {
             Id = dto.Id,
             WordType = dto.WordType,

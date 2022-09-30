@@ -23,7 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GermanVocabApp.Api.FluentValidation\GermanVocabApp.Api.FluentValidation.csproj" />
     <ProjectReference Include="..\GermanVocabApp.Api\GermanVocabApp.Api.csproj" />
     <ProjectReference Include="..\GermanVocabApp.Core\GermanVocabApp.Core.csproj" />
   </ItemGroup>

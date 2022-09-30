@@ -6,8 +6,8 @@ namespace GermanVocabApp.DataAccess.Shared
     {
         Task<IEnumerable<VocabListInfoDto>> GetVocabListInfos();
         Task<VocabListDto?> Get(Guid id);
-        Task<VocabListDto> Add(CreateVocabListDto newList);
-        Task Update(UpdateVocabListDto updatedList);
+        Task<VocabListDto> Add(VocabListDto newList);
+        Task Update(VocabListDto updatedList);
         Task<bool> HardDelete(Guid id);
     }
 }

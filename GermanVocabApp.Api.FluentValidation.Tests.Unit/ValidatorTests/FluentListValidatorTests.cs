@@ -8,13 +8,13 @@ namespace GermanVocabApp.Api.FluentValidation.Tests.Unit.ValidatorTests;
 
 public abstract class FluentListValidatorTests
 {
-    private readonly Mock<IListRequest<CreateVocabListItemRequest>> _mock;
-    private readonly FluentListValidator<CreateVocabListItemRequest> _validator;
+    private readonly Mock<ListRequest> _mock;
+    private readonly FluentListValidator _validator;
 
     public FluentListValidatorTests()
     {
-        _mock = new Mock<IListRequest<CreateVocabListItemRequest>>();
-        _validator = new FluentListValidator<CreateVocabListItemRequest>();
+        _mock = new Mock<ListRequest>();
+        _validator = new FluentListValidator();
     }
 
     [Theory]

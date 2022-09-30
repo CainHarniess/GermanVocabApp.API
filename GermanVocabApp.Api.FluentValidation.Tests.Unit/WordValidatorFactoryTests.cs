@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using GermanVocabApp.Api.FluentValidation.Validators;
-using GermanVocabApp.Core.Contracts;
+using GermanVocabApp.Api.VocabLists.Models;
 using GermanVocabApp.Shared.Data;
 using Moq;
 
@@ -9,10 +9,12 @@ namespace GermanVocabApp.Api.FluentValidation.Tests.Unit;
 public class WordValidatorFactoryTests
 {
     private readonly WordValidatorFactory _factory;
+    private readonly ItemRequest _item;
 
     public WordValidatorFactoryTests()
     {
         _factory = new WordValidatorFactory();
+        _item = new ItemRequest();
     }
 
     [Theory]
@@ -22,26 +24,23 @@ public class WordValidatorFactoryTests
     [InlineData(WordType.Adverb, typeof(FluentModifierValidator))]
     public void Create_ShouldReturnValidatorOfCorrectType(WordType wordType, Type expectedType)
     {
-        Mock<IListItemRequest> mockListItem = new Mock<IListItemRequest>();
-        mockListItem.Setup(li => li.WordType).Returns(wordType);
-        IValidator<IListItemRequest> result = _factory.Create(mockListItem.Object);
+        _item.WordType = wordType;
+        IValidator<ItemRequest> result = _factory.Create(_item);
         Assert.IsType(expectedType, result);
     }
 
     [Fact]
     public void Create_ShouldThrowError_IfInvalidWordType()
     {
-        Mock<IListItemRequest> mockListItem = new Mock<IListItemRequest>();
-        mockListItem.Setup(li => li.WordType).Returns((WordType)99);
-        Assert.Throws<ArgumentException>(() => _factory.Create(mockListItem.Object));
+        _item.WordType = (WordType)99;
+        Assert.Throws<ArgumentException>(() => _factory.Create(_item));
     }
 
     [Fact]
     public void Create_ShouldNotThrowError_IfValidWordType()
     {
-        Mock<IListItemRequest> mockListItem = new Mock<IListItemRequest>();
-        mockListItem.Setup(li => li.WordType).Returns(It.IsAny<WordType>());
-        Exception exception = Record.Exception(() => _factory.Create(mockListItem.Object));
+        _item.WordType = It.IsAny<WordType>();
+        Exception exception = Record.Exception(() => _factory.Create(_item));
         Assert.Null(exception);
     }
 }

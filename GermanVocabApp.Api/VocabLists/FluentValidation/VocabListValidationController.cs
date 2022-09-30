@@ -1,22 +1,22 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
+using GermanVocabApp.Api.VocabLists.Models;
 using GermanVocabApp.Core.Contracts;
 
 namespace GermanVocabApp.Api.VocabLists.Validation;
 
-public class VocabListValidationController<TItem> : IValidationController<IListRequest<TItem>>
-    where TItem : IListItemRequest
+public class VocabListValidationController : IValidationController<ListRequest>
 {
-    private readonly IValidator<IListRequest<TItem>> _listValidator;
-    private readonly IAggregateValidator<TItem> _listItemValidator;
+    private readonly IValidator<ListRequest> _listValidator;
+    private readonly IAggregateValidator<ItemRequest> _listItemValidator;
 
-    public VocabListValidationController(IValidator<IListRequest<TItem>> listValidator, IAggregateValidator<TItem> listItemValidator)
+    public VocabListValidationController(IValidator<ListRequest> listValidator, IAggregateValidator<ItemRequest> listItemValidator)
     {
         _listValidator = listValidator;
         _listItemValidator = listItemValidator;
     }
 
-    public ValidationResult Validate(IListRequest<TItem> target)
+    public ValidationResult Validate(ListRequest target)
     {
         ValidationResult result = _listValidator.Validate(target);
 
@@ -25,7 +25,7 @@ public class VocabListValidationController<TItem> : IValidationController<IListR
             return result;
         }
 
-        TItem[] items = target.ListItems.ToArray();
+        ItemRequest[] items = target.ListItems.ToArray();
         ValidationFailure[] itemErrors = _listItemValidator.Validate(items);
 
         if (!itemErrors.Any())

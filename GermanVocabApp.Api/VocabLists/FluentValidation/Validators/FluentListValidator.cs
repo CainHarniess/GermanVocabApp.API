@@ -1,10 +1,9 @@
 ﻿using FluentValidation;
-using GermanVocabApp.Core.Contracts;
+using GermanVocabApp.Api.VocabLists.Models;
 
 namespace GermanVocabApp.Api.FluentValidation.Validators;
 
-public class FluentListValidator<TItem> : AbstractValidator<IListRequest<TItem>>
-    where TItem : IListItemRequest
+public class FluentListValidator : AbstractValidator<ListRequest>
 {
     public FluentListValidator() : base()
     {

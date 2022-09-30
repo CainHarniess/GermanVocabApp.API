@@ -20,17 +20,14 @@ public static class IServiceCollectionInjectionExtensions
         services.AddSingleton<FluentVerbValidator>();
         services.AddSingleton<FluentModifierValidator>();
 
-        services.AddSingleton<IValidator<IListRequest<CreateVocabListItemRequest>>, FluentListValidator<CreateVocabListItemRequest>>();
-        services.AddSingleton<IValidator<IListRequest<UpdateVocabListItemRequest>>, FluentListValidator<UpdateVocabListItemRequest>>();
-        services.AddSingleton<IFactory<IValidator<IListItemRequest>, IListItemRequest>, WordValidatorFactory>();
+        services.AddSingleton<IValidator<ListRequest>, FluentListValidator>();
+        services.AddSingleton<IFactory<IValidator<ItemRequest>, ItemRequest>, WordValidatorFactory>();
 
-        services.AddSingleton<IAggregateValidator<IListItemRequest>, AggregateListItemValidator<IListItemRequest>>();
+        services.AddSingleton<IAggregateValidator<ItemRequest>, AggregateListItemValidator>();
 
-        services.AddSingleton<FluentListValidator<CreateVocabListItemRequest>>();
-        services.AddSingleton<FluentListValidator<UpdateVocabListItemRequest>>();
+        services.AddSingleton<IValidator<ListRequest>, FluentListValidator>();
 
-        services.AddSingleton<IValidationController<IListRequest<CreateVocabListItemRequest>>, VocabListValidationController<CreateVocabListItemRequest>>();
-        services.AddSingleton<IValidationController<IListRequest<UpdateVocabListItemRequest>>, VocabListValidationController<UpdateVocabListItemRequest>>();
+        services.AddSingleton<IValidationController<ListRequest>, VocabListValidationController>();
         return services;
     }
 

@@ -15,15 +15,12 @@ namespace GermanVocabApp.Api.VocabLists;
 public class VocabListsController : ControllerBase
 {
     private readonly IVocabListRepositoryAsync _repository;
-    private readonly IValidationController<IListRequest<CreateVocabListItemRequest>> _creationValidator;
-    private readonly IValidationController<IListRequest<UpdateVocabListItemRequest>> _updateValidator;
+    private readonly IValidationController<ListRequest> _validator;
 
-    public VocabListsController(IValidationController<IListRequest<CreateVocabListItemRequest>> creationValidator,
-        IValidationController<IListRequest<UpdateVocabListItemRequest>> updateValidator,
+    public VocabListsController(IValidationController<ListRequest> validator,
         IVocabListRepositoryAsync repository)
     {
-        _creationValidator = creationValidator;
-        _updateValidator = updateValidator;
+        _validator = validator;
         _repository = repository;
     }
 
@@ -31,15 +28,15 @@ public class VocabListsController : ControllerBase
     [ProducesResponseType((int)HttpStatusCode.BadRequest)]
     [ProducesResponseType(typeof(VocabListResponse), (int)HttpStatusCode.Created)]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-    public async Task<IActionResult> Create(CreateVocabListRequest request)
+    public async Task<IActionResult> Create(ListRequest request)
     {
-        ValidationResult result = _creationValidator.Validate(request);
+        ValidationResult result = _validator.Validate(request);
         if (!result.IsValid)
         {
             return BadRequest(result.ToDictionary());
         }
 
-        CreateVocabListDto dto = request.ToDto();
+        VocabListDto dto = request.ToDto();
         VocabListDto newListDto = await _repository.Add(dto);
 
         try
@@ -83,15 +80,15 @@ public class VocabListsController : ControllerBase
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
     [ProducesResponseType((int)HttpStatusCode.NoContent)]
-    public async Task<IActionResult> UpdateVocabList(Guid id, UpdateVocabListRequest request)
+    public async Task<IActionResult> UpdateVocabList(Guid id, ListRequest request)
     {
-        ValidationResult result = _updateValidator.Validate(request);
+        ValidationResult result = _validator.Validate(request);
         if (!result.IsValid)
         {
             return BadRequest(result.Errors);
         }
 
-        UpdateVocabListDto updateDto = request.ToDto(id);
+        VocabListDto updateDto = request.ToDto(id);
         try
         {
             await _repository.Update(updateDto);

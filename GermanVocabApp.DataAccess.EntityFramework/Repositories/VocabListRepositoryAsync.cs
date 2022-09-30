@@ -84,19 +84,19 @@ public class VocabListRepositoryAsync : IVocabListRepositoryAsync
         return listInfoDtos;
     }
 
-    public async Task<VocabListDto> Add(CreateVocabListDto creationDto)
+    public async Task<VocabListDto> Add(VocabListDto dto)
     {
         DateTime transactionTimeStamp = DateTime.UtcNow;
         VocabList entity;
 
         // TODO: Refactor to add whole graph at once.
-        entity = creationDto.ToEntityWithoutListItems(transactionTimeStamp);
+        entity = dto.ToEntityWithoutListItems(transactionTimeStamp);
         _context.Add(entity);
 
-        if (creationDto.ListItems.Any())
+        if (dto.ListItems.Any())
         {
             IEnumerable<VocabListItem> listItems;
-            listItems = creationDto.ListItems
+            listItems = dto.ListItems
                                    .ToEntities(transactionTimeStamp, entity.Id);
             _context.AddRange(listItems);
         }
@@ -107,31 +107,37 @@ public class VocabListRepositoryAsync : IVocabListRepositoryAsync
         return retrievalDto;
     }
 
-    public async Task Update(UpdateVocabListDto updateDto)
+    public async Task Update(VocabListDto dto)
     {
         DateTime currentTimestamp = DateTime.UtcNow;
-        Guid listId = updateDto.Id;
+
+        if (!dto.Id.HasValue)
+        {
+            throw new UnexpectedNullIdException("Expect non-null vocab list ID when updating records.");
+        }
+
+        Guid listId = dto.Id.Value;
 
         VocabList existingList = await _context.VocablLists
                                                .TryGetFirstActiveWithId(listId);
 
-        updateDto.CopyListDetails(existingList, currentTimestamp);
+        dto.CopyListDetails(existingList, currentTimestamp);
 
         //TODO: Refactor the below to a separate repository with unit of work pattern.
         IEnumerable<VocabListItem> existingListItems = existingList.ListItems;
-        bool allItemsDeleted = CheckDeleteAllListItems(existingListItems, updateDto.ListItems, currentTimestamp);
+        bool allItemsDeleted = CheckDeleteAllListItems(existingListItems, dto.ListItems, currentTimestamp);
         if (allItemsDeleted)
         {
             await _context.SaveChangesAsync();
             return;
         }
 
-        SoftDeletedRemovedListItems(updateDto, currentTimestamp, existingListItems);
+        SoftDeletedRemovedListItems(dto, currentTimestamp, existingListItems);
 
         Dictionary<Guid, VocabListItem> nonDeletedListItemEntities;
         nonDeletedListItemEntities = existingListItems.Where(li => li.DeletedDate == null)
                                                       .ToDictionary(li => li.Id);
-        AddOrUpdateListItems(updateDto, currentTimestamp, nonDeletedListItemEntities);
+        AddOrUpdateListItems(dto, currentTimestamp, nonDeletedListItemEntities);
 
         await _context.SaveChangesAsync();
         return;
@@ -161,9 +167,9 @@ public class VocabListRepositoryAsync : IVocabListRepositoryAsync
         return true;
     }
 
-    private void AddOrUpdateListItems(UpdateVocabListDto updateDto, DateTime currentTimestamp, Dictionary<Guid, VocabListItem> nonDeletedListItemEntities)
+    private void AddOrUpdateListItems(VocabListDto dto, DateTime currentTimestamp, Dictionary<Guid, VocabListItem> nonDeletedListItemEntities)
     {
-        updateDto.ListItems.ForEach(item =>
+        dto.ListItems.ForEach(item =>
         {
             VocabListItem newListItem = CheckAddNewListItem(item, currentTimestamp);
             if (newListItem != null)
@@ -177,7 +183,7 @@ public class VocabListRepositoryAsync : IVocabListRepositoryAsync
     }
 
     private static bool CheckDeleteAllListItems(IEnumerable<VocabListItem> existingListItems,
-        IEnumerable<UpdateVocabListItemDto> updatedListItems, DateTime transactionTimestamp)
+        IEnumerable<VocabListItemDto> updatedListItems, DateTime transactionTimestamp)
     {
         bool areAllListItemsDeleted = !updatedListItems.Any() && existingListItems.Any();
         if (areAllListItemsDeleted)
@@ -188,9 +194,9 @@ public class VocabListRepositoryAsync : IVocabListRepositoryAsync
         return false;
     }
 
-    private static void SoftDeletedRemovedListItems(UpdateVocabListDto updateDto, DateTime currentTimestamp, IEnumerable<VocabListItem> existingListItems)
+    private static void SoftDeletedRemovedListItems(VocabListDto updateDto, DateTime currentTimestamp, IEnumerable<VocabListItem> existingListItems)
     {
-        Dictionary<Guid, UpdateVocabListItemDto> updatedListItems;
+        Dictionary<Guid, VocabListItemDto> updatedListItems;
         updatedListItems = updateDto.ListItems
                                     .Where(li => li.Id.HasValue)
                                     .ToDictionary(li => li.Id.Value);
@@ -198,7 +204,7 @@ public class VocabListRepositoryAsync : IVocabListRepositoryAsync
         existingListItems.SoftDeleteWhere(item => !updatedListItems.ContainsKey(item.Id), currentTimestamp);
     }
 
-    private static VocabListItem? CheckAddNewListItem(UpdateVocabListItemDto updatedItemDto, DateTime transactionTimestamp)
+    private static VocabListItem? CheckAddNewListItem(VocabListItemDto updatedItemDto, DateTime transactionTimestamp)
     {
         if (updatedItemDto.Id.HasValue)
         {
@@ -207,7 +213,7 @@ public class VocabListRepositoryAsync : IVocabListRepositoryAsync
         VocabListItem newListItem;
         try
         {
-            newListItem = updatedItemDto.ToNewEntity(transactionTimestamp);
+            newListItem = updatedItemDto.ToEntity(transactionTimestamp);
         }
         catch (UnexpectedIdException e)
         {
@@ -216,7 +222,7 @@ public class VocabListRepositoryAsync : IVocabListRepositoryAsync
         return newListItem;
     }
 
-    private static void TryUpdateListItem(UpdateVocabListItemDto updatedItem, Dictionary<Guid, VocabListItem> entities,
+    private static void TryUpdateListItem(VocabListItemDto updatedItem, Dictionary<Guid, VocabListItem> entities,
         DateTime transactionTimestamp)
     {
         if (!updatedItem.Id.HasValue)

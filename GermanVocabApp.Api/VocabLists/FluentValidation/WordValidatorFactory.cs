@@ -1,12 +1,13 @@
 ﻿using FluentValidation;
 using GermanVocabApp.Api.FluentValidation.Validators;
+using GermanVocabApp.Api.VocabLists.Models;
 using GermanVocabApp.Core.Contracts;
 using GermanVocabApp.Shared.Data;
 
 namespace GermanVocabApp.Api.FluentValidation;
 
 // TODO: Write unit tests.
-public class WordValidatorFactory : IFactory<IValidator<IListItemRequest>, IListItemRequest>
+public class WordValidatorFactory : IFactory<IValidator<ItemRequest>, ItemRequest>
 {
     private Dictionary<WordType, FluentWordValidator> _validators;
 
@@ -34,7 +35,7 @@ public class WordValidatorFactory : IFactory<IValidator<IListItemRequest>, IList
         };
     }
 
-    public IValidator<IListItemRequest> Create(IListItemRequest request)
+    public IValidator<ItemRequest> Create(ItemRequest request)
     {
         WordType wordType = request.WordType;
         if (!_validators.ContainsKey(wordType))

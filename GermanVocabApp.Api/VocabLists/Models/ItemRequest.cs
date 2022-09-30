@@ -1,9 +1,11 @@
-﻿using GermanVocabApp.Shared.Data;
+﻿using GermanVocabApp.Core.Contracts;
+using GermanVocabApp.Shared.Data;
 
-namespace GermanVocabApp.DataAccess.Shared.DataTransfer;
+namespace GermanVocabApp.Api.VocabLists.Models;
 
-public class CreateVocabListItemDto
+public class ItemRequest : IListItemRequest
 {
+    public Guid? Id { get; set; }
     public WordType WordType { get; set; }
     public bool? IsWeakMasculineNoun { get; set; }
     public ReflexiveCase? ReflexiveCase { get; set; }

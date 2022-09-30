@@ -3,7 +3,7 @@ using GermanVocabApp.DataAccess.Shared.DataTransfer;
 
 namespace GermanVocabApp.Api.VocabLists.Conversion;
 
-internal static class VocabListInfoDtoConversionExtensions
+internal static class ListInfoDtoConversionExtensions
 {
     public static IEnumerable<VocabListInfoResponse> ToResponses(this IEnumerable<VocabListInfoDto> dtos)
     {

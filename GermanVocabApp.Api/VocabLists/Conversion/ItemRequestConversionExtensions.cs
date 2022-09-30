@@ -3,12 +3,19 @@ using GermanVocabApp.DataAccess.Shared.DataTransfer;
 
 namespace GermanVocabApp.Api.VocabLists.Conversion;
 
-internal static class CreateVocabListItemRequestConversionExtensions
+internal static class ItemRequestConversionExtensions
 {
-    public static CreateVocabListItemDto ToDto(this CreateVocabListItemRequest request)
+    public static IEnumerable<VocabListItemDto> ToDtos(this IEnumerable<ItemRequest> dtos,
+        Guid? listId)
     {
-        return new CreateVocabListItemDto()
+        return dtos.Select(dto => dto.ToDto(listId));
+    }
+
+    public static VocabListItemDto ToDto(this ItemRequest request, Guid? listId)
+    {
+        return new VocabListItemDto()
         {
+            Id = request.Id,
             WordType = request.WordType,
             IsWeakMasculineNoun = request.IsWeakMasculineNoun,
             ReflexiveCase = request.ReflexiveCase,
@@ -26,6 +33,7 @@ internal static class CreateVocabListItemRequestConversionExtensions
             Comparative = request.Comparative,
             Superlative = request.Superlative,
             English = request.English,
+            VocabListId = listId,
             FixedPlurality = request.FixedPlurality,
         };
     }
