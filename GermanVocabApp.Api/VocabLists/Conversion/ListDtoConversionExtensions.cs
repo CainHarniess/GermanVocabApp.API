@@ -6,13 +6,13 @@ namespace GermanVocabApp.Api.VocabLists.Conversion;
 
 internal static class ListDtoConversionExtensions
 {
-    public static VocabListResponse ToResponse(this VocabListDto dto)
+    public static ListResponse ToResponse(this VocabListDto dto)
     {
         if (!dto.Id.HasValue)
         {
             throw new UnexpectedNullIdException();
         }
-        return new VocabListResponse()
+        return new ListResponse()
         {
             Id = dto.Id.Value,
             Name = dto.Name,

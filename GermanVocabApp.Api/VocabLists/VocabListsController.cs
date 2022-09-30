@@ -26,7 +26,7 @@ public class VocabListsController : ControllerBase
 
     [HttpPost]
     [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-    [ProducesResponseType(typeof(VocabListResponse), (int)HttpStatusCode.Created)]
+    [ProducesResponseType(typeof(ListResponse), (int)HttpStatusCode.Created)]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
     public async Task<IActionResult> Create(ListRequest request)
     {
@@ -48,7 +48,7 @@ public class VocabListsController : ControllerBase
             return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
         }
 
-        VocabListResponse responseBody = newListDto.ToResponse();
+        ListResponse responseBody = newListDto.ToResponse();
         return CreatedAtAction(nameof(Get), new { id = newListDto.Id }, responseBody);
     }
 
@@ -56,7 +56,7 @@ public class VocabListsController : ControllerBase
     public async Task<IActionResult> GetInfos()
     {
         IEnumerable<VocabListInfoDto> vocabLists = await _repository.GetVocabListInfos();
-        IEnumerable<VocabListInfoResponse> responses = vocabLists.ToResponses();
+        IEnumerable<ListInfoResponse> responses = vocabLists.ToResponses();
         return Ok(responses);
     }
 
@@ -71,7 +71,7 @@ public class VocabListsController : ControllerBase
         {
             return NotFound();
         }
-        VocabListResponse response = dto.ToResponse();
+        ListResponse response = dto.ToResponse();
         return Ok(response);
     }
     

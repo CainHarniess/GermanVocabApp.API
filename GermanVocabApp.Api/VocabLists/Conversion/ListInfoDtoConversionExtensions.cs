@@ -5,14 +5,14 @@ namespace GermanVocabApp.Api.VocabLists.Conversion;
 
 internal static class ListInfoDtoConversionExtensions
 {
-    public static IEnumerable<VocabListInfoResponse> ToResponses(this IEnumerable<VocabListInfoDto> dtos)
+    public static IEnumerable<ListInfoResponse> ToResponses(this IEnumerable<VocabListInfoDto> dtos)
     {
         return dtos.Select(dto => dto.ToResponse());
     }
 
-    public static VocabListInfoResponse ToResponse(this VocabListInfoDto dto)
+    public static ListInfoResponse ToResponse(this VocabListInfoDto dto)
     {
-        return new VocabListInfoResponse()
+        return new ListInfoResponse()
         {
             Id = dto.Id,
             Name = dto.Name,

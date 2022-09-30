@@ -1,6 +1,6 @@
 ﻿namespace GermanVocabApp.Api.VocabLists.Models;
 
-public class VocabListInfoResponse
+public class ListInfoResponse
 {
     public Guid Id { get; set; }
     public string Name { get; set; }

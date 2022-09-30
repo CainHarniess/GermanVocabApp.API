@@ -6,12 +6,12 @@ namespace GermanVocabApp.Api.VocabLists.Conversion;
 
 internal static class ItemDtoConversionExtensions
 {
-    public static IEnumerable<VocabListItemResponse> ToResponses(this IEnumerable<VocabListItemDto> dtos)
+    public static IEnumerable<ItemResponse> ToResponses(this IEnumerable<VocabListItemDto> dtos)
     {
         return dtos.Select(dto => dto.ToResponse());
     }
 
-    public static VocabListItemResponse ToResponse(this VocabListItemDto dto)
+    public static ItemResponse ToResponse(this VocabListItemDto dto)
     {
         if (!dto.Id.HasValue)
         {
@@ -21,7 +21,7 @@ internal static class ItemDtoConversionExtensions
         {
             throw new UnexpectedNullIdException("Expect list item to have non-null list ID when copying to response object.");
         }
-        return new VocabListItemResponse()
+        return new ItemResponse()
         {
             Id = dto.Id.Value,
             WordType = dto.WordType,
