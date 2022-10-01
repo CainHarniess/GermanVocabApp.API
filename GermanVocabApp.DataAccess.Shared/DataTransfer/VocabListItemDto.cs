@@ -21,6 +21,5 @@ public class VocabListItemDto : EntityDtoBase
     public string? Superlative { get; set; }
     public string English { get; set; }
     public Guid? VocabListId { get; set; }
-    public virtual VocabListDto VocabList { get; set; }
     public FixedPlurality? FixedPlurality { get; set; }
 }

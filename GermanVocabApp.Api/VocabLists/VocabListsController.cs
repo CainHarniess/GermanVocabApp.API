@@ -36,7 +36,7 @@ public class VocabListsController : ControllerBase
             return BadRequest(result.ToDictionary());
         }
 
-        VocabListDto dto = request.ToDto();
+        VocabListDto dto = request.ToCreationDto();
         VocabListDto newListDto = await _repository.Add(dto);
 
         try
@@ -88,7 +88,7 @@ public class VocabListsController : ControllerBase
             return BadRequest(result.Errors);
         }
 
-        VocabListDto updateDto = request.ToDto(id);
+        VocabListDto updateDto = request.ToUpdateDto(id);
         try
         {
             await _repository.Update(updateDto);

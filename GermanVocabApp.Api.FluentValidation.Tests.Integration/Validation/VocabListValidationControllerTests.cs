@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using AutoFixture;
+using FluentValidation;
 using FluentValidation.Results;
 using GermanVocabApp.Api.VocabLists.Models;
 using GermanVocabApp.Api.VocabLists.Validation;
@@ -6,12 +7,12 @@ using GermanVocabApp.Core.Contracts;
 using Moq;
 using Osiris.FluentValidation.Testing;
 
-namespace GermanVocabApp.Api.FluentValidation.Tests.Unit;
+namespace GermanVocabApp.Api.FluentValidation.Tests.Integration.Validation;
 public class VocabListValidationControllerTests
 {
     private InlineValidator<int> _passingListValidator;
     private InlineValidator<int> _failingListValidator;
-    
+
     private Mock<IValidator<ListRequest>> _mockListValidator;
     private Mock<IAggregateValidator<ItemRequest>> _mockAggregateValidator;
 
@@ -27,15 +28,17 @@ public class VocabListValidationControllerTests
     {
         _passingListValidator = StubFluentValidator.CreatePassing<int>();
         _passResult = _passingListValidator.Validate(It.IsAny<int>());
-        
+
         _failingListValidator = StubFluentValidator.CreateFailing<int>();
         _failResult = _failingListValidator.Validate(It.IsAny<int>());
 
         _mockListValidator = new Mock<IValidator<ListRequest>>();
         _mockAggregateValidator = new Mock<IAggregateValidator<ItemRequest>>();
 
-        _list = new ListRequest();
-        _item = new ItemRequest();
+        var fixture = new Fixture();
+
+        _list = fixture.Create<ListRequest>();
+        _item = fixture.Create<ItemRequest>();
 
         _validationController = new(_mockListValidator.Object, _mockAggregateValidator.Object);
     }
@@ -51,7 +54,7 @@ public class VocabListValidationControllerTests
 
         _mockAggregateValidator.Setup(av => av.Validate(It.IsAny<IList<ItemRequest>>()));
 
-        ItemRequest[] items = new ItemRequest[listItemCount];
+        var items = new ItemRequest[listItemCount];
         for (int i = 0; i < listItemCount; i++)
         {
             items[i] = _item;

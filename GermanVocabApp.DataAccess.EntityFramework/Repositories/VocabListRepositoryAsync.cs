@@ -65,7 +65,7 @@ public class VocabListRepositoryAsync : IVocabListRepositoryAsync
         {
             IEnumerable<VocabListItem> listItems;
             listItems = dto.ListItems
-                                   .ToEntities(transactionTimeStamp, entity.Id);
+                           .ToEntities(transactionTimeStamp, entity.Id);
             _context.AddRange(listItems);
         }
 

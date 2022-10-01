@@ -11,7 +11,7 @@ internal static class ItemDtoConversionExtensions
         return dtos.Select(dto => dto.ToResponse());
     }
 
-    public static ItemResponse ToResponse(this VocabListItemDto dto)
+    internal static ItemResponse ToResponse(this VocabListItemDto dto)
     {
         if (!dto.Id.HasValue)
         {

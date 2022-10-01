@@ -4,7 +4,7 @@ using GermanVocabApp.Api.VocabLists.Models;
 using GermanVocabApp.Shared.Data;
 using Moq;
 
-namespace GermanVocabApp.Api.FluentValidation.Tests.Unit;
+namespace GermanVocabApp.Api.FluentValidation.Tests.Unit.Validation;
 
 public class WordValidatorFactoryTests
 {
