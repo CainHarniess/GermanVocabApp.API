@@ -2,6 +2,7 @@
 
 namespace GermanVocabApp.Api.VocabLists.Conversion;
 
+// TODO: Add tests.
 public class AggregateChildResourceConverter<TSource, TTarget> : IChildResourceConverter<TSource[], TTarget[]>
 {
     private readonly IChildResourceConverter<TSource, TTarget> _itemConverter;

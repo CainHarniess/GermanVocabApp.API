@@ -25,14 +25,14 @@ public class CreateItemRequestToDtoConverterValueTests : ItemRequestConverterVal
     }
 
     [Fact]
-    public void Convert_ShouldThrowException_WhenDtoIdNull()
+    public void Convert_ShouldThrowException_WhenDtoIdNotNull()
     {
-        _request.Id = null;
+        _request.Id = new Guid();
         Assert.Throws<UnexpectedNullIdException>(() => _converter.Convert(_request));
     }
 
     [Fact]
-    public void Convert_ShouldNotThrowException_WhenDtoIdNotNull()
+    public void Convert_ShouldNotThrowException_WhenDtoIdNull()
     {
         Exception e = Record.Exception(() => _converter.Convert(_request));
         Assert.Null(e);

@@ -1,5 +1,6 @@
 ﻿using GermanVocabApp.Api.VocabLists.Models;
 using GermanVocabApp.Core.Contracts;
+using GermanVocabApp.Core.Exceptions;
 using GermanVocabApp.DataAccess.Shared.DataTransfer;
 
 namespace GermanVocabApp.Api.VocabLists.Conversion.Items;
@@ -8,6 +9,10 @@ public class CreateItemRequestToDtoConverter : IConverter<ItemRequest, VocabList
 {
     public VocabListItemDto Convert(ItemRequest source)
     {
+        if (source.Id.HasValue)
+        {
+            throw new UnexpectedNullIdException($"Resource creation request with ID {source} but null was expected.");
+        }
         return new VocabListItemDto()
         {
             Id = null,

@@ -1,5 +1,4 @@
 ﻿using FluentValidation.Results;
-using GermanVocabApp.Api.VocabLists.Conversion.Lists;
 using GermanVocabApp.Api.VocabLists.Models;
 using GermanVocabApp.Core.Contracts;
 using GermanVocabApp.Core.Exceptions;
@@ -56,7 +55,7 @@ public class VocabListsController : ControllerBase
             return StatusCode(StatusCodes.Status500InternalServerError, "Unexpected null primary key on created resource.");
         }
 
-        ListResponse responseBody = _responseConverter.Convert(dto);
+        ListResponse responseBody = _responseConverter.Convert(newListDto);
         return CreatedAtAction(nameof(Get), new { id = newListDto.Id }, responseBody);
     }
 
@@ -90,6 +89,7 @@ public class VocabListsController : ControllerBase
     [ProducesResponseType((int)HttpStatusCode.NoContent)]
     public async Task<IActionResult> UpdateVocabList(Guid id, ListRequest request)
     {
+        // TODO: Fix this endpoint.
         ValidationResult result = _validator.Validate(request);
         if (!result.IsValid)
         {

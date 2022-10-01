@@ -14,6 +14,7 @@ public abstract class ItemRequestConverterValueTests
     {
         _fixture = new Fixture();
         _request = _fixture.Create<ItemRequest>();
+        _request.Id = null;
     }
 
     [Fact]

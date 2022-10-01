@@ -2,18 +2,18 @@
 
 namespace GermanVocabApp.Api.FluentValidation.Tests.Unit.Conversion.ListDtoToResponse;
 
-public class ListDtoToResponseConverterExceptionTests : ListDtoToResponseConverterTests
+public class CreateListRequestToDtoConverterExceptionTests : ListDtoToResponseConverterTests
 {
     [Fact]
-    public void Convert_ShouldThrowException_WhenDtoIdNull()
+    public void Convert_ShouldThrowException_WhenIdNull()
     {
-        _dto.Id = null;
         Assert.Throws<UnexpectedNullIdException>(() => _converter.Convert(_dto));
     }
 
     [Fact]
-    public void Convert_ShouldNotThrowException_WhenDtoIdNotNull()
+    public void Convert_ShouldNotThrowException_WhenIdNull()
     {
+        _dto.Id = null;
         Exception e = Record.Exception(() => _converter.Convert(_dto));
         Assert.Null(e);
     }
