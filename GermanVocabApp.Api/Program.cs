@@ -17,6 +17,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddEntityFrameworkDependencies(builder);
 builder.Services.AddValidationDependencies();
+builder.Services.AddConversionDependencies();
 builder.Services.AddDataAccessDependencies();
 
 var app = builder.Build();

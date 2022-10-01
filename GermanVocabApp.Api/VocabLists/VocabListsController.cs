@@ -16,12 +16,18 @@ public class VocabListsController : ControllerBase
 {
     private readonly IVocabListRepositoryAsync _repository;
     private readonly IValidationController<ListRequest> _validator;
+    private readonly IConverter<VocabListDto, ListResponse> _responseConverter;
+    private readonly IConverter<VocabListInfoDto[], ListInfoResponse[]> _infoResponseConverter;
 
     public VocabListsController(IValidationController<ListRequest> validator,
-        IVocabListRepositoryAsync repository)
+        IVocabListRepositoryAsync repository,
+        IConverter<VocabListDto, ListResponse> responseConverter,
+        IConverter<VocabListInfoDto[], ListInfoResponse[]> infoResponseConverter)
     {
         _validator = validator;
         _repository = repository;
+        _responseConverter = responseConverter;
+        _infoResponseConverter = infoResponseConverter;
     }
 
     [HttpPost]
@@ -48,7 +54,7 @@ public class VocabListsController : ControllerBase
             return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
         }
 
-        ListResponse responseBody = newListDto.ToResponse();
+        ListResponse responseBody = _responseConverter.Convert(dto);
         return CreatedAtAction(nameof(Get), new { id = newListDto.Id }, responseBody);
     }
 
@@ -56,7 +62,7 @@ public class VocabListsController : ControllerBase
     public async Task<IActionResult> GetInfos()
     {
         IEnumerable<VocabListInfoDto> vocabLists = await _repository.GetVocabListInfos();
-        IEnumerable<ListInfoResponse> responses = vocabLists.ToResponses();
+        IEnumerable<ListInfoResponse> responses = _infoResponseConverter.Convert(vocabLists.ToArray());
         return Ok(responses);
     }
 
@@ -71,7 +77,7 @@ public class VocabListsController : ControllerBase
         {
             return NotFound();
         }
-        ListResponse response = dto.ToResponse();
+        ListResponse response = _responseConverter.Convert(dto);
         return Ok(response);
     }
     

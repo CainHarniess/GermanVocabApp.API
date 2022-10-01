@@ -2,7 +2,7 @@
 
 namespace GermanVocabApp.Api.VocabLists.Models;
 
-internal class ItemResponse
+public class ItemResponse
 {
     public Guid Id { get; set; }
     public WordType WordType { get; set; }
