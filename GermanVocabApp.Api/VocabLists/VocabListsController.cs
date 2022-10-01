@@ -1,5 +1,5 @@
 ﻿using FluentValidation.Results;
-using GermanVocabApp.Api.VocabLists.Conversion;
+using GermanVocabApp.Api.VocabLists.Conversion.Lists;
 using GermanVocabApp.Api.VocabLists.Models;
 using GermanVocabApp.Core.Contracts;
 using GermanVocabApp.Core.Exceptions;
@@ -18,16 +18,22 @@ public class VocabListsController : ControllerBase
     private readonly IValidationController<ListRequest> _validator;
     private readonly IConverter<VocabListDto, ListResponse> _responseConverter;
     private readonly IConverter<VocabListInfoDto[], ListInfoResponse[]> _infoResponseConverter;
+    private readonly IConverter<ListRequest, VocabListDto> _createRequestConverter;
+    private readonly IUpdateResourceConverter<ListRequest, VocabListDto> _updateRequestConverter;
 
     public VocabListsController(IValidationController<ListRequest> validator,
         IVocabListRepositoryAsync repository,
         IConverter<VocabListDto, ListResponse> responseConverter,
-        IConverter<VocabListInfoDto[], ListInfoResponse[]> infoResponseConverter)
+        IConverter<VocabListInfoDto[], ListInfoResponse[]> infoResponseConverter,
+        IConverter<ListRequest, VocabListDto> createRequestConverter,
+        IUpdateResourceConverter<ListRequest, VocabListDto> updateRequestConverter)
     {
         _validator = validator;
         _repository = repository;
         _responseConverter = responseConverter;
         _infoResponseConverter = infoResponseConverter;
+        _createRequestConverter = createRequestConverter;
+        _updateRequestConverter = updateRequestConverter;
     }
 
     [HttpPost]
@@ -42,16 +48,12 @@ public class VocabListsController : ControllerBase
             return BadRequest(result.ToDictionary());
         }
 
-        VocabListDto dto = request.ToCreationDto();
+        VocabListDto dto = _createRequestConverter.Convert(request);
         VocabListDto newListDto = await _repository.Add(dto);
 
-        try
+        if (newListDto.Id == null)
         {
-            ValidateCreatedDto(newListDto);
-        }
-        catch (UnexpectedNullIdException e)
-        {
-            return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+            return StatusCode(StatusCodes.Status500InternalServerError, "Unexpected null primary key on created resource.");
         }
 
         ListResponse responseBody = _responseConverter.Convert(dto);
@@ -94,7 +96,7 @@ public class VocabListsController : ControllerBase
             return BadRequest(result.Errors);
         }
 
-        VocabListDto updateDto = request.ToUpdateDto(id);
+        VocabListDto updateDto = _updateRequestConverter.Convert(request, id);
         try
         {
             await _repository.Update(updateDto);
@@ -122,15 +124,6 @@ public class VocabListsController : ControllerBase
             return NotFound();
         }
         return NoContent();
-    }
-
-
-    private void ValidateCreatedDto(VocabListDto newListDto)
-    {
-        if (newListDto.Id == null)
-        {
-            throw new UnexpectedNullIdException($"Instance of {nameof(VocabListDto)} created with a null ID when an ID is expected.");
-        }
     }
 
 

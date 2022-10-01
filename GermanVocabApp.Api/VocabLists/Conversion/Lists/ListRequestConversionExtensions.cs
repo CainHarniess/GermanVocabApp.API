@@ -1,7 +1,8 @@
-﻿using GermanVocabApp.Api.VocabLists.Models;
+﻿using GermanVocabApp.Api.VocabLists.Conversion.Items;
+using GermanVocabApp.Api.VocabLists.Models;
 using GermanVocabApp.DataAccess.Shared.DataTransfer;
 
-namespace GermanVocabApp.Api.VocabLists.Conversion;
+namespace GermanVocabApp.Api.VocabLists.Conversion.Lists;
 
 internal static class ListRequestConversionExtensions
 {

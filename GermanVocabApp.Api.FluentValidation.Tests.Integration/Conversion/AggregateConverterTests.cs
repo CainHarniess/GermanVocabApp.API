@@ -7,14 +7,14 @@ using Moq;
 
 namespace GermanVocabApp.Api.FluentValidation.Tests.Integration.Conversion;
 
-public class AggregateItemDtoToResponseConverterTests
+public class AggregateConverterTests
 {
     private Fixture _fixture;
     private IEnumerable<VocabListItemDto> _dtos;
     private Mock<IConverter<VocabListItemDto, ItemResponse>> _mockItemConverter;
     private AggregateConverter<VocabListItemDto, ItemResponse> _converter;
 
-    public AggregateItemDtoToResponseConverterTests()
+    public AggregateConverterTests()
     {
         _fixture = new Fixture();
         _dtos = _fixture.Create<IEnumerable<VocabListItemDto>>();

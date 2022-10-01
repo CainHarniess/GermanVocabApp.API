@@ -1,11 +1,11 @@
 ﻿using AutoFixture;
-using GermanVocabApp.Api.VocabLists.Conversion;
+using GermanVocabApp.Api.VocabLists.Conversion.Lists;
 using GermanVocabApp.Api.VocabLists.Models;
 using GermanVocabApp.Core.Contracts;
 using GermanVocabApp.DataAccess.Shared.DataTransfer;
 using Moq;
 
-namespace GermanVocabApp.Api.FluentValidation.Tests.Unit.Conversion;
+namespace GermanVocabApp.Api.FluentValidation.Tests.Unit.Conversion.ListDtoToResponse;
 
 public abstract class ListDtoToResponseConverterTests
 {

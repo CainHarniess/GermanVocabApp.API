@@ -3,7 +3,7 @@ using GermanVocabApp.Core.Contracts;
 using GermanVocabApp.Core.Exceptions;
 using GermanVocabApp.DataAccess.Shared.DataTransfer;
 
-namespace GermanVocabApp.Api.VocabLists.Conversion;
+namespace GermanVocabApp.Api.VocabLists.Conversion.Items;
 
 public class ItemDtoToResponseConverter : IConverter<VocabListItemDto, ItemResponse>
 {

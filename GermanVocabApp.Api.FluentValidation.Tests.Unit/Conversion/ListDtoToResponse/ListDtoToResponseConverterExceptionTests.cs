@@ -1,7 +1,7 @@
 ﻿using GermanVocabApp.Api.VocabLists.Conversion;
 using GermanVocabApp.Core.Exceptions;
 
-namespace GermanVocabApp.Api.FluentValidation.Tests.Unit.Conversion;
+namespace GermanVocabApp.Api.FluentValidation.Tests.Unit.Conversion.ListDtoToResponse;
 
 public class ListDtoToResponseConverterExceptionTests : ListDtoToResponseConverterTests
 {

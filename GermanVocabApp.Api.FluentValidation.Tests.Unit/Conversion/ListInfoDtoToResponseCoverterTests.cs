@@ -1,8 +1,8 @@
 ﻿using AutoFixture;
-using GermanVocabApp.Api.VocabLists.Conversion;
+using GermanVocabApp.Api.VocabLists.Conversion.Lists;
 using GermanVocabApp.DataAccess.Shared.DataTransfer;
 
-namespace GermanVocabApp.Api.FluentValidation.Tests.Integration.Conversion;
+namespace GermanVocabApp.Api.FluentValidation.Tests.Unit.Conversion;
 
 public class ListInfoDtoToResponseCoverterTests
 {

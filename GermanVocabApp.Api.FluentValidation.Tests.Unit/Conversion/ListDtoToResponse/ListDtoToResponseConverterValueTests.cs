@@ -1,6 +1,6 @@
 ﻿using GermanVocabApp.Api.VocabLists.Models;
 
-namespace GermanVocabApp.Api.FluentValidation.Tests.Unit.Conversion;
+namespace GermanVocabApp.Api.FluentValidation.Tests.Unit.Conversion.ListDtoToResponse;
 
 public class ListDtoToResponseConverterValueTests : ListDtoToResponseConverterTests
 {

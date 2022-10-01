@@ -2,6 +2,8 @@
 using GermanVocabApp.Api.FluentValidation;
 using GermanVocabApp.Api.FluentValidation.Validators;
 using GermanVocabApp.Api.VocabLists.Conversion;
+using GermanVocabApp.Api.VocabLists.Conversion.Items;
+using GermanVocabApp.Api.VocabLists.Conversion.Lists;
 using GermanVocabApp.Api.VocabLists.Models;
 using GermanVocabApp.Api.VocabLists.Validation;
 using GermanVocabApp.Core.Contracts;
@@ -37,11 +39,19 @@ public static class IServiceCollectionInjectionExtensions
     {
         services.AddSingleton<IConverter<VocabListItemDto, ItemResponse>, ItemDtoToResponseConverter>();
         services.AddSingleton<IConverter<VocabListItemDto[], ItemResponse[]>, AggregateConverter<VocabListItemDto, ItemResponse>>();
+        services.AddSingleton<IConverter<VocabListDto, ListResponse>, ListDtoToResponseConverter>();
 
         services.AddSingleton<IConverter<VocabListInfoDto, ListInfoResponse>, ListInfoDtoToResponseCoverter>();
         services.AddSingleton<IConverter<VocabListInfoDto[], ListInfoResponse[]>, AggregateConverter<VocabListInfoDto, ListInfoResponse>>();
 
-        services.AddSingleton<IConverter<VocabListDto, ListResponse>, ListDtoToResponseConverter>();
+        services.AddSingleton<IConverter<ItemRequest, VocabListItemDto>, CreateItemRequestToDtoConverter>();
+        services.AddSingleton<IConverter<ItemRequest[], VocabListItemDto[]>, AggregateConverter<ItemRequest, VocabListItemDto>>();
+        services.AddSingleton<IConverter<ListRequest, VocabListDto>, CreateListRequestToDtoConverter>();
+
+        services.AddSingleton<IChildResourceConverter<ItemRequest, VocabListItemDto>, UpdateItemRequestToDtoConverter>();
+        services.AddSingleton<IChildResourceConverter<ItemRequest[], VocabListItemDto[]>, AggregateChildResourceConverter<ItemRequest, VocabListItemDto>>();
+        services.AddSingleton<IUpdateResourceConverter<ListRequest, VocabListDto>, UpdateListRequestToDtoConverter>();
+
         return services;
     }
 

@@ -2,7 +2,7 @@
 using GermanVocabApp.Core.Contracts;
 using GermanVocabApp.DataAccess.Shared.DataTransfer;
 
-namespace GermanVocabApp.Api.VocabLists.Conversion;
+namespace GermanVocabApp.Api.VocabLists.Conversion.Lists;
 
 public class ListInfoDtoToResponseCoverter : IConverter<VocabListInfoDto, ListInfoResponse>
 {

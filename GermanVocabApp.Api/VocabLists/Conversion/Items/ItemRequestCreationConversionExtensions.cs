@@ -1,21 +1,20 @@
 ﻿using GermanVocabApp.Api.VocabLists.Models;
 using GermanVocabApp.DataAccess.Shared.DataTransfer;
 
-namespace GermanVocabApp.Api.VocabLists.Conversion;
+namespace GermanVocabApp.Api.VocabLists.Conversion.Items;
 
-internal static class ItemRequestUpdateConversionExtensions
+internal static class ItemRequestCreationConversionExtensions
 {
-    public static IEnumerable<VocabListItemDto> ToUpdateDtos(this IEnumerable<ItemRequest> dtos,
-        Guid? listId)
+    public static IEnumerable<VocabListItemDto> ToCreationDtos(this IEnumerable<ItemRequest> dtos)
     {
-        return dtos.Select(dto => dto.ToUpdateDto(listId));
+        return dtos.Select(dto => dto.ToCreationDto());
     }
 
-    public static VocabListItemDto ToUpdateDto(this ItemRequest request, Guid? listId)
+    public static VocabListItemDto ToCreationDto(this ItemRequest request)
     {
         return new VocabListItemDto()
         {
-            Id = request.Id,
+            Id = null,
             WordType = request.WordType,
             IsWeakMasculineNoun = request.IsWeakMasculineNoun,
             ReflexiveCase = request.ReflexiveCase,
@@ -33,7 +32,7 @@ internal static class ItemRequestUpdateConversionExtensions
             Comparative = request.Comparative,
             Superlative = request.Superlative,
             English = request.English,
-            VocabListId = listId,
+            VocabListId = null,
             FixedPlurality = request.FixedPlurality,
         };
     }
