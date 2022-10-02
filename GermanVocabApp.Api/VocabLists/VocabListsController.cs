@@ -1,5 +1,4 @@
 ﻿using FluentValidation.Results;
-using GermanVocabApp.Api.VocabLists.Conversion;
 using GermanVocabApp.Api.VocabLists.Models;
 using GermanVocabApp.Core.Contracts;
 using GermanVocabApp.Core.Exceptions;
@@ -15,43 +14,48 @@ namespace GermanVocabApp.Api.VocabLists;
 public class VocabListsController : ControllerBase
 {
     private readonly IVocabListRepositoryAsync _repository;
-    private readonly IValidationController<IListRequest<CreateVocabListItemRequest>> _creationValidator;
-    private readonly IValidationController<IListRequest<UpdateVocabListItemRequest>> _updateValidator;
+    private readonly IValidationController<ListRequest> _validator;
+    private readonly IConverter<VocabListDto, ListResponse> _responseConverter;
+    private readonly IConverter<VocabListInfoDto[], ListInfoResponse[]> _infoResponseConverter;
+    private readonly IConverter<ListRequest, VocabListDto> _createRequestConverter;
+    private readonly IUpdateResourceConverter<ListRequest, VocabListDto> _updateRequestConverter;
 
-    public VocabListsController(IValidationController<IListRequest<CreateVocabListItemRequest>> creationValidator,
-        IValidationController<IListRequest<UpdateVocabListItemRequest>> updateValidator,
-        IVocabListRepositoryAsync repository)
+    public VocabListsController(IValidationController<ListRequest> validator,
+        IVocabListRepositoryAsync repository,
+        IConverter<VocabListDto, ListResponse> responseConverter,
+        IConverter<VocabListInfoDto[], ListInfoResponse[]> infoResponseConverter,
+        IConverter<ListRequest, VocabListDto> createRequestConverter,
+        IUpdateResourceConverter<ListRequest, VocabListDto> updateRequestConverter)
     {
-        _creationValidator = creationValidator;
-        _updateValidator = updateValidator;
+        _validator = validator;
         _repository = repository;
+        _responseConverter = responseConverter;
+        _infoResponseConverter = infoResponseConverter;
+        _createRequestConverter = createRequestConverter;
+        _updateRequestConverter = updateRequestConverter;
     }
 
     [HttpPost]
     [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-    [ProducesResponseType(typeof(VocabListResponse), (int)HttpStatusCode.Created)]
+    [ProducesResponseType(typeof(ListResponse), (int)HttpStatusCode.Created)]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-    public async Task<IActionResult> Create(CreateVocabListRequest request)
+    public async Task<IActionResult> Create(ListRequest request)
     {
-        ValidationResult result = _creationValidator.Validate(request);
+        ValidationResult result = _validator.Validate(request);
         if (!result.IsValid)
         {
             return BadRequest(result.ToDictionary());
         }
 
-        CreateVocabListDto dto = request.ToDto();
+        VocabListDto dto = _createRequestConverter.Convert(request);
         VocabListDto newListDto = await _repository.Add(dto);
 
-        try
+        if (newListDto.Id == null)
         {
-            ValidateCreatedDto(newListDto);
-        }
-        catch (UnexpectedNullIdException e)
-        {
-            return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+            return StatusCode(StatusCodes.Status500InternalServerError, "Unexpected null primary key on created resource.");
         }
 
-        VocabListResponse responseBody = newListDto.ToResponse();
+        ListResponse responseBody = _responseConverter.Convert(newListDto);
         return CreatedAtAction(nameof(Get), new { id = newListDto.Id }, responseBody);
     }
 
@@ -59,7 +63,7 @@ public class VocabListsController : ControllerBase
     public async Task<IActionResult> GetInfos()
     {
         IEnumerable<VocabListInfoDto> vocabLists = await _repository.GetVocabListInfos();
-        IEnumerable<VocabListInfoResponse> responses = vocabLists.ToResponses();
+        IEnumerable<ListInfoResponse> responses = _infoResponseConverter.Convert(vocabLists.ToArray());
         return Ok(responses);
     }
 
@@ -74,7 +78,7 @@ public class VocabListsController : ControllerBase
         {
             return NotFound();
         }
-        VocabListResponse response = dto.ToResponse();
+        ListResponse response = _responseConverter.Convert(dto);
         return Ok(response);
     }
     
@@ -83,15 +87,16 @@ public class VocabListsController : ControllerBase
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
     [ProducesResponseType((int)HttpStatusCode.NoContent)]
-    public async Task<IActionResult> UpdateVocabList(Guid id, UpdateVocabListRequest request)
+    public async Task<IActionResult> UpdateVocabList(Guid id, ListRequest request)
     {
-        ValidationResult result = _updateValidator.Validate(request);
+        // TODO: Fix this endpoint.
+        ValidationResult result = _validator.Validate(request);
         if (!result.IsValid)
         {
             return BadRequest(result.Errors);
         }
 
-        UpdateVocabListDto updateDto = request.ToDto(id);
+        VocabListDto updateDto = _updateRequestConverter.Convert(request, id);
         try
         {
             await _repository.Update(updateDto);
@@ -119,15 +124,6 @@ public class VocabListsController : ControllerBase
             return NotFound();
         }
         return NoContent();
-    }
-
-
-    private void ValidateCreatedDto(VocabListDto newListDto)
-    {
-        if (newListDto.Id == null)
-        {
-            throw new UnexpectedNullIdException($"Instance of {nameof(VocabListDto)} created with a null ID when an ID is expected.");
-        }
     }
 
 

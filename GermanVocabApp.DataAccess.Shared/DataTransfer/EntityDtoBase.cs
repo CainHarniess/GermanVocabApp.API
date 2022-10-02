@@ -2,5 +2,5 @@
 
 public abstract class EntityDtoBase
 {
-    public Guid Id { get; set; }
+    public Guid? Id { get; set; }
 }

@@ -1,12 +1,16 @@
 ﻿using FluentValidation;
 using GermanVocabApp.Api.FluentValidation;
 using GermanVocabApp.Api.FluentValidation.Validators;
+using GermanVocabApp.Api.VocabLists.Conversion;
+using GermanVocabApp.Api.VocabLists.Conversion.Items;
+using GermanVocabApp.Api.VocabLists.Conversion.Lists;
 using GermanVocabApp.Api.VocabLists.Models;
 using GermanVocabApp.Api.VocabLists.Validation;
 using GermanVocabApp.Core.Contracts;
 using GermanVocabApp.DataAccess.EntityFramework;
 using GermanVocabApp.DataAccess.EntityFramework.Repositories;
 using GermanVocabApp.DataAccess.Shared;
+using GermanVocabApp.DataAccess.Shared.DataTransfer;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
@@ -20,17 +24,34 @@ public static class IServiceCollectionInjectionExtensions
         services.AddSingleton<FluentVerbValidator>();
         services.AddSingleton<FluentModifierValidator>();
 
-        services.AddSingleton<IValidator<IListRequest<CreateVocabListItemRequest>>, FluentListValidator<CreateVocabListItemRequest>>();
-        services.AddSingleton<IValidator<IListRequest<UpdateVocabListItemRequest>>, FluentListValidator<UpdateVocabListItemRequest>>();
-        services.AddSingleton<IFactory<IValidator<IListItemRequest>, IListItemRequest>, WordValidatorFactory>();
+        services.AddSingleton<IValidator<ListRequest>, FluentListValidator>();
+        services.AddSingleton<IFactory<IValidator<ItemRequest>, ItemRequest>, WordValidatorFactory>();
 
-        services.AddSingleton<IAggregateValidator<IListItemRequest>, AggregateListItemValidator<IListItemRequest>>();
+        services.AddSingleton<IAggregateValidator<ItemRequest>, AggregateListItemValidator>();
 
-        services.AddSingleton<FluentListValidator<CreateVocabListItemRequest>>();
-        services.AddSingleton<FluentListValidator<UpdateVocabListItemRequest>>();
+        services.AddSingleton<IValidator<ListRequest>, FluentListValidator>();
 
-        services.AddSingleton<IValidationController<IListRequest<CreateVocabListItemRequest>>, VocabListValidationController<CreateVocabListItemRequest>>();
-        services.AddSingleton<IValidationController<IListRequest<UpdateVocabListItemRequest>>, VocabListValidationController<UpdateVocabListItemRequest>>();
+        services.AddSingleton<IValidationController<ListRequest>, VocabListValidationController>();
+        return services;
+    }
+
+    public static IServiceCollection AddConversionDependencies(this IServiceCollection services)
+    {
+        services.AddSingleton<IConverter<VocabListItemDto, ItemResponse>, ItemDtoToResponseConverter>();
+        services.AddSingleton<IConverter<VocabListItemDto[], ItemResponse[]>, AggregateConverter<VocabListItemDto, ItemResponse>>();
+        services.AddSingleton<IConverter<VocabListDto, ListResponse>, ListDtoToResponseConverter>();
+
+        services.AddSingleton<IConverter<VocabListInfoDto, ListInfoResponse>, ListInfoDtoToResponseCoverter>();
+        services.AddSingleton<IConverter<VocabListInfoDto[], ListInfoResponse[]>, AggregateConverter<VocabListInfoDto, ListInfoResponse>>();
+
+        services.AddSingleton<IConverter<ItemRequest, VocabListItemDto>, CreateItemRequestToDtoConverter>();
+        services.AddSingleton<IConverter<ItemRequest[], VocabListItemDto[]>, AggregateConverter<ItemRequest, VocabListItemDto>>();
+        services.AddSingleton<IConverter<ListRequest, VocabListDto>, CreateListRequestToDtoConverter>();
+
+        services.AddSingleton<IChildResourceConverter<ItemRequest, VocabListItemDto>, UpdateItemRequestToDtoConverter>();
+        services.AddSingleton<IChildResourceConverter<ItemRequest[], VocabListItemDto[]>, AggregateChildResourceConverter<ItemRequest, VocabListItemDto>>();
+        services.AddSingleton<IUpdateResourceConverter<ListRequest, VocabListDto>, UpdateListRequestToDtoConverter>();
+
         return services;
     }
 

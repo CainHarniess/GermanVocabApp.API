@@ -1,8 +1,10 @@
 ﻿using GermanVocabApp.Shared.Data;
 
-namespace GermanVocabApp.DataAccess.Shared.DataTransfer;
-public class VocabListItemDto : EntityDtoBase
+namespace GermanVocabApp.Api.VocabLists.Models;
+
+public class ItemResponse
 {
+    public Guid Id { get; set; }
     public WordType WordType { get; set; }
     public bool? IsWeakMasculineNoun { get; set; }
     public ReflexiveCase? ReflexiveCase { get; set; }
@@ -20,6 +22,6 @@ public class VocabListItemDto : EntityDtoBase
     public string? Comparative { get; set; }
     public string? Superlative { get; set; }
     public string English { get; set; }
-    public Guid? VocabListId { get; set; }
+    public Guid VocabListId { get; set; }
     public FixedPlurality? FixedPlurality { get; set; }
 }

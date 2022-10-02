@@ -7,10 +7,3 @@ public interface IListRequest<TItem>
     public string? Description { get; set; }
     public IEnumerable<TItem> ListItems { get; set; }
 }
-
-public interface IListRequest
-{
-    public string Name { get; set; }
-    public string? Description { get; set; }
-    public IEnumerable<IListItemRequest> ListItems { get; set; }
-}
