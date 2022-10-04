@@ -1,16 +1,16 @@
 ﻿using GermanVocabApp.Core.Exceptions;
 using GermanVocabApp.DataAccess.EntityFramework.Models;
-using GermanVocabApp.DataAccess.Shared.Abstractions;
 using GermanVocabApp.DataAccess.Shared.DataTransfer;
 
 namespace GermanVocabApp.DataAccess.EntityFramework.Conversion;
 
 internal static class VocabListItemDtoConversionExtensions
 {
-    public static IEnumerable<VocabListItem> ToEntities(this IEnumerable<VocabListItemDto> dtos,
-                                                        DateTime creationTimeStamp, Guid vocabListId)
+    public static VocabListItem[] ToEntities(this VocabListItemDto[] dtos,
+                                             DateTime creationTimeStamp, Guid vocabListId)
     {
-        return dtos.Select(dto => dto.ToEntity(creationTimeStamp, vocabListId));
+        return dtos.Select(dto => dto.ToEntity(creationTimeStamp, vocabListId))
+                   .ToArray();
     }
 
     public static IEnumerable<VocabListItem> ToEntities(this IEnumerable<VocabListItemDto> dtos,

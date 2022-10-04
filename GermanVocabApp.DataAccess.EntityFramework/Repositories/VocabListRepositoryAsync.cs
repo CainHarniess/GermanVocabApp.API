@@ -63,8 +63,8 @@ public class VocabListRepositoryAsync : IVocabListRepositoryAsync
 
         if (dto.ListItems.Any())
         {
-            IEnumerable<VocabListItem> listItems;
-            listItems = dto.ListItems
+            VocabListItem[] listItems;
+            listItems = dto.ListItems.ToArray()
                            .ToEntities(transactionTimeStamp, entity.Id);
             _context.AddRange(listItems);
         }
