@@ -9,7 +9,6 @@
 
 using System;
 using System.CodeDom.Compiler;
-using GermanVocabApp.Core.Testing;
 using GermanVocabApp.DataAccess.EntityFramework.Models;
 using GermanVocabApp.Shared.Data;
 
@@ -17,7 +16,7 @@ namespace GermanVocabApp.DataAccess.EntityFramework.Tests.Unit.Builders;
 
 
 [GeneratedCode("Builders", "1.0")]
-public partial class VocabListBuilder : AbstractBuilder<GermanVocabApp.DataAccess.EntityFramework.Models.VocabList>
+public partial class VocabListBuilder : BuilderBase<GermanVocabApp.DataAccess.EntityFramework.Models.VocabList>
 {
     private DateTime _createdDate;
     public VocabListBuilder WithCreatedDate(DateTime value)
@@ -79,7 +78,7 @@ public partial class VocabListBuilder : AbstractBuilder<GermanVocabApp.DataAcces
 }
 
 [GeneratedCode("Builders", "1.0")]
-public partial class VocabListItemBuilder : AbstractBuilder<GermanVocabApp.DataAccess.EntityFramework.Models.VocabListItem>
+public partial class VocabListItemBuilder : BuilderBase<GermanVocabApp.DataAccess.EntityFramework.Models.VocabListItem>
 {
     private AuxiliaryVerb? _auxiliaryVerb;
     public VocabListItemBuilder WithAuxiliaryVerb(AuxiliaryVerb? value)
