@@ -8,6 +8,7 @@ namespace GermanVocabApp.Core.Tests.Unit.Inspection;
 public class ModelBuildPropertyInspectorTests
 {
     private readonly Mock<IBuiltInTypeDictProvider> _mockBuiltInTypeDictProvider;
+    private readonly NullableReferenceTypeInspector _nullReferenceTypeInspector;
     private readonly ModelBuilderPropertyInspector _inspector;
     private readonly PropertyInfo[] _properties;
 
@@ -23,8 +24,8 @@ public class ModelBuildPropertyInspectorTests
         _mockBuiltInTypeDictProvider.Setup(p => p.Provide())
                                     .Returns(mockDict);
 
-
-        _inspector = new ModelBuilderPropertyInspector(_mockBuiltInTypeDictProvider.Object);
+        _nullReferenceTypeInspector = new NullableReferenceTypeInspector();
+        _inspector = new ModelBuilderPropertyInspector(_mockBuiltInTypeDictProvider.Object, _nullReferenceTypeInspector);
 
         Type testType = typeof(ComplexType);
         _properties = testType.GetProperties(BindingFlags.Public | BindingFlags.Instance)

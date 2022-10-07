@@ -6,10 +6,13 @@ namespace GermanVocabApp.Core.SourceGeneration.Builders.Inspection;
 public class ModelBuilderPropertyInspector
 {
     private readonly Dictionary<string, string> _buildInTypeDict;
+    private readonly NullableReferenceTypeInspector _nullReferenceTypeInpsector;
 
-    public ModelBuilderPropertyInspector(IBuiltInTypeDictProvider builIBuiltInDictProvider)
+    public ModelBuilderPropertyInspector(IBuiltInTypeDictProvider builIBuiltInDictProvider,
+        NullableReferenceTypeInspector nullReferenceTypeInpsector)
     {
         _buildInTypeDict = builIBuiltInDictProvider.Provide();
+        _nullReferenceTypeInpsector = nullReferenceTypeInpsector;
     }
 
     public ModelBuilderPropertyInfo Inspect(PropertyInfo propertyInfo)
@@ -28,7 +31,7 @@ public class ModelBuilderPropertyInspector
                                             propertyTypeName, propertyInfo.Name);
     }
 
-    private static Tuple<bool, string> TryGetNullableUnderlyingTypeName(PropertyInfo propertyInfo)
+    private Tuple<bool, string> TryGetNullableUnderlyingTypeName(PropertyInfo propertyInfo)
     {
         string dotNetTypeName;
         bool isNullable;
@@ -44,17 +47,9 @@ public class ModelBuilderPropertyInspector
         else
         {
             dotNetTypeName = propertyInfo.PropertyType.Name;
-            isNullable = AssertNullableReferenceType(propertyInfo);
+            isNullable = _nullReferenceTypeInpsector.AssertIsNullable(propertyInfo);
         }
         return new Tuple<bool, string>(isNullable, dotNetTypeName);
-    }
-
-    private static bool AssertNullableReferenceType(PropertyInfo propertyInfo)
-    {
-        NullabilityInfoContext nullInfoContext = new NullabilityInfoContext();
-        NullabilityInfo nullInfo = nullInfoContext.Create(propertyInfo);
-        NullabilityState nullabilityState = nullInfo.WriteState;
-        return nullabilityState == NullabilityState.Nullable;
     }
 
     private string TryGetKeywordTypeName(string dotNetTypeName)
@@ -64,4 +59,3 @@ public class ModelBuilderPropertyInspector
                : dotNetTypeName;
     }
 }
-
