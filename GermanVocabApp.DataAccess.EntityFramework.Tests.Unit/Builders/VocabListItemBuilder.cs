@@ -1,9 +1,10 @@
-﻿using GermanVocabApp.DataAccess.EntityFramework.Models;
+﻿using GermanVocabApp.Core.Testing;
+using GermanVocabApp.DataAccess.EntityFramework.Models;
 using GermanVocabApp.Shared.Data;
 
 namespace GermanVocabApp.DataAccess.EntityFramework.Tests.Unit.Builders;
 
-public partial class VocabListItemBuilder : BuilderBase<VocabListItem>
+public partial class VocabListItemBuilder : AbstractBuilder<VocabListItem>
 {
     public VocabListItemBuilder BasicWithListId(Guid listId)
     {

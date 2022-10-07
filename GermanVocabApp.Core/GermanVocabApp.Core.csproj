@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Osiris\Osiris.System.Extensions\Osiris.System.Extensions.csproj" />
     <ProjectReference Include="..\GermanVocabApp.Shared\GermanVocabApp.Shared.csproj" />
   </ItemGroup>
 

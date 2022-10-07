@@ -36,4 +36,8 @@
     <ProjectReference Include="..\GermanVocabApp.DataAccess.Shared\GermanVocabApp.DataAccess.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="SourceGeneration\" />
+  </ItemGroup>
+
 </Project>

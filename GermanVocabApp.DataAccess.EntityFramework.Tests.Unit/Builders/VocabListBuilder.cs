@@ -1,8 +1,9 @@
-﻿using GermanVocabApp.DataAccess.EntityFramework.Models;
+﻿using GermanVocabApp.Core.Testing;
+using GermanVocabApp.DataAccess.EntityFramework.Models;
 
 namespace GermanVocabApp.DataAccess.EntityFramework.Tests.Unit.Builders;
 
-public partial class VocabListBuilder
+public partial class VocabListBuilder : AbstractBuilder<VocabList>
 {
     public VocabListBuilder Default()
     {
