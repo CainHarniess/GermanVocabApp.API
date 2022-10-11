@@ -6,12 +6,17 @@ namespace GermanVocabApp.DataAccess.EntityFramework.Tests.Unit.Builders;
 
 public partial class VocabListItemBuilder : AbstractBuilder<VocabListItem>
 {
-    public VocabListItemBuilder BasicWithListId(Guid listId)
+    //public VocabListItemBuilder BasicWithListId(Guid listId)
+    //{
+    //    return WithId(new Guid())
+    //          .WithWordType(WordType.Noun)
+    //          .WithEnglish("Test List Item")
+    //          .WithGerman("Tester Listeintrag")
+    //          .WithVocabListId(listId);
+    //}
+
+    public override VocabListItem Build()
     {
-        return WithId(new Guid())
-              .WithWordType(WordType.Noun)
-              .WithEnglish("Test List Item")
-              .WithGerman("Tester Listeintrag")
-              .WithVocabListId(listId);
+        throw new NotImplementedException();
     }
 }

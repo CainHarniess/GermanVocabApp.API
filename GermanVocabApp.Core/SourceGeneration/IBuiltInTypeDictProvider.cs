@@ -1,4 +1,4 @@
-﻿namespace GermanVocabApp.Core.SourceGeneration.Builders.Inspection;
+﻿namespace GermanVocabApp.Core.SourceGeneration;
 
 public interface IBuiltInTypeDictProvider
 {

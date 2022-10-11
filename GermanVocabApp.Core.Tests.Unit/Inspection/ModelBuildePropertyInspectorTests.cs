@@ -1,4 +1,5 @@
-﻿using GermanVocabApp.Core.SourceGeneration.Builders;
+﻿using GermanVocabApp.Core.SourceGeneration;
+using GermanVocabApp.Core.SourceGeneration.Builders;
 using GermanVocabApp.Core.SourceGeneration.Builders.Inspection;
 using Moq;
 using System.Reflection;
@@ -118,6 +119,7 @@ public class ModelBuildPropertyInspectorTests
 
     private class ComplexType
     {
+#pragma warning disable CS8618
         public ComplexType ComplexTypeProperty { get; set; }
         public BuiltInType BuiltInTypeProperty { get; set; }
         public ComplexType? NullableReferenceType { get; set; }
@@ -128,6 +130,7 @@ public class ModelBuildPropertyInspectorTests
         public List<ComplexType> ConcreteGenericReferenceType { get; set; }
         public List<DateTime> ConcreteGenericValueType { get; set; }
         public List<int> ConcreteGenericBuiltInType { get; set; }
+#pragma warning restore CS8618
     }
 
     private class BuiltInType

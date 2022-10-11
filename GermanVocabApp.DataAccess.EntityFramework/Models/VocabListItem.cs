@@ -1,4 +1,5 @@
 ﻿
+using GermanVocabApp.DataAccess.Shared;
 using GermanVocabApp.DataAccess.Shared.Abstractions;
 using GermanVocabApp.Shared.Data;
 

@@ -5,6 +5,11 @@ namespace GermanVocabApp.DataAccess.EntityFramework.Tests.Unit.Builders;
 
 public partial class VocabListBuilder : AbstractBuilder<VocabList>
 {
+    public override VocabList Build()
+    {
+        throw new NotImplementedException();
+    }
+
     public VocabListBuilder Default()
     {
         return this;

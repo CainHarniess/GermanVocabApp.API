@@ -1,4 +1,4 @@
-﻿namespace GermanVocabApp.DataAccess.EntityFramework.Models
+﻿namespace GermanVocabApp.DataAccess.Shared
 {
     public abstract class EntityBase
     {

@@ -32,12 +32,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\GermanVocabApp.Core\GermanVocabApp.Core.csproj" />
     <ProjectReference Include="..\GermanVocabApp.DataAccess.EntityFramework\GermanVocabApp.DataAccess.EntityFramework.csproj" />
     <ProjectReference Include="..\GermanVocabApp.DataAccess.Shared\GermanVocabApp.DataAccess.Shared.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="SourceGeneration\" />
   </ItemGroup>
 
 </Project>

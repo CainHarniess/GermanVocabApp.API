@@ -8,10 +8,16 @@
 
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="11.2.2" />
+    <PackageReference Include="Scripty" Version="0.7.4" />
+    <PackageReference Include="Scripty.MsBuild" Version="0.7.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Osiris\Osiris.System.Extensions\Osiris.System.Extensions.csproj" />
+    <ProjectReference Include="..\GermanVocabApp.DataAccess.Shared\GermanVocabApp.DataAccess.Shared.csproj" />
     <ProjectReference Include="..\GermanVocabApp.Shared\GermanVocabApp.Shared.csproj" />
   </ItemGroup>
 
