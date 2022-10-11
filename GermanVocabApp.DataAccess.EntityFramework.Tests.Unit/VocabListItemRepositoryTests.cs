@@ -1,7 +1,7 @@
 using AutoFixture;
 using GermanVocabApp.DataAccess.EntityFramework.Models;
 using GermanVocabApp.DataAccess.EntityFramework.Repositories;
-using GermanVocabApp.DataAccess.EntityFramework.Tests.Unit.Builders;
+using GermanVocabApp.DataAccess.Models.Builders;
 using GermanVocabApp.DataAccess.Shared.DataTransfer;
 using Microsoft.EntityFrameworkCore;
 
