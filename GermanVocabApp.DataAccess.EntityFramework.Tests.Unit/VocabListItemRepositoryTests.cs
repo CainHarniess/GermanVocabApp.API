@@ -1,3 +1,4 @@
+using GermanVocabApp.Core.Exceptions;
 using GermanVocabApp.DataAccess.EntityFramework.Conversion;
 using GermanVocabApp.DataAccess.EntityFramework.Models;
 using GermanVocabApp.DataAccess.EntityFramework.Repositories;
@@ -62,6 +63,8 @@ public class VocabListItemRepositoryTests
         {
             Assert.True(entities.ContainsKey(newItems[i].English));
         }
+
+        Assert.True(entities.Values.All(li => li.CreatedDate == transactionTimeStamp));
     }
 
     [Fact]
@@ -141,6 +144,7 @@ public class VocabListItemRepositoryTests
 
         VocabList list;
         VocabListItem[] existingItems;
+        VocabListItemDto[] newItems;
         VocabListItemDto[] updatedItems;
         VocabListItemDtoBuilder itemDtoBuilder = new();
         using (VocabListDbContext context = _contextOptions.BuildNewInMemoryContext())
@@ -150,14 +154,14 @@ public class VocabListItemRepositoryTests
                           .First(l => l.DeletedDate == null);
 
             existingItems = list.ListItems.ToArray();
-
+            newItems = new[] { itemDtoBuilder.Knife().Build(), itemDtoBuilder.ToChop().Build(), };
             updatedItems = new VocabListItemDto[existingItems.Length + 2];
             for (int i = 0; i < existingItems.Length; i++)
             {
                 updatedItems[i] = existingItems[i].ToDto();
             }
-            updatedItems[^1] = itemDtoBuilder.Knife().Build();
-            updatedItems[^2] = itemDtoBuilder.ToChop().Build();
+            updatedItems[^1] = newItems[0];
+            updatedItems[^2] = newItems[1];
 
             ItemRepositoryAsync repository = new ItemRepositoryAsync(context);
             repository.Update(list, updatedItems, transactionTimeStamp);
@@ -168,19 +172,93 @@ public class VocabListItemRepositoryTests
         using (VocabListDbContext context = _contextOptions.BuildNewInMemoryContext())
         {
             itemsPostUpdate = context.VocablListItems
-                              .Where(i => i.VocabListId == list.Id
-                                       && i.DeletedDate == null)
-                              .ToArray();
+                                     .Where(i => i.VocabListId == list.Id
+                                              && i.DeletedDate == null)
+                                     .ToArray();
         }
 
         Assert.Equal(updatedItems.Length, itemsPostUpdate.Length);
 
         for (int i = 0; i < existingItems.Length; i++)
         {
-            var existingItem = existingItems[i];
-            Assert.NotNull(Array.Find(itemsPostUpdate, li => li.Id == existingItems[i].Id));
+            VocabListItem existingItem = existingItems[i];
+            VocabListItem? existingItemPostUpdate = Array.Find(itemsPostUpdate, li => li.Id == existingItems[i].Id);
+
+            Assert.NotNull(existingItemPostUpdate);
+            Assert.True(existingItemPostUpdate!.CreatedDate < transactionTimeStamp);
         }
-        Assert.NotNull(Array.Find(itemsPostUpdate, li => li.English == updatedItems[^1].English));
-        Assert.NotNull(Array.Find(itemsPostUpdate, li => li.English == updatedItems[^2].English));
+
+        for (int i = 1; i <= 2; i++)
+        {
+            VocabListItem? newItem = Array.Find(itemsPostUpdate, li => li.English == updatedItems[^1].English);
+            Assert.NotNull(newItem);
+            Assert.Equal(newItem!.CreatedDate, transactionTimeStamp);
+        }
+    }
+
+    [Fact(Skip = "Not yet implemented.")]
+    public void Update_ShouldNotSetUpdatedDate_IfItemNotUpdated()
+    {
+        Assert.True(false);
+    }
+
+    [Fact]
+    public async void Update_ShouldUpdateExistingItems()
+    {
+        DateTime transactionTimeStamp = DateTime.UtcNow;
+        VocabList list;
+        using (VocabListDbContext context = _contextOptions.BuildNewInMemoryContext())
+        {
+            list = context.VocablLists
+                          .Include(l => l.ListItems)
+                          .First();
+        }
+
+        VocabListItemDto[] listItemSnapshot = list.ListItems
+                                                  .ToDtos()
+                                                  .ToArray();
+        VocabListItemDto[] updateDtos = list.ListItems
+                                            .ToDtos()
+                                            .ToArray();
+        string suffix = " (updated)";
+        for (int i = 0; i < updateDtos.Length; i++)
+        {
+            updateDtos[i].English = $"{updateDtos[i].English}{suffix}";
+        }
+
+        using (VocabListDbContext context = _contextOptions.BuildNewInMemoryContext())
+        {
+            VocabList testEntity = context.VocablLists
+                                          .Include(l => l.ListItems)
+                                          .First(l => l.Id == list.Id);
+            ItemRepositoryAsync repository = new(context);
+            repository.Update(testEntity, updateDtos, transactionTimeStamp);
+            await context.SaveChangesAsync();
+        }
+
+        Dictionary<Guid, VocabListItem> testEntities;
+        using (VocabListDbContext context = _contextOptions.BuildNewInMemoryContext())
+        {
+            testEntities = context.VocablListItems
+                                  .Where(li => li.VocabListId == list.Id)
+                                  .ToDictionary(li => li.Id);
+        }
+
+        Assert.Equal(listItemSnapshot.Length, testEntities.Count);
+
+        for (int i = 0; i < listItemSnapshot.Length; i++)
+        {
+            string expected = $"{listItemSnapshot[i].English}{suffix}";
+            var snapshot = listItemSnapshot[i];
+            if (!snapshot.Id.HasValue)
+            {
+                throw new UnexpectedNullIdException();
+            }
+            VocabListItem testEntity = testEntities[snapshot.Id.Value];
+
+            string actual = testEntity.English;
+            Assert.Equal(expected, actual);
+            Assert.Equal(testEntity.UpdatedDate, transactionTimeStamp);
+        }
     }
 }

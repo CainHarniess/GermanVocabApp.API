@@ -63,7 +63,7 @@ public class ItemRepositoryAsync : RepositoryBase
                 return;
             }
 
-            //TryUpdateListItem(item, nonDeletedListItemEntities, currentTimestamp);
+            TryUpdateListItem(item, nonDeletedListItemEntities, currentTimestamp);
         });
     }
 
@@ -84,5 +84,23 @@ public class ItemRepositoryAsync : RepositoryBase
         }
         newListItem.VocabListId = listId;
         return newListItem;
+    }
+
+    private static void TryUpdateListItem(VocabListItemDto updatedItem, Dictionary<Guid, VocabListItem> entities,
+        DateTime transactionTimestamp)
+    {
+        if (!updatedItem.Id.HasValue)
+        {
+            throw new InvalidOperationException("Cannot update list item with null ID value.");
+        }
+
+        Guid listItemId = updatedItem.Id.Value;
+        if (!entities.ContainsKey(listItemId))
+        {
+            throw new EntityNotFoundException($"Vocab list item with ID {listItemId} not found in "
+                                            + $"Vocab List with ID {updatedItem.VocabListId}.");
+        }
+        VocabListItem existingListItem = entities[listItemId];
+        updatedItem.CopyTo(existingListItem, transactionTimestamp);
     }
 }
