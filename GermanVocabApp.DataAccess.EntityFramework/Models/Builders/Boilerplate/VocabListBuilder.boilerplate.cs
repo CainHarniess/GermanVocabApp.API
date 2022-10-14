@@ -37,12 +37,24 @@ public partial class VocabListBuilder : EntityBuilder<VocabList, VocabListBuilde
     public override VocabList Build()
     {
         var item = new VocabList();
-        
-        ApplyBaseValues(item);
+        ApplyValues(item);
+        Clear();
+        return item;
+    }
 
+    protected override void ApplyValues(VocabList item)
+    {
+        base.ApplyValues(item);
         item.Name = _name;
         item.Description = _description;
         item.ListItems = _items;
-        return item;
     }
+
+    protected override void Clear()
+    {
+        base.Clear();
+        _name = default;
+        _description = default;
+        _items = default;
+}
 }

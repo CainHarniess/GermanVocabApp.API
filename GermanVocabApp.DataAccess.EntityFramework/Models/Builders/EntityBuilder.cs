@@ -1,5 +1,5 @@
-﻿using GermanVocabApp.DataAccess.EntityFramework.Models;
-using GermanVocabApp.DataAccess.EntityFramework.Models.Builders;
+﻿using GermanVocabApp.Core;
+using GermanVocabApp.DataAccess.EntityFramework.Models;
 
 namespace GermanVocabApp.DataAccess.Models.Builders;
 
@@ -14,13 +14,6 @@ public abstract class EntityBuilder<TEntity, TBuilder> : AbstractBuilder<TEntity
 
     protected abstract TBuilder Instance { get; }
 
-    protected void ApplyBaseValues(TEntity result)
-    {
-        result.Id = _id;
-        result.CreatedDate = _createdDate ?? DateTime.UtcNow;
-        result.UpdatedDate = _updatedDate;
-        result.DeletedDate = _deletedDate;
-    }
 
     public TBuilder WithId(Guid id)
     {
@@ -44,5 +37,21 @@ public abstract class EntityBuilder<TEntity, TBuilder> : AbstractBuilder<TEntity
     {
         _deletedDate = date;
         return Instance;
+    }
+
+    protected override void ApplyValues(TEntity result)
+    {
+        result.Id = _id;
+        result.CreatedDate = _createdDate ?? DateTime.UtcNow;
+        result.UpdatedDate = _updatedDate;
+        result.DeletedDate = _deletedDate;
+    }
+
+    protected override void Clear()
+    {
+        _id = default;
+        _createdDate = default;
+        _updatedDate = default;
+        _deletedDate = default;
     }
 }

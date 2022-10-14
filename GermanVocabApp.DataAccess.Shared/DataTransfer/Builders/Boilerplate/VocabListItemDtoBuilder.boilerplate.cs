@@ -1,9 +1,9 @@
-﻿using GermanVocabApp.DataAccess.EntityFramework.Models;
+﻿using GermanVocabApp.DataAccess.Shared.DataTransfer;
 using GermanVocabApp.Shared.Data;
 
 namespace GermanVocabApp.DataAccess.Models.Builders;
 
-public partial class VocabListItemBuilder : EntityBuilder<VocabListItem, VocabListItemBuilder>
+public partial class VocabListItemDtoBuilder : EntityDtoBuilder<VocabListItemDto, VocabListItemDtoBuilder>
 {
     private WordType? _wordType;
     private bool? _isWeakMasculineNoun;
@@ -15,152 +15,151 @@ public partial class VocabListItemBuilder : EntityBuilder<VocabListItem, VocabLi
     private AuxiliaryVerb? _auxiliaryVerb;
     private string? _perfect;
     private Gender? _gender;
-    private string _german;
+    private string _german = "Test German";
     private string? _plural;
     private string? _preposition;
     private Case? _prepositionCase;
     private string? _comparative;
     private string? _superlative;
-    private string _english;
+    private string _english = "Test English";
     private Guid? _listId;
-    private VocabList? _list;
     private FixedPlurality? _fixedPlurality;
 
-    protected override VocabListItemBuilder Instance => this;
-    
-    public VocabListItemBuilder WithWordType(WordType wordType)
+    protected override VocabListItemDtoBuilder Instance => this;
+
+    public VocabListItemDtoBuilder WithWordType(WordType wordType)
     {
         _wordType = wordType;
         return Instance;
     }
 
-    public VocabListItemBuilder WithWeakMasculineNoun(bool isWeakMasculineNoun)
+    public VocabListItemDtoBuilder WithWeakMasculineNoun(bool isWeakMasculineNoun)
     {
         _isWeakMasculineNoun = isWeakMasculineNoun;
         return Instance;
     }
 
-    public VocabListItemBuilder WithSeparability(Separability separability)
+    public VocabListItemDtoBuilder WithSeparability(Separability separability)
     {
         _separability = separability;
         return Instance;
     }
 
-    public VocabListItemBuilder WithTransitivity(Transitivity transitivity)
+    public VocabListItemDtoBuilder WithTransitivity(Transitivity transitivity)
     {
         _transitivity = transitivity;
         return Instance;
     }
 
-    public VocabListItemBuilder WithThirdPersonPresent(string thirdPersonPresent)
+    public VocabListItemDtoBuilder WithThirdPersonPresent(string thirdPersonPresent)
     {
         _thirdPersonPresent = thirdPersonPresent;
         return Instance;
     }
 
-    public VocabListItemBuilder WithThirdPersonImperfect(string thirdPersonImperfect)
+    public VocabListItemDtoBuilder WithThirdPersonImperfect(string thirdPersonImperfect)
     {
         _thirdPersonImperfect = thirdPersonImperfect;
         return Instance;
     }
 
-    public VocabListItemBuilder WithAuxiliaryVerb(AuxiliaryVerb auxiliaryVerb)
+    public VocabListItemDtoBuilder WithAuxiliaryVerb(AuxiliaryVerb auxiliaryVerb)
     {
         _auxiliaryVerb = auxiliaryVerb;
         return Instance;
     }
 
-    public VocabListItemBuilder WithHaben()
+    public VocabListItemDtoBuilder WithHaben()
     {
         return WithAuxiliaryVerb(AuxiliaryVerb.Haben);
     }
 
-    public VocabListItemBuilder WithSein()
+    public VocabListItemDtoBuilder WithSein()
     {
         return WithAuxiliaryVerb(AuxiliaryVerb.Sein);
     }
 
-    public VocabListItemBuilder WithPerfect(string perfect)
+    public VocabListItemDtoBuilder WithPerfect(string perfect)
     {
         _perfect = perfect;
         return Instance;
     }
 
-    public VocabListItemBuilder WithGender(Gender gender)
+    public VocabListItemDtoBuilder WithGender(Gender gender)
     {
         _gender = gender;
         return Instance;
     }
 
-    public VocabListItemBuilder WithGerman(string german)
+    public VocabListItemDtoBuilder WithGerman(string german)
     {
         _german = german;
         return Instance;
     }
 
-    public VocabListItemBuilder WithPlural(string _plural)
+    public VocabListItemDtoBuilder WithPlural(string _plural)
     {
         this._plural = _plural;
         return Instance;
     }
 
-    public VocabListItemBuilder WithComparative(string comparative)
+    public VocabListItemDtoBuilder WithComparative(string comparative)
     {
         _comparative = comparative;
         return Instance;
     }
 
-    public VocabListItemBuilder WithPreposition(string preposition)
+    public VocabListItemDtoBuilder WithPreposition(string preposition)
     {
         _preposition = preposition;
         return Instance;
     }
 
-    public VocabListItemBuilder WithPrepositionCase(Case prepositionCase)
+    public VocabListItemDtoBuilder WithPrepositionCase(Case prepositionCase)
     {
         _prepositionCase = prepositionCase;
         return Instance;
     }
 
-    public VocabListItemBuilder WithSuperlative(string superlative)
+    public VocabListItemDtoBuilder WithSuperlative(string superlative)
     {
         _superlative = superlative;
         return Instance;
     }
 
-    public VocabListItemBuilder WithEnglish(string english)
+    public VocabListItemDtoBuilder WithEnglish(string english)
     {
         _english = english;
         return Instance;
     }
 
-    public VocabListItemBuilder WithListId(Guid listId)
+    public VocabListItemDtoBuilder WithListId(Guid listId)
     {
         _listId = listId;
         return Instance;
     }
 
-    public VocabListItemBuilder WithFixedPlurality(FixedPlurality fixedPlurality)
+    public VocabListItemDtoBuilder WithFixedPlurality(FixedPlurality fixedPlurality)
     {
         _fixedPlurality = fixedPlurality;
         return Instance;
     }
-    
-    public VocabListItemBuilder WithReflexiveCase(ReflexiveCase reflexiveCase)
+
+    public VocabListItemDtoBuilder WithReflexiveCase(ReflexiveCase reflexiveCase)
     {
         _reflexiveCase = reflexiveCase;
         return Instance;
     }
 
-    public override VocabListItem Build()
+    public override VocabListItemDto Build()
     {
-        var item = new VocabListItem();
+        var item = new VocabListItemDto();
         ApplyValues(item);
         Clear();
         return item;
     }
 
-    protected override void ApplyValues(VocabListItem item)
+    protected override void ApplyValues(VocabListItemDto item)
     {
         base.ApplyValues(item);
         item.WordType = _wordType ?? WordType.Noun;
@@ -180,8 +179,7 @@ public partial class VocabListItemBuilder : EntityBuilder<VocabListItem, VocabLi
         item.Comparative = _comparative;
         item.Superlative = _superlative;
         item.English = _english ?? "Default English";
-        item.VocabListId = _listId ?? Guid.NewGuid();
-        item.VocabList = _list;
+        item.VocabListId = _listId;
         item.FixedPlurality = _fixedPlurality;
     }
 
@@ -197,15 +195,14 @@ public partial class VocabListItemBuilder : EntityBuilder<VocabListItem, VocabLi
         _auxiliaryVerb = default;
         _perfect = default;
         _gender = default;
-        _german = default;
+        _german = "Test German";
         _plural = default;
         _preposition = default;
         _prepositionCase = default;
         _comparative = default;
         _superlative = default;
-        _english = default;
+        _english = "Test English";
         _listId = default;
-        _list = default;
         _fixedPlurality = default;
-}
+    }
 }

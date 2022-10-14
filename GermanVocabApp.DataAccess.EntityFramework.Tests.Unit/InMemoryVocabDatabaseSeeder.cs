@@ -4,29 +4,29 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GermanVocabApp.DataAccess.EntityFramework.Tests.Unit;
 
-public class InMemoryVocabDatabaseSeederAsync
+public class InMemoryVocabDatabaseSeeder
 {
-    private DbContextOptions _contextOptions;
+    private readonly DbContextOptions _contextOptions;
+    private readonly VocabListBuilder _listBuilder;
 
-    public InMemoryVocabDatabaseSeederAsync(DbContextOptions contextOptions)
+    public InMemoryVocabDatabaseSeeder(DbContextOptions contextOptions,
+                                            VocabListBuilder listBuilder)
     {
         _contextOptions = contextOptions;
+        _listBuilder = listBuilder;
     }
 
-    public async Task SeedAsync()
+    public void Seed()
     {
         using (VocabListDbContext context = _contextOptions.BuildNewInMemoryContext())
         {
             context.Database.OpenConnection();
             context.Database.EnsureCreated();
 
-            VocabListItemBuilder itemBuilder = new();
-            VocabListBuilder listBuilder = new(itemBuilder);
-
-            VocabList kitchen = listBuilder.Kitchen().Build();
+            VocabList kitchen = _listBuilder.Kitchen().Build();
             context.Add(kitchen);
 
-            await context.SaveChangesAsync();
+            context.SaveChanges();
         }
     }
 }

@@ -93,7 +93,9 @@ public class VocabListRepositoryAsync : IVocabListRepositoryAsync
 
         //TODO: Refactor the below to a separate repository with unit of work pattern.
         IEnumerable<VocabListItem> existingListItems = existingList.ListItems;
-        bool allItemsDeleted = CheckDeleteAllListItems(existingListItems, dto.ListItems, currentTimestamp);
+        bool allItemsDeleted = CheckDeleteAllListItems(existingListItems,
+                                                       dto.ListItems,
+                                                       currentTimestamp);
         if (allItemsDeleted)
         {
             await _context.SaveChangesAsync();
