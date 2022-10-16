@@ -142,7 +142,10 @@ public class ListRepositoryTests
         updatedListItems.RemoveAt(0);
 
         VocabListItemDto newItem = _itemDtoBuilder.Kettle()
-            .AsNew().WithListId(entityPreUpdate.Id).Build();
+                                                  .AsNew()
+                                                  .WithEnglish(Guid.NewGuid().ToString())
+                                                  .WithListId(entityPreUpdate.Id)
+                                                  .Build();
 
         updatedListItems.Add(newItem);
         updatedDto.ListItems = updatedListItems;
@@ -155,6 +158,9 @@ public class ListRepositoryTests
 
         VocabList testList = GetFirstWithItemsWhere(l => l.Id == entityPreUpdate.Id);
         VocabListItem[] testItems = testList.ListItems.ToArray();
+
+        VocabListItem? testRemovedItem = testItems.FirstOrDefault(li => li.Id == removedItem.Id);
+        Assert.NotNull(testRemovedItem);
 
         for (int i = 0; i < testItems.Length; i++)
         {
@@ -208,20 +214,6 @@ public class ListRepositoryTests
             });
         }
     }
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
 
     private async Task<VocabList?> AddAndRetreiveVocabListWithItems(VocabListDto listDto)
     {

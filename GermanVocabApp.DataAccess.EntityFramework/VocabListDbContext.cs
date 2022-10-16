@@ -49,7 +49,17 @@ public class VocabListDbContext : DbContext
                     entry.Entity.UpdatedDate = transactionTimeStamp;
                     continue;
                 }
+            }
+
+            if (entry.State == EntityState.Deleted)
+            {
+                if (entity.DeletedDate != null)
+                {
+                    continue;
+                }
                 entity.DeletedDate = transactionTimeStamp;
+                entry.State = EntityState.Modified;
+                continue;
             }
         }
 

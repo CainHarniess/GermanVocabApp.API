@@ -11,18 +11,16 @@ using Osiris.Utilities.Collections.Generic;
 
 namespace GermanVocabApp.DataAccess.EntityFramework.Repositories;
 
-public class VocabListRepositoryAsync : IVocabListRepositoryAsync
+public class VocabListRepositoryAsync : RepositoryBase, IVocabListRepositoryAsync
 {
-    private readonly VocabListDbContext _context;
-
-    public VocabListRepositoryAsync(VocabListDbContext context)
+    public VocabListRepositoryAsync(VocabListDbContext context) : base(context)
     {
-        _context = context;
+
     }
 
     public async Task<VocabListDto?> Get(Guid id)
     {
-        IQueryable<VocabList> query = _context.VocablLists
+        IQueryable<VocabList> query = Context.VocablLists
                                               .AsNoTracking()
                                               .Where(vl => vl.Id == id
                                                         && vl.DeletedDate == null)
@@ -45,7 +43,7 @@ public class VocabListRepositoryAsync : IVocabListRepositoryAsync
     public async Task<IEnumerable<VocabListInfoDto>> GetVocabListInfos()
     {
         IEnumerable<VocabListInfoDto> listInfoDtos;
-        listInfoDtos = await _context.VocablLists
+        listInfoDtos = await Context.VocablLists
                                       .AsNoTracking()
                                       .Where(vl => vl.DeletedDate == null)
                                       .ProjectToInfoDto()
@@ -60,17 +58,17 @@ public class VocabListRepositoryAsync : IVocabListRepositoryAsync
 
         // TODO: Refactor to add whole graph at once.
         entity = dto.ToEntityWithoutListItems(transactionTimeStamp);
-        _context.Add(entity);
+        Context.Add(entity);
 
         if (dto.ListItems.Any())
         {
             VocabListItem[] listItems;
             listItems = dto.ListItems.ToArray()
                            .ToEntities(entity.Id);
-            _context.AddRange(listItems);
+            Context.AddRange(listItems);
         }
 
-        await _context.SaveChangesAsync();
+        await Context.SaveChangesAsync();
 
         VocabListDto retrievalDto = entity.ToDto();
         return retrievalDto;
@@ -87,18 +85,17 @@ public class VocabListRepositoryAsync : IVocabListRepositoryAsync
 
         Guid listId = dto.Id.Value;
 
-        VocabList existingList = await _context.VocablLists
+        VocabList existingList = await Context.VocablLists
                                                .TryGetFirstActiveWithId(listId);
 
         dto.CopyListDetails(existingList, currentTimestamp);
 
         IEnumerable<VocabListItem> existingListItems = existingList.ListItems;
         bool allItemsDeleted = CheckDeleteAllListItems(existingListItems,
-                                                       dto.ListItems,
-                                                       currentTimestamp);
+                                                       dto.ListItems);
         if (allItemsDeleted)
         {
-            await _context.SaveChangesAsync();
+            await Context.SaveChangesAsync();
             return;
         }
 
@@ -109,7 +106,7 @@ public class VocabListRepositoryAsync : IVocabListRepositoryAsync
                                                       .ToDictionary(li => li.Id);
         AddOrUpdateListItems(dto, currentTimestamp, nonDeletedListItemEntities);
 
-        await _context.SaveChangesAsync();
+        await Context.SaveChangesAsync();
     }
 
     public async Task<bool> HardDelete(Guid id)
@@ -117,7 +114,7 @@ public class VocabListRepositoryAsync : IVocabListRepositoryAsync
         VocabList list;
         try
         {
-            list = await _context.VocablLists
+            list = await Context.VocablLists
                                  .Include(vl => vl.ListItems)
                                  .FirstAsync(vl => vl.Id == id);
         }
@@ -128,11 +125,11 @@ public class VocabListRepositoryAsync : IVocabListRepositoryAsync
 
         if (list.ListItems.Any())
         {
-            list.ListItems.ForEach((item) => _context.VocablListItems.Remove(item));
+            HardDeleteRangeWhere(list.ListItems, li => true);
         }
-        _context.VocablLists.Remove(list);
+        Context.VocablLists.Remove(list);
 
-        await _context.SaveChangesAsync();
+        await Context.SaveChangesAsync();
         return true;
     }
 
@@ -143,7 +140,7 @@ public class VocabListRepositoryAsync : IVocabListRepositoryAsync
             VocabListItem newListItem = TryCreateItemNewItem(item, currentTimestamp);
             if (newListItem != null)
             {
-                _context.Add(newListItem);
+                Context.Add(newListItem);
                 return;
             }
 
@@ -152,12 +149,12 @@ public class VocabListRepositoryAsync : IVocabListRepositoryAsync
     }
 
     private bool CheckDeleteAllListItems(IEnumerable<VocabListItem> existingListItems,
-        IEnumerable<VocabListItemDto> updatedListItems, DateTime transactionTimestamp)
+        IEnumerable<VocabListItemDto> updatedListItems)
     {
         bool areAllListItemsDeleted = !updatedListItems.Any() && existingListItems.Any();
         if (areAllListItemsDeleted)
         {
-            existingListItems.SoftDeleteAll(transactionTimestamp);
+            Context.RemoveRange(existingListItems);
             return true;
         }
         return false;
@@ -169,8 +166,7 @@ public class VocabListRepositoryAsync : IVocabListRepositoryAsync
         updatedListItems = updateDto.ListItems
                                     .Where(li => li.Id.HasValue)
                                     .ToDictionary(li => li.Id.Value);
-
-        existingListItems.SoftDeleteWhere(item => !updatedListItems.ContainsKey(item.Id), currentTimestamp);
+        SoftDeleteRangeWhere(existingListItems, item => !updatedListItems.ContainsKey(item.Id));
     }
 
     private VocabListItem? TryCreateItemNewItem(VocabListItemDto updatedItemDto, DateTime transactionTimestamp)
