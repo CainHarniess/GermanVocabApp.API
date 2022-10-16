@@ -91,7 +91,6 @@ public class VocabListRepositoryAsync : IVocabListRepositoryAsync
 
         dto.CopyListDetails(existingList, currentTimestamp);
 
-        //TODO: Refactor the below to a separate repository with unit of work pattern.
         IEnumerable<VocabListItem> existingListItems = existingList.ListItems;
         bool allItemsDeleted = CheckDeleteAllListItems(existingListItems,
                                                        dto.ListItems,
@@ -145,6 +144,7 @@ public class VocabListRepositoryAsync : IVocabListRepositoryAsync
             if (newListItem != null)
             {
                 _context.Add(newListItem);
+
                 return;
             }
 

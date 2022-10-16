@@ -21,6 +21,22 @@ public partial class VocabListDtoBuilder : EntityDtoBuilder<VocabListDto, VocabL
         return this;
     }
 
+    public override VocabListDtoBuilder AsNew()
+    {
+        for (int i = 0; i < _items.Count; i++)
+        {
+            _items[i].Id = null;
+        }
+        return base.AsNew();
+    }
+
+    public VocabListDtoBuilder Empty()
+    {
+        return WithId(Guid.NewGuid())
+              .WithName("Empty Vocab List")
+              .WithDescription("This vocab list contains no items");
+    }
+
     public VocabListDtoBuilder Kitchen()
     {
         Guid listId = Guid.NewGuid();
@@ -29,7 +45,7 @@ public partial class VocabListDtoBuilder : EntityDtoBuilder<VocabListDto, VocabL
         VocabListItemDto[] items = new VocabListItemDto[]
         {
             _itemBuilder.Kettle(listId).Build(),
-            _itemBuilder.ToPlay(listId).Build(),
+            _itemBuilder.ToCook(listId).Build(),
             _itemBuilder.Spicy(listId).Build(),
             _itemBuilder.Saucily(listId).Build(),
         };

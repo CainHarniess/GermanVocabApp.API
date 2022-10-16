@@ -32,7 +32,7 @@ public partial class VocabListItemDtoBuilder : EntityDtoBuilder<VocabListItemDto
               .WithFixedPlurality(FixedPlurality.None);
     }
 
-    public VocabListItemDtoBuilder ToPlay(Guid listId)
+    public VocabListItemDtoBuilder ToCook(Guid listId)
     {
         return ToCook().WithListId(listId);
     }

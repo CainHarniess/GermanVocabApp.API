@@ -48,6 +48,7 @@ internal static class VocabListItemDtoConversionExtensions
             Comparative = dto.Comparative,
             Superlative = dto.Superlative,
             English = dto.English,
+            VocabListId = dto.VocabListId.HasValue ? dto.VocabListId.Value : default,
             FixedPlurality = dto.FixedPlurality,
             CreatedDate = creationTimeStamp,
             UpdatedDate = null,

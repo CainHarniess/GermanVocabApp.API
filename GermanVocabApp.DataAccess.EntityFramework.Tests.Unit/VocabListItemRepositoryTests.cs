@@ -11,9 +11,9 @@ namespace GermanVocabApp.DataAccess.EntityFramework.Tests.Unit;
 public class VocabListItemRepositoryTests
 {
     private readonly DbContextOptions _contextOptions;
+    private readonly InMemoryVocabDatabaseSeeder _dataSeeder;
     private readonly VocabListItemBuilder _itemBuilder;
     private readonly VocabListBuilder _listBuilder;
-    private readonly InMemoryVocabDatabaseSeeder _dataSeeder;
 
     public VocabListItemRepositoryTests()
     {

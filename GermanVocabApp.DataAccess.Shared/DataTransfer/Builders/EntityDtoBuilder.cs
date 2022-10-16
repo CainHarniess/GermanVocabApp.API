@@ -17,6 +17,11 @@ public abstract class EntityDtoBuilder<TEntityDto, TBuilder> : AbstractBuilder<T
         return Instance;
     }
 
+    public virtual TBuilder AsNew()
+    {
+        return WithId(null);
+    }
+
     protected override void ApplyValues(TEntityDto result)
     {
         result.Id = _id;
