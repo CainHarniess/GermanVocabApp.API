@@ -13,7 +13,7 @@ internal static class VocabListDtoConversionExtensions
         {
             return entity;
         }
-        entity.ListItems = dto.ListItems.Select(li => li.ToEntity(creationTimeStamp));
+        entity.ListItems = dto.ListItems.Select(li => li.ToEntity());
         return entity;
     }
 

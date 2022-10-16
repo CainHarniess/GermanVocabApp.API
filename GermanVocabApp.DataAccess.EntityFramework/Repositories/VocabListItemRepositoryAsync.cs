@@ -18,7 +18,7 @@ public class ItemRepositoryAsync : RepositoryBase
     public async Task AddRangeAsync(VocabListItemDto[] dtos, Guid listId, DateTime transactionTimeStamp)
     {
         VocabListItem[] entities;
-        entities = dtos.ToEntities(transactionTimeStamp, listId);
+        entities = dtos.ToEntities(listId);
         await Context.AddRangeAsync(entities);
     }
 
@@ -76,7 +76,7 @@ public class ItemRepositoryAsync : RepositoryBase
         VocabListItem newListItem;
         try
         {
-            newListItem = updatedItemDto.ToEntity(transactionTimestamp);
+            newListItem = updatedItemDto.ToEntity();
         }
         catch (UnexpectedIdException e)
         {
@@ -101,6 +101,6 @@ public class ItemRepositoryAsync : RepositoryBase
                                             + $"Vocab List with ID {updatedItem.VocabListId}.");
         }
         VocabListItem existingListItem = entities[listItemId];
-        updatedItem.CopyTo(existingListItem, transactionTimestamp);
+        updatedItem.CopyTo(existingListItem);
     }
 }

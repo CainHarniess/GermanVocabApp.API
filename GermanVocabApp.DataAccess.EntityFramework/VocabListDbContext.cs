@@ -1,8 +1,7 @@
 ﻿using GermanVocabApp.DataAccess.EntityFramework.Configuration;
 using GermanVocabApp.DataAccess.EntityFramework.Models;
-using GermanVocabApp.DataAccess.EntityFramework.Repositories;
-using GermanVocabApp.DataAccess.Shared.DataTransfer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace GermanVocabApp.DataAccess.EntityFramework;
 public class VocabListDbContext : DbContext
@@ -22,24 +21,38 @@ public class VocabListDbContext : DbContext
         modelBuilder.ConfigureDatabaseConventions();
         modelBuilder.ConfigureEntities();
     }
+
+    public override async Task<int> SaveChangesAsync(CancellationToken token = new())
+    {
+        DateTime transactionTimeStamp = DateTime.UtcNow;
+
+        IEnumerable<EntityEntry<EntityBase>> changeSet = ChangeTracker.Entries<EntityBase>();
+
+        foreach (EntityEntry<EntityBase> entry in changeSet)
+        {
+            if (entry.State == EntityState.Unchanged)
+            {
+                continue;
+            }
+
+            EntityBase entity = entry.Entity;
+            if (entry.State == EntityState.Added)
+            {
+                entity.CreatedDate = transactionTimeStamp;
+                continue;
+            }
+
+            if (entry.State == EntityState.Modified)
+            {
+                if (entity.DeletedDate == null)
+                {
+                    entry.Entity.UpdatedDate = transactionTimeStamp;
+                    continue;
+                }
+                entity.DeletedDate = transactionTimeStamp;
+            }
+        }
+
+        return await base.SaveChangesAsync(token);
+    }
 }
-
-//public class VocabUnitOfWorkAsync
-//{
-//    private VocabListDbContext _context;
-//    private VocabListRepositoryAsync _listRepository;
-//    private ItemRepositoryAsync _itemRepository;
-
-//    public VocabUnitOfWork(VocabListDbContext context, VocabListRepositoryAsync listRepository,
-//                           ItemRepositoryAsync itemRepository)
-//    {
-//        _context = context;
-//        _listRepository = listRepository;
-//        _itemRepository = itemRepository;
-//    }
-
-//    public async Task SaveChangesAsync()
-//    {
-//        await _context.SaveChangesAsync();
-//    }
-//}

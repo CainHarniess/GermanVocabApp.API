@@ -4,6 +4,7 @@ using GermanVocabApp.DataAccess.EntityFramework.Models;
 using GermanVocabApp.DataAccess.EntityFramework.ModificationExtensions;
 using GermanVocabApp.DataAccess.EntityFramework.Projection;
 using GermanVocabApp.DataAccess.Shared;
+using GermanVocabApp.DataAccess.Shared.Abstractions;
 using GermanVocabApp.DataAccess.Shared.DataTransfer;
 using Microsoft.EntityFrameworkCore;
 using Osiris.Utilities.Collections.Generic;
@@ -65,7 +66,7 @@ public class VocabListRepositoryAsync : IVocabListRepositoryAsync
         {
             VocabListItem[] listItems;
             listItems = dto.ListItems.ToArray()
-                           .ToEntities(transactionTimeStamp, entity.Id);
+                           .ToEntities(entity.Id);
             _context.AddRange(listItems);
         }
 
@@ -109,7 +110,6 @@ public class VocabListRepositoryAsync : IVocabListRepositoryAsync
         AddOrUpdateListItems(dto, currentTimestamp, nonDeletedListItemEntities);
 
         await _context.SaveChangesAsync();
-        return;
     }
 
     public async Task<bool> HardDelete(Guid id)
@@ -140,11 +140,10 @@ public class VocabListRepositoryAsync : IVocabListRepositoryAsync
     {
         dto.ListItems.ForEach(item =>
         {
-            VocabListItem newListItem = CheckAddNewListItem(item, currentTimestamp);
+            VocabListItem newListItem = TryCreateItemNewItem(item, currentTimestamp);
             if (newListItem != null)
             {
                 _context.Add(newListItem);
-
                 return;
             }
 
@@ -152,7 +151,7 @@ public class VocabListRepositoryAsync : IVocabListRepositoryAsync
         });
     }
 
-    private static bool CheckDeleteAllListItems(IEnumerable<VocabListItem> existingListItems,
+    private bool CheckDeleteAllListItems(IEnumerable<VocabListItem> existingListItems,
         IEnumerable<VocabListItemDto> updatedListItems, DateTime transactionTimestamp)
     {
         bool areAllListItemsDeleted = !updatedListItems.Any() && existingListItems.Any();
@@ -164,7 +163,7 @@ public class VocabListRepositoryAsync : IVocabListRepositoryAsync
         return false;
     }
 
-    private static void SoftDeletedRemovedListItems(VocabListDto updateDto, DateTime currentTimestamp, IEnumerable<VocabListItem> existingListItems)
+    private void SoftDeletedRemovedListItems(VocabListDto updateDto, DateTime currentTimestamp, IEnumerable<VocabListItem> existingListItems)
     {
         Dictionary<Guid, VocabListItemDto> updatedListItems;
         updatedListItems = updateDto.ListItems
@@ -174,7 +173,7 @@ public class VocabListRepositoryAsync : IVocabListRepositoryAsync
         existingListItems.SoftDeleteWhere(item => !updatedListItems.ContainsKey(item.Id), currentTimestamp);
     }
 
-    private static VocabListItem? CheckAddNewListItem(VocabListItemDto updatedItemDto, DateTime transactionTimestamp)
+    private VocabListItem? TryCreateItemNewItem(VocabListItemDto updatedItemDto, DateTime transactionTimestamp)
     {
         if (updatedItemDto.Id.HasValue)
         {
@@ -183,7 +182,7 @@ public class VocabListRepositoryAsync : IVocabListRepositoryAsync
         VocabListItem newListItem;
         try
         {
-            newListItem = updatedItemDto.ToEntity(transactionTimestamp);
+            newListItem = updatedItemDto.ToEntity();
         }
         catch (UnexpectedIdException e)
         {
@@ -192,7 +191,7 @@ public class VocabListRepositoryAsync : IVocabListRepositoryAsync
         return newListItem;
     }
 
-    private static void TryUpdateListItem(VocabListItemDto updatedItem, Dictionary<Guid, VocabListItem> entities,
+    private void TryUpdateListItem(VocabListItemDto updatedItem, Dictionary<Guid, VocabListItem> entities,
         DateTime transactionTimestamp)
     {
         if (!updatedItem.Id.HasValue)
@@ -207,6 +206,6 @@ public class VocabListRepositoryAsync : IVocabListRepositoryAsync
                                             + $"Vocab List with ID {updatedItem.VocabListId}.");
         }
         VocabListItem existingListItem = entities[listItemId];
-        updatedItem.CopyTo(existingListItem, transactionTimestamp);
+        updatedItem.CopyTo(existingListItem);
     }
 }

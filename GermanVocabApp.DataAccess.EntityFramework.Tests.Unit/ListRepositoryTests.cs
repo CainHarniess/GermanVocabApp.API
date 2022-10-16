@@ -125,106 +125,13 @@ public class ListRepositoryTests
         Assert.Null(testList.DeletedDate);
     }
 
-    [Fact(Skip = "Not sure if we want this.")]
-    public async void Update_ShouldNotUpdateDbAdminValues_IfNotUpdated()
-    {
-        VocabList entityPreUpdate = GetFirstWithItemsWhere(li => true);
-
-        VocabListDto updatedDto = entityPreUpdate.ToDto();
-
-        using (VocabListDbContext context = _contextOptions.BuildNewInMemoryContext())
-        {
-            VocabListRepositoryAsync repository = new(context);
-            await repository.Update(updatedDto);
-        }
-
-        VocabList testList = GetFirstWithItemsWhere(l => l.Id == entityPreUpdate.Id);
-
-        Assert.True(testList.CreatedDate <= _testStartTimeStamp, $@"Creation time stamp is after the test start time stamp.");
-        Assert.True(testList.UpdatedDate <= _testStartTimeStamp, $@"Uupdate time stamp is after the test start time stamp.");
-
-        Assert.Null(testList.DeletedDate);
-    }
-
-    [Fact]
-    public async void Update_ShouldUpdateItemInformation()
-    {
-        VocabList entityPreUpdate = GetFirstWithItemsWhere(li => true);
-
-        VocabListDto updatedDto = entityPreUpdate.ToDto();
-        VocabListItemDto[] updatedItemDtos = updatedDto.ListItems.ToArray();
-        updatedDto.ListItems = updatedItemDtos;
-
-        string suffix = " (updated)";
-        for (int i = 0; i < updatedItemDtos.Length; i++)
-        {
-            VocabListItemDto item = updatedItemDtos[i];
-            updatedItemDtos[i].English = $"{item.English}{suffix}";
-        }
-
-        using (VocabListDbContext context = _contextOptions.BuildNewInMemoryContext())
-        {
-            VocabListRepositoryAsync repository = new(context);
-            await repository.Update(updatedDto);
-        }
-
-        VocabList testList = GetFirstWithItemsWhere(l => l.Id == entityPreUpdate.Id);
-        VocabListItem[] testItems = testList.ListItems.ToArray();
-
-        for (int i = 0; i < testItems.Length; i++)
-        {
-            var item = testItems[i];
-            Assert.EndsWith(suffix, item.English);
-            Assert.True(item.UpdatedDate >= _testStartTimeStamp, $@"Item ""{item.English}"" at index {i} update time stamp is before the test start time stamp.");
-            Assert.Null(testItems[i].DeletedDate);
-        }
-    }
-
-    [Fact]
-    public async void Update_ShouldSoftDeleteItemsCorrectly()
-    {
-        VocabList entityPreUpdate = GetFirstWithItemsWhere(li => li.ListItems.Count() > 1);
-        VocabListDto updatedDto = entityPreUpdate.ToDto();
-
-        List<VocabListItemDto> updatedListItems = updatedDto.ListItems.ToList();
-        VocabListItemDto removedDto = updatedListItems[1];
-
-        if (!removedDto.Id.HasValue)
-        {
-            throw new UnexpectedNullIdException();
-        }
-
-        updatedListItems.RemoveAt(1);
-        updatedDto.ListItems = updatedListItems;
-
-        using (VocabListDbContext context = _contextOptions.BuildNewInMemoryContext())
-        {
-            VocabListRepositoryAsync repository = new(context);
-            await repository.Update(updatedDto);
-        }
-
-        VocabList testList = GetFirstWithItemsWhere(l => l.Id == entityPreUpdate.Id);
-        VocabListItem[] testItems = testList.ListItems.ToArray();
-
-        for (int i = 0; i < testItems.Length; i++)
-        {
-            var item = testItems[i];
-            if (item.Id == removedDto.Id.Value)
-            {
-                Assert.True(item.DeletedDate >= _testStartTimeStamp);
-                continue;
-            }
-            Assert.Null(item.DeletedDate);
-
-        }
-    }
-
-
     [Fact]
     public async void Update_ShouldAddAndUpdateItemsCorrectly()
     {
         VocabList entityPreUpdate = GetFirstWithItemsWhere(li => li.ListItems.Count() > 1);
         VocabListDto updatedDto = entityPreUpdate.ToDto();
+
+        updatedDto.Name += " (updated)";
 
         List<VocabListItemDto> updatedListItems = updatedDto.ListItems.ToList();
 
@@ -252,13 +159,12 @@ public class ListRepositoryTests
         for (int i = 0; i < testItems.Length; i++)
         {
             var item = testItems[i];
-            Assert.True(item.CreatedDate <= _testStartTimeStamp);
 
             if (item.English == newItem.English)
             {
-                Assert.False(item.CreatedDate >= _testStartTimeStamp);
+                Assert.True(item.CreatedDate >= _testStartTimeStamp.AddSeconds(-1));
                 Assert.Null(item.UpdatedDate);
-                //Assert.Null(item.DeletedDate);
+                Assert.Null(item.DeletedDate);
             }
             else
             {

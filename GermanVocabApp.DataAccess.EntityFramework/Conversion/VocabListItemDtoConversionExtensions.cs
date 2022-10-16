@@ -7,27 +7,25 @@ namespace GermanVocabApp.DataAccess.EntityFramework.Conversion;
 internal static class VocabListItemDtoConversionExtensions
 {
     public static VocabListItem[] ToEntities(this VocabListItemDto[] dtos,
-                                             DateTime creationTimeStamp, Guid vocabListId)
+                                             Guid vocabListId)
     {
-        return dtos.Select(dto => dto.ToEntity(creationTimeStamp, vocabListId))
+        return dtos.Select(dto => dto.ToEntity(vocabListId))
                    .ToArray();
     }
 
-    public static IEnumerable<VocabListItem> ToEntities(this IEnumerable<VocabListItemDto> dtos,
-                                                        DateTime creationTimeStamp)
+    public static IEnumerable<VocabListItem> ToEntities(this IEnumerable<VocabListItemDto> dtos)
     {
-        return dtos.Select(dto => dto.ToEntity(creationTimeStamp));
+        return dtos.Select(dto => dto.ToEntity());
     }
 
-    public static VocabListItem ToEntity(this VocabListItemDto dto, DateTime creationTimeStamp,
-                                         Guid vocabListId)
+    public static VocabListItem ToEntity(this VocabListItemDto dto, Guid vocabListId)
     {
-        VocabListItem entity = dto.ToEntity(creationTimeStamp);
+        VocabListItem entity = dto.ToEntity();
         entity.VocabListId = vocabListId;
         return entity;
     }
 
-    public static VocabListItem ToEntity(this VocabListItemDto dto, DateTime creationTimeStamp)
+    public static VocabListItem ToEntity(this VocabListItemDto dto)
     {
         VocabListItem entity =  new VocabListItem()
         {
@@ -50,7 +48,6 @@ internal static class VocabListItemDtoConversionExtensions
             English = dto.English,
             VocabListId = dto.VocabListId.HasValue ? dto.VocabListId.Value : default,
             FixedPlurality = dto.FixedPlurality,
-            CreatedDate = creationTimeStamp,
             UpdatedDate = null,
             DeletedDate = null,
         };
@@ -62,7 +59,7 @@ internal static class VocabListItemDtoConversionExtensions
     }
 
     public static void CopyTo(this VocabListItemDto dto,
-                              VocabListItem entity, DateTime updateTimestamp)
+                              VocabListItem entity)
     {
         if (!dto.VocabListId.HasValue)
         {
@@ -88,6 +85,5 @@ internal static class VocabListItemDtoConversionExtensions
         entity.English = dto.English;
         entity.VocabListId = dto.VocabListId.Value;
         entity.FixedPlurality = dto.FixedPlurality;
-        entity.UpdatedDate = updateTimestamp;
     }
 }
