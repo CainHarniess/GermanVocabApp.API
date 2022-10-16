@@ -44,30 +44,18 @@ public class VocabListRepositoryAsync : RepositoryBase, IVocabListRepositoryAsyn
     {
         IEnumerable<VocabListInfoDto> listInfoDtos;
         listInfoDtos = await Context.VocablLists
-                                      .AsNoTracking()
-                                      .Where(vl => vl.DeletedDate == null)
-                                      .ProjectToInfoDto()
-                                      .ToArrayAsync();
+                                    .AsNoTracking()
+                                    .Where(vl => vl.DeletedDate == null)
+                                    .ProjectToInfoDto()
+                                    .ToArrayAsync();
         return listInfoDtos;
     }
 
     public async Task<VocabListDto> Add(VocabListDto dto)
     {
-        DateTime transactionTimeStamp = DateTime.UtcNow;
-        VocabList entity;
-
-        // TODO: Refactor to add whole graph at once.
-        entity = dto.ToEntityWithoutListItems(transactionTimeStamp);
+        VocabList entity = dto.ToEntityWithListItems();
+        
         Context.Add(entity);
-
-        if (dto.ListItems.Any())
-        {
-            VocabListItem[] listItems;
-            listItems = dto.ListItems.ToArray()
-                           .ToEntities(entity.Id);
-            Context.AddRange(listItems);
-        }
-
         await Context.SaveChangesAsync();
 
         VocabListDto retrievalDto = entity.ToDto();

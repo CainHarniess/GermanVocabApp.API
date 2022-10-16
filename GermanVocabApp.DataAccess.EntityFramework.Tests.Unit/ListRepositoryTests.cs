@@ -14,8 +14,6 @@ public class ListRepositoryTests
 {
     private readonly DbContextOptions _contextOptions;
     private readonly InMemoryVocabDatabaseSeeder _dataSeeder;
-    private readonly VocabListItemBuilder _itemBuilder;
-    private readonly VocabListBuilder _listBuilder;
     private readonly VocabListItemDtoBuilder _itemDtoBuilder;
     private readonly VocabListDtoBuilder _listDtoBuilder;
 
@@ -25,9 +23,9 @@ public class ListRepositoryTests
     {
         _contextOptions = new DbContextOptionsBuilder().NewContextConfiguration();
 
-        _itemBuilder = new VocabListItemBuilder();
-        _listBuilder = new VocabListBuilder(_itemBuilder);
-        _dataSeeder = new InMemoryVocabDatabaseSeeder(_contextOptions, _listBuilder);
+        var itemBuilder = new VocabListItemBuilder();
+        var listBuilder = new VocabListBuilder(itemBuilder);
+        _dataSeeder = new InMemoryVocabDatabaseSeeder(_contextOptions, listBuilder);
         _dataSeeder.Seed();
 
         _itemDtoBuilder = new();
@@ -37,21 +35,7 @@ public class ListRepositoryTests
     }
 
     [Fact]
-    public async void Add_ShouldAddNewList_AndSetCreatedDate()
-    {
-        VocabListDto newListDto = _listDtoBuilder.Empty()
-                                                 .AsNew()
-                                                 .WithName(Guid.NewGuid().ToString())
-                                                 .Build();
-
-        VocabList? entity = await AddAndRetreiveVocabListWithItems(newListDto);
-
-        Assert.NotNull(entity);
-        Assert.True(entity!.CreatedDate >= _testStartTimeStamp);
-    }
-
-    [Fact]
-    public async void Add_ShouldAddListItems_AndSetCreatedDate()
+    public async void Add_ShouldAddListAndListItems()
     {
         VocabListItemDto[] newItems = new VocabListItemDto[]
         {
@@ -65,10 +49,12 @@ public class ListRepositoryTests
                                                  .WithListItems(newItems)
                                                  .Build();
 
-        VocabList? entity = await AddAndRetreiveVocabListWithItems(newListDto);
-        Assert.NotNull(entity);
+        VocabList? listEntity = await AddAndRetreiveVocabListWithItems(newListDto);
+        
+        Assert.NotNull(listEntity);
+        Assert.True(listEntity!.CreatedDate >= _testStartTimeStamp);
 
-        VocabListItem[] listItems = entity!.ListItems.ToArray();
+        VocabListItem[] listItems = listEntity!.ListItems.ToArray();
 
         Assert.Equal(newItems.Length, listItems.Length);
 
@@ -126,7 +112,7 @@ public class ListRepositoryTests
     }
 
     [Fact]
-    public async void Update_ShouldAddAndUpdateItemsCorrectly()
+    public async void Update_ShouldAddUpdateAndRemoveItemsCorrectly()
     {
         VocabList entityPreUpdate = GetFirstWithItemsWhere(li => li.ListItems.Count() > 1);
         VocabListDto updatedDto = entityPreUpdate.ToDto();
@@ -214,6 +200,8 @@ public class ListRepositoryTests
             });
         }
     }
+
+
 
     private async Task<VocabList?> AddAndRetreiveVocabListWithItems(VocabListDto listDto)
     {
