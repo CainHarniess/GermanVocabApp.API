@@ -10,7 +10,7 @@ public class InMemoryVocabDatabaseSeeder
     private readonly VocabListBuilder _listBuilder;
 
     public InMemoryVocabDatabaseSeeder(DbContextOptions contextOptions,
-                                            VocabListBuilder listBuilder)
+                                       VocabListBuilder listBuilder)
     {
         _contextOptions = contextOptions;
         _listBuilder = listBuilder;
@@ -23,8 +23,12 @@ public class InMemoryVocabDatabaseSeeder
             context.Database.OpenConnection();
             context.Database.EnsureCreated();
 
-            VocabList kitchen = _listBuilder.Kitchen().Build();
-            context.Add(kitchen);
+            VocabList[] lists = new VocabList[]
+            {
+                _listBuilder.Kitchen().Build(),
+                _listBuilder.WithName("zz_deleted").WithDeletedDate(DateTime.UtcNow).Build(),
+            };
+            context.AddRange(lists);
 
             context.SaveChanges();
         }

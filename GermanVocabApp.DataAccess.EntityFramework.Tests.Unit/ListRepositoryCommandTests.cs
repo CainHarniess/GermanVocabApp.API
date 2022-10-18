@@ -2,7 +2,6 @@
 using GermanVocabApp.DataAccess.EntityFramework.Conversion;
 using GermanVocabApp.DataAccess.EntityFramework.Models;
 using GermanVocabApp.DataAccess.EntityFramework.Repositories;
-using GermanVocabApp.DataAccess.Models.Builders;
 using GermanVocabApp.DataAccess.Shared.DataTransfer;
 using Microsoft.EntityFrameworkCore;
 using SQLitePCL;
@@ -10,49 +9,35 @@ using System.Linq.Expressions;
 
 namespace GermanVocabApp.DataAccess.EntityFramework.Tests.Unit;
 
-public class ListRepositoryTests
+public class ListRepositoryCommandTests : ListRepositoryTestConfiguration
 {
-    private readonly DbContextOptions _contextOptions;
-    private readonly InMemoryVocabDatabaseSeeder _dataSeeder;
-    private readonly VocabListItemDtoBuilder _itemDtoBuilder;
-    private readonly VocabListDtoBuilder _listDtoBuilder;
-
-    private readonly DateTime _testStartTimeStamp;
-
-    public ListRepositoryTests()
-    {
-        _contextOptions = new DbContextOptionsBuilder().NewContextConfiguration();
-
-        var itemBuilder = new VocabListItemBuilder();
-        var listBuilder = new VocabListBuilder(itemBuilder);
-        _dataSeeder = new InMemoryVocabDatabaseSeeder(_contextOptions, listBuilder);
-        _dataSeeder.Seed();
-
-        _itemDtoBuilder = new();
-        _listDtoBuilder = new(_itemDtoBuilder);
-
-        _testStartTimeStamp = DateTime.UtcNow;
-    }
-
     [Fact]
     public async void Add_ShouldAddListAndListItems()
     {
         VocabListItemDto[] newItems = new VocabListItemDto[]
         {
-            _itemDtoBuilder.Spicy().AsNew().Build(),
-            _itemDtoBuilder.ToChop().AsNew().Build(),
+            ItemDtoBuilder.Spicy().AsNew().Build(),
+            ItemDtoBuilder.ToChop().AsNew().Build(),
         };
 
-        VocabListDto newListDto = _listDtoBuilder.Empty()
+        VocabListDto newListDto = ListDtoBuilder.Empty()
                                                  .AsNew()
                                                  .WithName(Guid.NewGuid().ToString())
                                                  .WithListItems(newItems)
                                                  .Build();
 
-        VocabList? listEntity = await AddAndRetreiveVocabListWithItems(newListDto);
-        
+        using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
+        {
+            VocabListRepositoryAsync repository = new(context);
+            VocabListDto _ = await repository.Add(newListDto);
+        }
+
+        VocabList? listEntity = GetSingleOrDefaultWithItemsWhere(l => l.Name == newListDto.Name
+                                                        && l.Description == newListDto.Description
+                                                        && l.DeletedDate == null);
+
         Assert.NotNull(listEntity);
-        Assert.True(listEntity!.CreatedDate >= _testStartTimeStamp);
+        Assert.True(listEntity!.CreatedDate >= TestStartTimeStamp);
 
         VocabListItem[] listItems = listEntity!.ListItems.ToArray();
 
@@ -60,7 +45,7 @@ public class ListRepositoryTests
 
         for (int i = 0; i < listItems.Length; i++)
         {
-            Assert.True(listItems[i].CreatedDate >= _testStartTimeStamp);
+            Assert.True(listItems[i].CreatedDate >= TestStartTimeStamp);
         }
     }
 
@@ -70,12 +55,12 @@ public class ListRepositoryTests
         VocabList? entityPreUpdate = GetFirstOrDefaultWithItemsWhere(li => true);
         Assert.NotNull(entityPreUpdate);
 
-        VocabListDto updatedDto = _listDtoBuilder.WithId(entityPreUpdate!.Id)
+        VocabListDto updatedDto = ListDtoBuilder.WithId(entityPreUpdate!.Id)
             .WithName(Guid.NewGuid().ToString())
             .WithDescription(Guid.NewGuid().ToString())
             .Build();
 
-        using (VocabListDbContext context = _contextOptions.BuildNewInMemoryContext())
+        using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
         {
             VocabListRepositoryAsync repository = new(context);
             await repository.Update(updatedDto);
@@ -93,20 +78,20 @@ public class ListRepositoryTests
     {
         VocabList entityPreUpdate = GetFirstWithItemsWhere(li => true);
 
-        VocabListDto updatedDto = _listDtoBuilder.WithId(entityPreUpdate.Id)
+        VocabListDto updatedDto = ListDtoBuilder.WithId(entityPreUpdate.Id)
             .WithName(Guid.NewGuid().ToString())
             .WithDescription(Guid.NewGuid().ToString())
             .Build();
 
-        using (VocabListDbContext context = _contextOptions.BuildNewInMemoryContext())
+        using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
         {
             VocabListRepositoryAsync repository = new(context);
             await repository.Update(updatedDto);
         }
 
         VocabList testList = GetFirstWithItemsWhere(l => l.Id == entityPreUpdate.Id);
-        Assert.True(testList.CreatedDate <= _testStartTimeStamp, "$@Creation time stamp is before the test start time stamp.");
-        Assert.True(testList.UpdatedDate >= _testStartTimeStamp, "$@Update time stamp is before the test start time stamp.");
+        Assert.True(testList.CreatedDate <= TestStartTimeStamp, "$@Creation time stamp is before the test start time stamp.");
+        Assert.True(testList.UpdatedDate >= TestStartTimeStamp, "$@Update time stamp is before the test start time stamp.");
 
         Assert.Null(testList.DeletedDate);
     }
@@ -127,7 +112,7 @@ public class ListRepositoryTests
         VocabListItemDto removedItem = updatedListItems[0];
         updatedListItems.RemoveAt(0);
 
-        VocabListItemDto newItem = _itemDtoBuilder.Kettle()
+        VocabListItemDto newItem = ItemDtoBuilder.Kettle()
                                                   .AsNew()
                                                   .WithEnglish(Guid.NewGuid().ToString())
                                                   .WithListId(entityPreUpdate.Id)
@@ -136,7 +121,7 @@ public class ListRepositoryTests
         updatedListItems.Add(newItem);
         updatedDto.ListItems = updatedListItems;
 
-        using (VocabListDbContext context = _contextOptions.BuildNewInMemoryContext())
+        using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
         {
             VocabListRepositoryAsync repository = new(context);
             await repository.Update(updatedDto);
@@ -154,29 +139,29 @@ public class ListRepositoryTests
 
             if (item.English == newItem.English)
             {
-                Assert.True(item.CreatedDate >= _testStartTimeStamp.AddSeconds(-1));
+                Assert.True(item.CreatedDate >= TestStartTimeStamp.AddSeconds(-1));
                 Assert.Null(item.UpdatedDate);
                 Assert.Null(item.DeletedDate);
             }
             else
             {
-                Assert.True(item.CreatedDate < _testStartTimeStamp);
+                Assert.True(item.CreatedDate < TestStartTimeStamp);
             }
 
             if (item.Id == updatedItem.Id)
             {
                 Assert.Equal(updatedItem.English, item.English);
-                Assert.True(item.UpdatedDate.HasValue && item.UpdatedDate >= _testStartTimeStamp);
+                Assert.True(item.UpdatedDate.HasValue && item.UpdatedDate >= TestStartTimeStamp);
             }
             else
             {
-                Assert.True(item.UpdatedDate.HasValue == false || item.UpdatedDate < _testStartTimeStamp);
+                Assert.True(item.UpdatedDate.HasValue == false || item.UpdatedDate < TestStartTimeStamp);
             }
 
             if (item.Id == removedItem.Id)
             {
-                Assert.True(item.DeletedDate.HasValue && item.DeletedDate >= _testStartTimeStamp);
-                Assert.True(item.UpdatedDate.HasValue == false || item.UpdatedDate <= _testStartTimeStamp);
+                Assert.True(item.DeletedDate.HasValue && item.DeletedDate >= TestStartTimeStamp);
+                Assert.True(item.UpdatedDate.HasValue == false || item.UpdatedDate <= TestStartTimeStamp);
             }
             else
             {
@@ -188,10 +173,10 @@ public class ListRepositoryTests
     [Fact]
     public async void Update_ShouldThrowException_IfInputHasNoId()
     {
-        VocabListDto updatedDto = _listDtoBuilder.WithId(null)
+        VocabListDto updatedDto = ListDtoBuilder.WithId(null)
             .Build();
 
-        using (VocabListDbContext context = _contextOptions.BuildNewInMemoryContext())
+        using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
         {
             _ = await Assert.ThrowsAsync<UnexpectedNullIdException>(async () =>
             {
@@ -201,26 +186,10 @@ public class ListRepositoryTests
         }
     }
 
-
-
-    private async Task<VocabList?> AddAndRetreiveVocabListWithItems(VocabListDto listDto)
-    {
-        using (VocabListDbContext context = _contextOptions.BuildNewInMemoryContext())
-        {
-            VocabListRepositoryAsync repository = new(context);
-            VocabListDto _ = await repository.Add(listDto);
-        }
-
-        VocabList? listEntity = GetSingleOrDefaultWithItemsWhere(l => l.Name == listDto.Name
-                                                        && l.Description == listDto.Description
-                                                        && l.DeletedDate == null);
-        return listEntity;
-    }
-
     private VocabList? GetFirstOrDefaultWithItemsWhere(Expression<Func<VocabList, bool>> condition)
     {
         VocabList? entity;
-        using (VocabListDbContext context = _contextOptions.BuildNewInMemoryContext())
+        using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
         {
             entity = context.VocablLists
                             .Include(l => l.ListItems)
@@ -232,7 +201,7 @@ public class ListRepositoryTests
     private VocabList GetFirstWithItemsWhere(Expression<Func<VocabList, bool>> condition)
     {
         VocabList entity;
-        using (VocabListDbContext context = _contextOptions.BuildNewInMemoryContext())
+        using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
         {
             entity = context.VocablLists
                             .Include(l => l.ListItems)
@@ -244,7 +213,7 @@ public class ListRepositoryTests
     private VocabList? GetSingleOrDefaultWithItemsWhere(Expression<Func<VocabList, bool>> condition)
     {
         VocabList? entity;
-        using (VocabListDbContext context = _contextOptions.BuildNewInMemoryContext())
+        using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
         {
             entity = context.VocablLists
                             .Include(l => l.ListItems)

@@ -27,17 +27,7 @@ public class VocabListRepositoryAsync : RepositoryBase, IVocabListRepositoryAsyn
                                               .ProjectToListWithItems(id);
         VocabList entity = await query.SingleOrDefaultAsync();
 
-        if (entity == null)
-        {
-            return null;
-        }
-
-        if (entity.ListItems == null)
-        {
-            throw new NullReferenceException($"VocabList entity ListItems property returned null in {nameof(VocabListRepositoryAsync)}.{nameof(Get)}." +
-                                             $"\n\nCheck Entity Framework is behaving as expected.");
-        }
-        return entity.ToDto();
+        return entity?.ToDto();
     }
 
     public async Task<IEnumerable<VocabListInfoDto>> GetVocabListInfos()
@@ -97,16 +87,16 @@ public class VocabListRepositoryAsync : RepositoryBase, IVocabListRepositoryAsyn
         await Context.SaveChangesAsync();
     }
 
+    // TODO: Test the item is actually removed.
+    // TODO: Test that list items are removed.
+    // TODO: test that true is returned if item found.
+    // TODO: Test false is returned if item not found
     public async Task<bool> HardDelete(Guid id)
     {
-        VocabList list;
-        try
-        {
-            list = await Context.VocablLists
-                                 .Include(vl => vl.ListItems)
-                                 .FirstAsync(vl => vl.Id == id);
-        }
-        catch (InvalidOperationException)
+        VocabList? list = await Context.VocablLists
+                                       .Include(vl => vl.ListItems)
+                                       .FirstOrDefaultAsync(vl => vl.Id == id);
+        if (list == null)
         {
             return false;
         }
