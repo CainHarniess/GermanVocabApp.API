@@ -44,22 +44,12 @@ public class VocabListDbContext : DbContext
 
             if (entry.State == EntityState.Modified)
             {
-                if (entity.DeletedDate == null)
+                if (entity.DeletedDate.HasValue == false)
                 {
                     entry.Entity.UpdatedDate = transactionTimeStamp;
                     continue;
                 }
-            }
-
-            if (entry.State == EntityState.Deleted)
-            {
-                if (entity.DeletedDate != null)
-                {
-                    continue;
-                }
                 entity.DeletedDate = transactionTimeStamp;
-                entry.State = EntityState.Modified;
-                continue;
             }
         }
 

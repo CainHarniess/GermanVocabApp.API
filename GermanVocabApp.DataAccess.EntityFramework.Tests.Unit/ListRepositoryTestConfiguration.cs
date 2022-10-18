@@ -1,5 +1,8 @@
-﻿using GermanVocabApp.DataAccess.Models.Builders;
+﻿using GermanVocabApp.Core.Exceptions;
+using GermanVocabApp.DataAccess.EntityFramework.Models;
+using GermanVocabApp.DataAccess.Models.Builders;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace GermanVocabApp.DataAccess.EntityFramework.Tests.Unit;
 
@@ -32,4 +35,28 @@ public abstract class ListRepositoryTestConfiguration
     protected VocabListItemDtoBuilder ItemDtoBuilder => _itemDtoBuilder;
     protected VocabListDtoBuilder ListDtoBuilder => _listDtoBuilder;
     protected DateTime TestStartTimeStamp => _testStartTimeStamp;
+
+    protected Guid GetFirstListIdWhere(Expression<Func<VocabList, bool>> condition)
+    {
+        using VocabListDbContext context = ContextOptions.BuildNewInMemoryContext();
+        return context.VocablLists
+                      .Where(condition)
+                      .Select(l => l.Id)
+                      .First();
+    }
+
+    protected VocabList GetFirstActiveIncludeActiveItems()
+    {
+        VocabList entityPreUpdate;
+        using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
+        {
+            entityPreUpdate = context.VocablLists
+                                     .Include(l => l.ListItems
+                                                    .Where(i => i.DeletedDate == null))
+                                     .First(li => li.DeletedDate.HasValue == false
+                                               && li.ListItems.Count() > 1);
+        }
+
+        return entityPreUpdate;
+    }
 }

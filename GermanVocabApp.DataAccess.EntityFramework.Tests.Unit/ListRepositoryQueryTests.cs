@@ -13,7 +13,7 @@ public class ListRepositoryQueryTests : ListRepositoryTestConfiguration
     [Fact]
     public async void GetVocabListInfos_ShouldReturnList_IfNotSoftDeleted()
     {
-        Guid activeListId = GetNonDeletedListId();
+        Guid activeListId = GetFirstListIdWhere(l => l.DeletedDate.HasValue == false);
 
         IEnumerable<VocabListInfoDto> listInfos;
         using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
@@ -52,12 +52,10 @@ public class ListRepositoryQueryTests : ListRepositoryTestConfiguration
         Assert.Empty(testLists);
     }
 
-    
-
     [Fact]
     public async void Get_ShouldReturnList_IfNotSoftDeleted()
     {
-        Guid activeListId = GetNonDeletedListId();
+        Guid activeListId = GetFirstListIdWhere(l => l.DeletedDate.HasValue == false);
 
         VocabListDto? listDto;
         using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
@@ -155,16 +153,6 @@ public class ListRepositoryQueryTests : ListRepositoryTestConfiguration
         }
     }
 
-    private Guid GetNonDeletedListId()
-    {
-        using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
-        {
-            return context.VocablLists
-                          .Where(l => l.DeletedDate == null)
-                          .Select(l => l.Id)
-                          .First();
-        }
-    }
 
     private async Task<VocabListItem> GetFirstItemIdPairWhereAsync(Expression<Func<VocabListItem, bool>> condition)
     {

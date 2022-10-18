@@ -23,6 +23,7 @@ public abstract class RepositoryBase
             {
                 return;
             }
+            entity.DeletedDate = DateTime.UtcNow;
             _context.Remove(entity);
         });
     }
@@ -36,9 +37,6 @@ public abstract class RepositoryBase
             {
                 return;
             }
-            // See the SaveChagnesAsync override to see why a duplicate remove call is needed.
-            // TODO: This won't actually work because save changes isn't called in between remove statements.
-            _context.Remove(entity);
             _context.Remove(entity);
         });
     }
