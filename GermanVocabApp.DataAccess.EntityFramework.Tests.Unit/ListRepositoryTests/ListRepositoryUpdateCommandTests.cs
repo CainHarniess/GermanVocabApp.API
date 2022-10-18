@@ -9,46 +9,9 @@ using System.Linq.Expressions;
 
 namespace GermanVocabApp.DataAccess.EntityFramework.Tests.Unit;
 
-public class ListRepositoryCommandTests : ListRepositoryTestConfiguration
+public class ListRepositoryUpdateCommandTests : ListRepositoryTestConfiguration
 {
-    [Fact]
-    public async void Add_ShouldAddListAndListItems()
-    {
-        VocabListItemDto[] newItems = new VocabListItemDto[]
-        {
-            ItemDtoBuilder.Spicy().AsNew().Build(),
-            ItemDtoBuilder.ToChop().AsNew().Build(),
-        };
-
-        VocabListDto newListDto = ListDtoBuilder.Empty()
-                                                 .AsNew()
-                                                 .WithName(Guid.NewGuid().ToString())
-                                                 .WithListItems(newItems)
-                                                 .Build();
-
-        using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
-        {
-            VocabListRepositoryAsync repository = new(context);
-            VocabListDto _ = await repository.Add(newListDto);
-        }
-
-        VocabList? listEntity = GetSingleOrDefaultIncludeItemsWhere(l => l.Name == newListDto.Name
-                                                        && l.Description == newListDto.Description
-                                                        && l.DeletedDate == null);
-
-        Assert.NotNull(listEntity);
-        Assert.True(listEntity!.CreatedDate >= TestStartTimeStamp);
-
-        VocabListItem[] listItems = listEntity!.ListItems.ToArray();
-
-        Assert.Equal(newItems.Length, listItems.Length);
-
-        for (int i = 0; i < listItems.Length; i++)
-        {
-            Assert.True(listItems[i].CreatedDate >= TestStartTimeStamp);
-        }
-    }
-
+    
     [Fact]
     public async void Update_ShouldUpdateListInformation()
     {
@@ -219,91 +182,6 @@ public class ListRepositoryCommandTests : ListRepositoryTestConfiguration
         }
     }
 
-    [Fact]
-    public async void HardDelete_ShouldReturnFalse_IfListWithIdNotFound()
-    {
-        bool result;
-        using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
-        {
-            VocabListRepositoryAsync repository = new(context);
-            result = await repository.HardDelete(Guid.NewGuid());
-        }
-        Assert.False(result);
-    }
-
-    [Fact]
-    public async void HardDelete_ShouldReturnFalse_IfListAlreadyDeleted()
-    {
-        Guid deletedListId = GetFirstListIdWhere(l => l.DeletedDate.HasValue);
-
-        bool result;
-        using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
-        {
-            VocabListRepositoryAsync repository = new(context);
-            result = await repository.HardDelete(deletedListId);
-        }
-        Assert.False(result);
-    }
-
-    [Fact]
-    public async void HardDelete_ShouldReturnTrue_IfListFound()
-    {
-        Guid activeListId = GetFirstListIdWhere(l => l.DeletedDate.HasValue == false);
-
-        bool result;
-        using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
-        {
-            VocabListRepositoryAsync repository = new(context);
-            result = await repository.HardDelete(activeListId);
-        }
-        Assert.True(result);
-    }
-
-
-    [Fact]
-    public async void HardDelete_ShouldRemoveList_IfNotDeleted()
-    {
-        Guid listId = GetFirstListIdWhere(l => l.DeletedDate.HasValue == false);
-
-        using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
-        {
-            VocabListRepositoryAsync repository = new(context);
-            bool _ = await repository.HardDelete(listId);
-        }
-
-        VocabList? testList;
-        using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
-        {
-            testList = context.VocablLists
-                              .Where(l => l.Id == listId)
-                              .FirstOrDefault();
-        };
-        Assert.Null(testList);
-    }
-
-    [Fact]
-    public async void HardDelete_ShouldRemoveItems()
-    {
-        Guid listId = GetFirstListIdWhere(l => l.ListItems.Count() > 1);
-
-        using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
-        {
-            VocabListRepositoryAsync repository = new(context);
-            bool _ = await repository.HardDelete(listId);
-        }
-
-        Guid[] itemIds;
-        using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
-        {
-            itemIds = context.VocablListItems
-                             .Where(i => i.VocabListId == listId)
-                             .Select(i => i.Id)
-                             .ToArray();
-        }
-        Assert.Empty(itemIds);
-    }
-
-
     private VocabList? GetFirstOrDefaultIncludeItemsWhere(Expression<Func<VocabList, bool>> condition)
     {
         VocabList? entity;
@@ -324,18 +202,6 @@ public class ListRepositoryCommandTests : ListRepositoryTestConfiguration
             entity = context.VocablLists
                             .Include(l => l.ListItems)
                             .First(condition);
-        }
-        return entity;
-    }
-
-    private VocabList? GetSingleOrDefaultIncludeItemsWhere(Expression<Func<VocabList, bool>> condition)
-    {
-        VocabList? entity;
-        using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
-        {
-            entity = context.VocablLists
-                            .Include(l => l.ListItems)
-                            .SingleOrDefault(condition);
         }
         return entity;
     }

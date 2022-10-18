@@ -59,4 +59,16 @@ public abstract class ListRepositoryTestConfiguration
 
         return entityPreUpdate;
     }
+
+    protected VocabList? GetSingleOrDefaultIncludeItemsWhere(Expression<Func<VocabList, bool>> condition)
+    {
+        VocabList? entity;
+        using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
+        {
+            entity = context.VocablLists
+                            .Include(l => l.ListItems)
+                            .SingleOrDefault(condition);
+        }
+        return entity;
+    }
 }
