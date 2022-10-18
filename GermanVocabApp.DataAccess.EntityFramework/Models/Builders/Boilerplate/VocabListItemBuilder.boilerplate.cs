@@ -187,6 +187,7 @@ public partial class VocabListItemBuilder : EntityBuilder<VocabListItem, VocabLi
 
     protected override void Clear()
     {
+        base.Clear();
         _wordType = default;
         _isWeakMasculineNoun = default;
         _reflexiveCase = default;
