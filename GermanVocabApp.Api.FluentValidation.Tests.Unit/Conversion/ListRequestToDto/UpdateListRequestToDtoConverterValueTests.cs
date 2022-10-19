@@ -21,12 +21,20 @@ public class UpdateListRequestToDtoConverterValueTests : ListRequestToDtoConvert
 
         _testGuid = _fixture.Create<Guid>();
 
-        _result = _converter.Convert(_request, _testGuid);
     }
 
     [Fact]
     public void Convert_ShouldSetIdToNull()
     {
-        Assert.Equal(_testGuid, _result.Id);
+        var result = _converter.Convert(_request, _testGuid);
+        Assert.Equal(_testGuid, result.Id);
+    }
+
+    [Fact]
+    public void Convert_ShouldCopyValues()
+    {
+        var result = _converter.Convert(_request, _testGuid);
+        Assert.Equal(result.Name, _request.Name);
+        Assert.Equal(result.Description, _request.Description);
     }
 }

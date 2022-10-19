@@ -16,7 +16,7 @@ public class ListDtoToResponseConverter : IConverter<VocabListDto, ListResponse>
 
     public ListResponse Convert(VocabListDto dto)
     {
-        if (!dto.Id.HasValue)
+        if (dto.Id.HasValue == false)
         {
             throw new UnexpectedNullIdException();
         }
