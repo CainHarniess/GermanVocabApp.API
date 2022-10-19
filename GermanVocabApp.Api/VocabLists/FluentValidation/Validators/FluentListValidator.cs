@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using GermanVocabApp.Api.VocabLists.Models;
 
-namespace GermanVocabApp.Api.FluentValidation.Validators;
+namespace GermanVocabApp.Api.Validators;
 
 public class FluentListValidator : AbstractValidator<ListRequest>
 {

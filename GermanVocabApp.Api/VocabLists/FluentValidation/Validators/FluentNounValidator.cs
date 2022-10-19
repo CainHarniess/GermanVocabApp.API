@@ -3,7 +3,7 @@ using GermanVocabApp.Shared.Constraints;
 using GermanVocabApp.Shared.Data;
 using Osiris.FluentValidation;
 
-namespace GermanVocabApp.Api.FluentValidation.Validators;
+namespace GermanVocabApp.Api.Validators;
 
 public class FluentNounValidator : FluentWordValidator
 {

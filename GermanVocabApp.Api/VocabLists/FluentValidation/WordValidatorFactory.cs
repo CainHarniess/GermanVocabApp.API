@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
-using GermanVocabApp.Api.FluentValidation.Validators;
+using GermanVocabApp.Api.Validators;
 using GermanVocabApp.Api.VocabLists.Models;
 using GermanVocabApp.Core.Contracts;
 using GermanVocabApp.Shared.Data;
 
-namespace GermanVocabApp.Api.FluentValidation;
+namespace GermanVocabApp.Api;
 
 public class WordValidatorFactory : IFactory<IValidator<ItemRequest>, ItemRequest>
 {
@@ -17,18 +17,6 @@ public class WordValidatorFactory : IFactory<IValidator<ItemRequest>, ItemReques
         {
             { WordType.Noun, nounValidator },
             { WordType.Verb, verbValidator },
-            { WordType.Adjective, modifierValidator },
-            { WordType.Adverb, modifierValidator },
-        };
-    }
-
-    internal WordValidatorFactory()
-    {
-        FluentModifierValidator modifierValidator = new FluentModifierValidator();
-        _validators = new Dictionary<WordType, FluentWordValidator>()
-        {
-            { WordType.Noun, new FluentNounValidator() },
-            { WordType.Verb, new FluentVerbValidator() },
             { WordType.Adjective, modifierValidator },
             { WordType.Adverb, modifierValidator },
         };

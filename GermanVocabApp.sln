@@ -28,11 +28,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Osiris.FluentValidation", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Osiris.System.Extensions", "..\..\Osiris\Osiris.System.Extensions\Osiris.System.Extensions.csproj", "{DB762B25-65A7-4C0D-A26C-85F5A8404CFD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GermanVocabApp.Api.FluentValidation.Tests.Unit", "GermanVocabApp.Api.FluentValidation.Tests.Unit\GermanVocabApp.Api.FluentValidation.Tests.Unit.csproj", "{7ED3AD3C-EEAE-4864-AFA3-62975795FFCB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GermanVocabApp.Api.Tests.Unit", "GermanVocabApp.Api.Tests.Unit\GermanVocabApp.Api.Tests.Unit.csproj", "{7ED3AD3C-EEAE-4864-AFA3-62975795FFCB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GermanVocabApp.Api.FluentValidation.Tests.Integration", "GermanVocabApp.Api.FluentValidation.Tests.Integration\GermanVocabApp.Api.FluentValidation.Tests.Integration.csproj", "{C624ECBC-F50B-45A0-9DEC-C911F8EAAF6E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GermanVocabApp.Api.Tests.Integration", "GermanVocabApp.Api.Tests.Integration\GermanVocabApp.Api.Tests.Integration.csproj", "{C624ECBC-F50B-45A0-9DEC-C911F8EAAF6E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GermanVocabApp.DataAccess.EntityFramework.Tests.Unit", "GermanVocabApp.DataAccess.EntityFramework.Tests.Unit\GermanVocabApp.DataAccess.EntityFramework.Tests.Unit.csproj", "{4D5EF449-E341-4B11-A303-D9E3A187BAAF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GermanVocabApp.DataAccess.EntityFramework.Tests.Unit", "GermanVocabApp.DataAccess.EntityFramework.Tests.Unit\GermanVocabApp.DataAccess.EntityFramework.Tests.Unit.csproj", "{4D5EF449-E341-4B11-A303-D9E3A187BAAF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
