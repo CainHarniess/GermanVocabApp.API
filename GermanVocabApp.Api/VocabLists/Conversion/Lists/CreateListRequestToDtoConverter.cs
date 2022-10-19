@@ -18,7 +18,7 @@ public class CreateListRequestToDtoConverter : IConverter<ListRequest, VocabList
     {
         if (source.Id.HasValue)
         {
-            throw new UnexpectedNullIdException($"Resource creation request with ID {source} but null was expected.");
+            throw new UnexpectedIdException($"Resource creation request with ID {source.Id} but null was expected.");
         }
         return new VocabListDto()
         {

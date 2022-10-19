@@ -27,6 +27,7 @@ public class CreateListRequestToDtoConverterTests
     public void Convert_ShouldCallItemConverter_WithCorrectValue()
     {
         _mockItemConverter.Setup(ic => ic.Convert(_request.ListItems.ToArray()));
+        _request.Id = null;
         _converter.Convert(_request);
         _mockItemConverter.Verify(m => m.Convert(_request.ListItems.ToArray()), Times.Once);
     }

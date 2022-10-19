@@ -1,6 +1,7 @@
 ﻿using GermanVocabApp.Api.VocabLists.Conversion.Lists;
 using GermanVocabApp.Api.VocabLists.Models;
 using GermanVocabApp.Core.Contracts;
+using GermanVocabApp.Core.Exceptions;
 using GermanVocabApp.DataAccess.Shared.DataTransfer;
 using Moq;
 
@@ -15,12 +16,20 @@ public class CreateListRequestToDtoConverterValueTests : ListRequestToDtoConvert
     {
         _mockItemsConverter = new Mock<IConverter<ItemRequest[], VocabListItemDto[]>>();
         _converter = new CreateListRequestToDtoConverter(_mockItemsConverter.Object);
-        _result = _converter.Convert(_request);
     }
 
     [Fact]
-    public void Convert_ShouldSetIdToNull()
+    public void Convert_ShouldThrowException_IfIdNotNull()
     {
-        Assert.Null(_result.Id);
+        Assert.Throws<UnexpectedIdException>(() => _converter.Convert(_request));
+    }
+
+    [Fact]
+    public void Convert_ShouldCopyValues()
+    {
+        _request.Id = null;
+        var result = _converter.Convert(_request);
+        Assert.Equal(result.Name, _request.Name);
+        Assert.Equal(result.Description, _request.Description);
     }
 }

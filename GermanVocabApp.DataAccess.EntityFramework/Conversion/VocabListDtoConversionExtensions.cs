@@ -5,25 +5,24 @@ namespace GermanVocabApp.DataAccess.EntityFramework.Conversion;
 
 internal static class VocabListDtoConversionExtensions
 {
-    public static VocabList ToEntityWithListItems(this VocabListDto dto, DateTime creationTimeStamp)
+    public static VocabList ToEntityWithListItems(this VocabListDto dto)
     {
-        VocabList entity = dto.ToEntityWithoutListItems(creationTimeStamp);
+        VocabList entity = dto.ToEntityWithoutListItems();
 
         if (!dto.ListItems.Any())
         {
             return entity;
         }
-        entity.ListItems = dto.ListItems.Select(li => li.ToEntity(creationTimeStamp));
+        entity.ListItems = dto.ListItems.Select(li => li.ToEntity()).ToArray();
         return entity;
     }
 
-    public static VocabList ToEntityWithoutListItems(this VocabListDto dto, DateTime creationTimeStamp)
+    public static VocabList ToEntityWithoutListItems(this VocabListDto dto)
     {
         VocabList entity =  new VocabList()
         {
             Name = dto.Name,
             Description = dto.Description,
-            CreatedDate = creationTimeStamp,
             UpdatedDate = null,
             DeletedDate = null,
         };

@@ -32,6 +32,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GermanVocabApp.Api.FluentVa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GermanVocabApp.Api.FluentValidation.Tests.Integration", "GermanVocabApp.Api.FluentValidation.Tests.Integration\GermanVocabApp.Api.FluentValidation.Tests.Integration.csproj", "{C624ECBC-F50B-45A0-9DEC-C911F8EAAF6E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GermanVocabApp.DataAccess.EntityFramework.Tests.Unit", "GermanVocabApp.DataAccess.EntityFramework.Tests.Unit\GermanVocabApp.DataAccess.EntityFramework.Tests.Unit.csproj", "{4D5EF449-E341-4B11-A303-D9E3A187BAAF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -78,6 +80,10 @@ Global
 		{C624ECBC-F50B-45A0-9DEC-C911F8EAAF6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C624ECBC-F50B-45A0-9DEC-C911F8EAAF6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C624ECBC-F50B-45A0-9DEC-C911F8EAAF6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D5EF449-E341-4B11-A303-D9E3A187BAAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D5EF449-E341-4B11-A303-D9E3A187BAAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D5EF449-E341-4B11-A303-D9E3A187BAAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D5EF449-E341-4B11-A303-D9E3A187BAAF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -88,6 +94,7 @@ Global
 		{92B0C0AB-35A3-4B3A-B645-2CF589587C9C} = {AE5185CB-0027-43AA-B603-26487D2091AC}
 		{7ED3AD3C-EEAE-4864-AFA3-62975795FFCB} = {A7CD964B-D532-4261-965D-53EFED352767}
 		{C624ECBC-F50B-45A0-9DEC-C911F8EAAF6E} = {A7CD964B-D532-4261-965D-53EFED352767}
+		{4D5EF449-E341-4B11-A303-D9E3A187BAAF} = {AE5185CB-0027-43AA-B603-26487D2091AC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {63843E0B-466C-46B2-BD69-C3421B111354}
