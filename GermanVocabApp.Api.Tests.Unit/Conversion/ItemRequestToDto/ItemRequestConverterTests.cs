@@ -10,7 +10,9 @@ public abstract class ItemRequestConverterTests
     protected readonly ItemRequest _request;
     protected VocabListItemDto _dto;
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     protected ItemRequestConverterTests()
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     {
         _fixture = new Fixture();
         _request = _fixture.Create<ItemRequest>();
