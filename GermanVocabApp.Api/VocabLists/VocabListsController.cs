@@ -89,7 +89,6 @@ public class VocabListsController : ControllerBase
     [ProducesResponseType((int)HttpStatusCode.NoContent)]
     public async Task<IActionResult> UpdateVocabList(Guid id, ListRequest request)
     {
-        // TODO: Fix this endpoint.
         ValidationResult result = _validator.Validate(request);
         if (!result.IsValid)
         {
@@ -125,7 +124,6 @@ public class VocabListsController : ControllerBase
         }
         return NoContent();
     }
-
 
     private static class ActionParameters
     {
