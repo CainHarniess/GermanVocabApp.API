@@ -4,13 +4,13 @@ using GermanVocabApp.DataAccess.Shared.DataTransfer;
 
 namespace GermanVocabApp.Api.Tests.Unit.Conversion;
 
-public abstract class ItemRequestConverterValueTests
+public abstract class ItemRequestConverterTests
 {
     protected readonly Fixture _fixture;
     protected readonly ItemRequest _request;
     protected VocabListItemDto _dto;
 
-    protected ItemRequestConverterValueTests()
+    protected ItemRequestConverterTests()
     {
         _fixture = new Fixture();
         _request = _fixture.Create<ItemRequest>();
