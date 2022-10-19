@@ -1,7 +1,7 @@
 ﻿using GermanVocabApp.Api.VocabLists.Conversion.Items;
 using GermanVocabApp.Core.Exceptions;
 
-namespace GermanVocabApp.Api.Tests.Unit.Conversion.ItemRequestToDto;
+namespace GermanVocabApp.Api.Tests.Unit.Conversion;
 
 public class CreateItemRequestToDtoConverterValueTests : ItemRequestConverterValueTests
 {

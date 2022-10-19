@@ -2,7 +2,7 @@
 using GermanVocabApp.Api.VocabLists.Conversion.Items;
 using GermanVocabApp.DataAccess.Shared.DataTransfer;
 
-namespace GermanVocabApp.Api.Tests.Unit.Conversion.ItemDtoToResponse;
+namespace GermanVocabApp.Api.Tests.Unit.Conversion;
 
 public abstract class ItemDtoToResponseConverterTestSetUp
 {

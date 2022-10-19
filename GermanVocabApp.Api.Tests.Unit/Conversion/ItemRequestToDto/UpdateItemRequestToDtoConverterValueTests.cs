@@ -1,7 +1,7 @@
 ﻿using AutoFixture;
 using GermanVocabApp.Api.VocabLists.Conversion.Items;
 
-namespace GermanVocabApp.Api.Tests.Unit.Conversion.ItemRequestToDto;
+namespace GermanVocabApp.Api.Tests.Unit.Conversion;
 
 public class UpdateItemRequestToDtoConverterValueTests : ItemRequestConverterValueTests
 {

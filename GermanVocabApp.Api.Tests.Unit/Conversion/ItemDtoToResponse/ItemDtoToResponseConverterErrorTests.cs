@@ -1,6 +1,6 @@
 ﻿using GermanVocabApp.Core.Exceptions;
 
-namespace GermanVocabApp.Api.Tests.Unit.Conversion.ItemDtoToResponse;
+namespace GermanVocabApp.Api.Tests.Unit.Conversion;
 
 public class ItemDtoToResponseConverterErrorTests : ItemDtoToResponseConverterTestSetUp
 {

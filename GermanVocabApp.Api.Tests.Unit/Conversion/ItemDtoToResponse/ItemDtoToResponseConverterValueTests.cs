@@ -1,4 +1,4 @@
-﻿namespace GermanVocabApp.Api.Tests.Unit.Conversion.ItemDtoToResponse;
+﻿namespace GermanVocabApp.Api.Tests.Unit.Conversion;
 
 public class ItemDtoToResponseConverterValueTests : ItemDtoToResponseConverterTestSetUp
 {

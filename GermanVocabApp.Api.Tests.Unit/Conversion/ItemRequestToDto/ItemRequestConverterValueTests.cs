@@ -2,7 +2,7 @@
 using GermanVocabApp.Api.VocabLists.Models;
 using GermanVocabApp.DataAccess.Shared.DataTransfer;
 
-namespace GermanVocabApp.Api.Tests.Unit.Conversion.ItemRequestToDto;
+namespace GermanVocabApp.Api.Tests.Unit.Conversion;
 
 public abstract class ItemRequestConverterValueTests
 {
