@@ -9,13 +9,13 @@ namespace GermanVocabApp.Api.Tests.Unit.Conversion.ListRequestToDto;
 
 public class CreateListRequestToDtoConverterValueTests : ListRequestToDtoConverterSetup
 {
-    private readonly Mock<IConverter<ItemRequest[], VocabListItemDto[]>> _mockItemsConverter;
+    private readonly Mock<IConverter<ItemRequest[], VocabListItemDto[]>> _mockItemConverter;
     private readonly CreateListRequestToDtoConverter _converter;
 
     public CreateListRequestToDtoConverterValueTests() : base()
     {
-        _mockItemsConverter = new Mock<IConverter<ItemRequest[], VocabListItemDto[]>>();
-        _converter = new CreateListRequestToDtoConverter(_mockItemsConverter.Object);
+        _mockItemConverter = new Mock<IConverter<ItemRequest[], VocabListItemDto[]>>();
+        _converter = new CreateListRequestToDtoConverter(_mockItemConverter.Object);
     }
 
     [Fact]
@@ -31,5 +31,14 @@ public class CreateListRequestToDtoConverterValueTests : ListRequestToDtoConvert
         var result = _converter.Convert(_request);
         Assert.Equal(result.Name, _request.Name);
         Assert.Equal(result.Description, _request.Description);
+    }
+
+    [Fact]
+    public void Convert_ShouldCallItemConverter_WithCorrectValue()
+    {
+        _mockItemConverter.Setup(ic => ic.Convert(_request.ListItems.ToArray()));
+        _request.Id = null;
+        _converter.Convert(_request);
+        _mockItemConverter.Verify(m => m.Convert(_request.ListItems.ToArray()), Times.Once);
     }
 }
