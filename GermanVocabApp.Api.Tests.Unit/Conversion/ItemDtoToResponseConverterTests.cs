@@ -1,7 +1,24 @@
-﻿namespace GermanVocabApp.Api.FluentValidation.Tests.Unit.Conversion.ItemDtoToResponse;
+﻿using AutoFixture;
+using GermanVocabApp.Api.VocabLists.Conversion.Items;
+using GermanVocabApp.Core.Exceptions;
+using GermanVocabApp.DataAccess.Shared.DataTransfer;
 
-public class ItemDtoToResponseConverterValueTests : ItemDtoToResponseConverterTestSetUp
+namespace GermanVocabApp.Api.Tests.Unit.Conversion;
+
+public class ItemDtoToResponseConverterTests
 {
+    protected Fixture _fixture;
+    protected VocabListItemDto _dto;
+    protected ItemDtoToResponseConverter _converter;
+
+    public ItemDtoToResponseConverterTests()
+    {
+        _fixture = new Fixture();
+        _dto = _fixture.Create<VocabListItemDto>();
+
+        _converter = new();
+    }
+
     [Fact]
     public void ToResponse_ShouldCopyValues()
     {
@@ -27,5 +44,28 @@ public class ItemDtoToResponseConverterValueTests : ItemDtoToResponseConverterTe
         Assert.Equal(_dto.English, _response.English);
         Assert.Equal(_dto.VocabListId, _response.VocabListId);
         Assert.Equal(_dto.FixedPlurality, _response.FixedPlurality);
+    }
+
+    [Fact]
+    public void ToResponse_ShouldThrowError_WhenNoId()
+    {
+        _dto.Id = null;
+        UnexpectedNullIdException e = Assert.Throws<UnexpectedNullIdException>(() => _converter.Convert(_dto));
+        Assert.Contains("list item ID", e.Message);
+    }
+
+    [Fact]
+    public void ToResponse_ShouldThrowError_WhenNoListId()
+    {
+        _dto.VocabListId = null;
+        UnexpectedNullIdException e = Assert.Throws<UnexpectedNullIdException>(() => _converter.Convert(_dto));
+        Assert.Contains("list ID", e.Message);
+    }
+
+    [Fact]
+    public void ToResponse_ShouldNotThrowError_WhenIdsPresent()
+    {
+        Exception exception = Record.Exception(() => _converter.Convert(_dto));
+        Assert.Null(exception);
     }
 }

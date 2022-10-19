@@ -1,12 +1,12 @@
 ﻿using GermanVocabApp.Api.VocabLists.Conversion.Items;
 using GermanVocabApp.Core.Exceptions;
 
-namespace GermanVocabApp.Api.FluentValidation.Tests.Unit.Conversion.ItemRequestToDto;
+namespace GermanVocabApp.Api.Tests.Unit.Conversion;
 
-public class CreateItemRequestToDtoConverterValueTests : ItemRequestConverterValueTests
+public class CreateItemRequestToDtoConverterTests : ItemRequestConverterTests
 {
     private CreateItemRequestToDtoConverter _converter;
-    public CreateItemRequestToDtoConverterValueTests() : base()
+    public CreateItemRequestToDtoConverterTests() : base()
     {
         _converter = new CreateItemRequestToDtoConverter();
         _dto = _converter.Convert(_request);

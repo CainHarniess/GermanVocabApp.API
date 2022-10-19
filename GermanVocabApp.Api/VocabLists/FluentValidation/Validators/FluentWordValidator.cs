@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using GermanVocabApp.Core.Contracts;
 
-namespace GermanVocabApp.Api.FluentValidation.Validators;
+namespace GermanVocabApp.Api.Validators;
 
 public abstract class FluentWordValidator : AbstractValidator<IListItemRequest>
 {

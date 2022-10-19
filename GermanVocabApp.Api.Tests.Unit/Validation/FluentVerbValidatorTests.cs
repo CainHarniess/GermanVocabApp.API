@@ -1,9 +1,9 @@
 ﻿using FluentValidation.TestHelper;
-using GermanVocabApp.Api.FluentValidation.Validators;
+using GermanVocabApp.Api.Validators;
 using GermanVocabApp.Shared.Data;
 using Moq;
 
-namespace GermanVocabApp.Api.FluentValidation.Tests.Unit.ValidatorTests;
+namespace GermanVocabApp.Api.Tests.Unit.Validation;
 
 public class FluentVerbValidatorTests : FluentWordValidatorTests<FluentVerbValidator>
 {

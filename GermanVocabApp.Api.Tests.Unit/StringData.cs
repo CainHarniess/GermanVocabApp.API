@@ -1,4 +1,4 @@
-﻿namespace GermanVocabApp.Api.FluentValidation.Tests.Unit;
+﻿namespace GermanVocabApp.Api.Tests.Unit;
 internal struct StringData
 {
     public const string Empty = "";

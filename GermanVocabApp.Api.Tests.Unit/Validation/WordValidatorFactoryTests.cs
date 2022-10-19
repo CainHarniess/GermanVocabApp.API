@@ -1,10 +1,11 @@
 ﻿using FluentValidation;
-using GermanVocabApp.Api.FluentValidation.Validators;
+using GermanVocabApp.Api;
+using GermanVocabApp.Api.Validators;
 using GermanVocabApp.Api.VocabLists.Models;
 using GermanVocabApp.Shared.Data;
 using Moq;
 
-namespace GermanVocabApp.Api.FluentValidation.Tests.Unit.Validation;
+namespace GermanVocabApp.Api.Tests.Unit.Validation;
 
 public class WordValidatorFactoryTests
 {
@@ -13,7 +14,8 @@ public class WordValidatorFactoryTests
 
     public WordValidatorFactoryTests()
     {
-        _factory = new WordValidatorFactory();
+        _factory = new WordValidatorFactory(new FluentNounValidator(), new FluentVerbValidator(),
+                                            new FluentModifierValidator());
         _item = new ItemRequest();
     }
 

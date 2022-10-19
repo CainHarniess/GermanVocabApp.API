@@ -2,7 +2,7 @@
 using GermanVocabApp.Api.VocabLists.Conversion.Lists;
 using GermanVocabApp.DataAccess.Shared.DataTransfer;
 
-namespace GermanVocabApp.Api.FluentValidation.Tests.Unit.Conversion;
+namespace GermanVocabApp.Api.Tests.Unit.Conversion;
 
 public class ListInfoDtoToResponseCoverterTests
 {

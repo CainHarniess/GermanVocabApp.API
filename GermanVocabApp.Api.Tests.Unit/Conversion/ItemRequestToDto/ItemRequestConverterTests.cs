@@ -2,15 +2,17 @@
 using GermanVocabApp.Api.VocabLists.Models;
 using GermanVocabApp.DataAccess.Shared.DataTransfer;
 
-namespace GermanVocabApp.Api.FluentValidation.Tests.Unit.Conversion.ItemRequestToDto;
+namespace GermanVocabApp.Api.Tests.Unit.Conversion;
 
-public abstract class ItemRequestConverterValueTests
+public abstract class ItemRequestConverterTests
 {
     protected readonly Fixture _fixture;
     protected readonly ItemRequest _request;
     protected VocabListItemDto _dto;
 
-    protected ItemRequestConverterValueTests()
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    protected ItemRequestConverterTests()
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     {
         _fixture = new Fixture();
         _request = _fixture.Create<ItemRequest>();

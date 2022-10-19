@@ -5,16 +5,16 @@ using GermanVocabApp.Core.Contracts;
 using GermanVocabApp.DataAccess.Shared.DataTransfer;
 using Moq;
 
-namespace GermanVocabApp.Api.FluentValidation.Tests.Unit.Conversion.ListRequestToDto;
+namespace GermanVocabApp.Api.Tests.Unit.Conversion;
 
-public class UpdateListRequestToDtoConverterValueTests : ListRequestToDtoConverterSetup
+public class UpdateListRequestToDtoConverterTests : ListRequestToDtoConverterSetup
 {
     private readonly Mock<IChildResourceConverter<ItemRequest[], VocabListItemDto[]>> _mockItemsConverter;
     private readonly UpdateListRequestToDtoConverter _converter;
 
     private readonly Guid _testGuid;
 
-    public UpdateListRequestToDtoConverterValueTests() : base()
+    public UpdateListRequestToDtoConverterTests() : base()
     {
         _mockItemsConverter = new Mock<IChildResourceConverter<ItemRequest[], VocabListItemDto[]>>();
         _converter = new UpdateListRequestToDtoConverter(_mockItemsConverter.Object);

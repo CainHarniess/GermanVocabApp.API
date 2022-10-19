@@ -7,7 +7,7 @@ using GermanVocabApp.Core.Contracts;
 using Moq;
 using Osiris.FluentValidation.Testing;
 
-namespace GermanVocabApp.Api.FluentValidation.Tests.Integration.Validation;
+namespace GermanVocabApp.Api.Tests.Integration.Validation;
 public class VocabListValidationControllerTests
 {
     private InlineValidator<int> _passingListValidator;

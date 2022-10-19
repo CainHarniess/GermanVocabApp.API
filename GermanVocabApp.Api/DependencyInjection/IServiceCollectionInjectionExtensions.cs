@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
-using GermanVocabApp.Api.FluentValidation;
-using GermanVocabApp.Api.FluentValidation.Validators;
+using GermanVocabApp.Api;
+using GermanVocabApp.Api.Validators;
 using GermanVocabApp.Api.VocabLists.Conversion;
 using GermanVocabApp.Api.VocabLists.Conversion.Items;
 using GermanVocabApp.Api.VocabLists.Conversion.Lists;

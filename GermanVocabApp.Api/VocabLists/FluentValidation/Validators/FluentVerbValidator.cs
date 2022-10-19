@@ -2,7 +2,7 @@
 using GermanVocabApp.Shared.Constraints;
 using Osiris.FluentValidation;
 
-namespace GermanVocabApp.Api.FluentValidation.Validators;
+namespace GermanVocabApp.Api.Validators;
 
 public class FluentVerbValidator : FluentWordValidator
 {

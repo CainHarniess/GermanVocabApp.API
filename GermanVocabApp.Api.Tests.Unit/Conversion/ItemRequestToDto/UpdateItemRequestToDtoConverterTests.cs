@@ -1,13 +1,13 @@
 ﻿using AutoFixture;
 using GermanVocabApp.Api.VocabLists.Conversion.Items;
 
-namespace GermanVocabApp.Api.FluentValidation.Tests.Unit.Conversion.ItemRequestToDto;
+namespace GermanVocabApp.Api.Tests.Unit.Conversion;
 
-public class UpdateItemRequestToDtoConverterValueTests : ItemRequestConverterValueTests
+public class UpdateItemRequestToDtoConverterTests : ItemRequestConverterTests
 {
     private UpdateItemRequestToDtoConverter _converter;
     private Guid _testGuid;
-    public UpdateItemRequestToDtoConverterValueTests() : base()
+    public UpdateItemRequestToDtoConverterTests() : base()
     {
         _converter = new UpdateItemRequestToDtoConverter();
         _testGuid = _fixture.Create<Guid>();

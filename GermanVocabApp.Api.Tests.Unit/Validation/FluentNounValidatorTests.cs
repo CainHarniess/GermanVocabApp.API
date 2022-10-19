@@ -1,17 +1,19 @@
-﻿using FluentValidation.TestHelper;
-using GermanVocabApp.Api.FluentValidation.Validators;
+using FluentValidation.TestHelper;
+using GermanVocabApp.Api.Validators;
 using GermanVocabApp.Shared.Data;
+using Moq;
 
-namespace GermanVocabApp.Api.FluentValidation.Tests.Unit.ValidatorTests;
+namespace GermanVocabApp.Api.Tests.Unit.Validation;
 
-public class FluentModifierValidatorTests : FluentWordValidatorTests<FluentModifierValidator>
+public class FluentNounValidatorTests : FluentWordValidatorTests<FluentNounValidator>
 {
-    protected override FluentModifierValidator CreateValidator()
+    protected override FluentNounValidator CreateValidator()
     {
-        return new FluentModifierValidator();
+        return new FluentNounValidator();
     }
 
-    #region IsWeakMasculineNoun
+
+    #region IsWeakmasculineNoun
     [Theory]
     [InlineData(true)]
     [InlineData(false)]
@@ -19,15 +21,16 @@ public class FluentModifierValidatorTests : FluentWordValidatorTests<FluentModif
     {
         Mock.Setup(r => r.IsWeakMasculineNoun).Returns(value);
         var result = Validator.TestValidate(Mock.Object);
-        result.ShouldHaveValidationErrorFor(request => request.IsWeakMasculineNoun);
+        result.ShouldNotHaveValidationErrorFor(request => request.IsWeakMasculineNoun);
     }
 
-    [Fact]
-    public void IsWeakMasculineNoun_ShouldNotHaveValidationError_WhenNull()
+    [Theory]
+    [InlineData(null)]
+    public void IsWeakMasculineNoun_ShouldHaveValidationError_WhenNull(bool? value)
     {
-        Mock.Setup(r => r.IsWeakMasculineNoun).Returns(() => null);
+        Mock.Setup(r => r.IsWeakMasculineNoun).Returns(value);
         var result = Validator.TestValidate(Mock.Object);
-        result.ShouldNotHaveValidationErrorFor(request => request.IsWeakMasculineNoun);
+        result.ShouldHaveValidationErrorFor(request => request.IsWeakMasculineNoun);
     }
     #endregion
 
@@ -93,7 +96,7 @@ public class FluentModifierValidatorTests : FluentWordValidatorTests<FluentModif
     }
     #endregion
 
-    #region ThidPersonPresent
+    #region ThirdPersonPresent
     [Fact]
     public void ThirdPersonPresent_ShouldNotHaveValidationError_WhenNull()
     {
@@ -117,7 +120,7 @@ public class FluentModifierValidatorTests : FluentWordValidatorTests<FluentModif
     [Fact]
     public void ThirdPersonImperfect_ShouldNotHaveValidationError_WhenNull()
     {
-        Mock.Setup(r => r.ThirdPersonImperfect).Returns(() => null);
+        Mock.Setup(r => r.ThirdPersonImperfect).Returns((string)null);
         var result = Validator.TestValidate(Mock.Object);
         result.ShouldNotHaveValidationErrorFor(request => request.ThirdPersonImperfect);
     }
@@ -174,45 +177,23 @@ public class FluentModifierValidatorTests : FluentWordValidatorTests<FluentModif
     #endregion
 
     #region Gender
-    [Theory]
-    [InlineData(Gender.Masculine)]
-    [InlineData(Gender.Feminine)]
-    [InlineData(Gender.Neuter)]
-    public void Gender_ShouldHaveValidationError_WhenNotNull(Gender value)
+    [Fact]
+    public void Gender_ShouldHaveValidationError_WhenNull()
     {
-        Mock.Setup(r => r.Gender).Returns(value);
+        Mock.Setup(r => r.Gender).Returns(() => null);
         var result = Validator.TestValidate(Mock.Object);
         result.ShouldHaveValidationErrorFor(request => request.Gender);
     }
 
-    [Fact]
-    public void Gender_ShouldNotHaveValidationError_WhenNull()
+    [Theory]
+    [InlineData(Gender.Masculine)]
+    [InlineData(Gender.Feminine)]
+    [InlineData(Gender.Neuter)]
+    public void Gender_ShouldNotHaveValidationError_WhenNotNull(Gender value)
     {
-        Mock.Setup(r => r.Gender).Returns(() => null);
+        Mock.Setup(r => r.Gender).Returns(value);
         var result = Validator.TestValidate(Mock.Object);
         result.ShouldNotHaveValidationErrorFor(request => request.Gender);
-    }
-    #endregion
-
-    #region Plural
-    [Theory]
-    [InlineData(StringData.Empty)]
-    [InlineData(StringData.Whitespace)]
-    [InlineData("abc")]
-    [InlineData(StringData.CharString25)]
-    public void Plural_ShouldHaveValidationError_WhenNotNull(string? value)
-    {
-        Mock.Setup(r => r.Plural).Returns(value);
-        var result = Validator.TestValidate(Mock.Object);
-        result.ShouldHaveValidationErrorFor(request => request.Plural);
-    }
-
-    [Fact]
-    public void Plural_ShouldNotHaveValidationError_WhenNull()
-    {
-        Mock.Setup(r => r.Plural).Returns(() => null);
-        var result = Validator.TestValidate(Mock.Object);
-        result.ShouldNotHaveValidationErrorFor(request => request.Plural);
     }
     #endregion
 
@@ -221,107 +202,199 @@ public class FluentModifierValidatorTests : FluentWordValidatorTests<FluentModif
     [InlineData(StringData.Empty)]
     [InlineData(StringData.CharString1)]
     [InlineData(StringData.CharString26)]
-    public void Preposition_ShouldHaveValidationError_WhenNotNull(string? value)
+    public void Preposition_ShouldHaveValidationError_WhenInvalidLength(string? value)
     {
         Mock.Setup(r => r.Preposition).Returns(value);
         var result = Validator.TestValidate(Mock.Object);
         result.ShouldHaveValidationErrorFor(request => request.Preposition);
     }
 
-    [Fact]
-    public void Preposition_ShouldNotHaveValidationError_WhenNull()
+    [Theory]
+    [InlineData(null)]
+    [InlineData("abc")]
+    [InlineData(StringData.CharString25)]
+    public void Preposition_ShouldNotHaveValidationError_WhenNull_OrValidLength(string? value)
     {
+        Mock.Setup(r => r.Preposition).Returns(value);
         var result = Validator.TestValidate(Mock.Object);
         result.ShouldNotHaveValidationErrorFor(request => request.Preposition);
     }
     #endregion
 
     #region PrepositionCase
-    [Theory]
-    [InlineData(Case.Nominative)]
-    [InlineData(Case.Accusative)]
-    [InlineData(Case.Dative)]
-    [InlineData(Case.Genetive)]
-    public void PrepositionCase_ShouldHaveValidationError_WhenNotNull(Case value)
+    [Fact]
+    public void PrepositionCase_ShouldNotHaveValidationError_WhenNull_AndPrepositionCaseNull()
     {
-        Mock.Setup(r => r.PrepositionCase).Returns(value);
+        Mock.Setup(r => r.Preposition).Returns(() => null);
+        Mock.Setup(r => r.PrepositionCase).Returns(() => null);
+        var result = Validator.TestValidate(Mock.Object);
+        result.ShouldNotHaveValidationErrorFor(request => request.PrepositionCase);
+    }
+
+    [Fact]
+    public void PrepositionCase_ShouldHaveValidationError_WhenNotNull_AndPrepositionNull()
+    {
+        Mock.Setup(r => r.Preposition).Returns(() => null);
+        Mock.Setup(r => r.PrepositionCase).Returns(() => It.IsAny<Case>());
         var result = Validator.TestValidate(Mock.Object);
         result.ShouldHaveValidationErrorFor(request => request.PrepositionCase);
     }
 
-    [Fact]
-    public void PrepositionCase_ShouldNotHaveValidationError_WhenNull()
+    [Theory]
+    [InlineData(StringData.Whitespace)]
+    [InlineData(StringData.Empty)]
+    [InlineData(StringData.CharString1)]
+    public void PrepositionCase_ShouldHaveValidationError_WhenNull_AndPrepositionNotNull(string? prepositionValue)
     {
+        Mock.Setup(r => r.Preposition).Returns(() => prepositionValue);
+        Mock.Setup(r => r.PrepositionCase).Returns(() => null);
+        var result = Validator.TestValidate(Mock.Object);
+        result.ShouldHaveValidationErrorFor(request => request.PrepositionCase);
+    }
+
+    [Theory]
+    [InlineData(StringData.Whitespace)]
+    [InlineData(StringData.Empty)]
+    [InlineData(StringData.CharString1)]
+    public void PrepositionCase_ShouldNotHaveValidationError_WhenNotNull_AndPrepositionNotNull(string? prepositionValue)
+    {
+        Mock.Setup(r => r.Preposition).Returns(prepositionValue);
+        Mock.Setup(r => r.PrepositionCase).Returns(() => It.IsAny<Case>());
         var result = Validator.TestValidate(Mock.Object);
         result.ShouldNotHaveValidationErrorFor(request => request.PrepositionCase);
     }
     #endregion
 
-    #region Comparative
+    #region Plural
     [Theory]
     [InlineData(StringData.Empty)]
     [InlineData(StringData.CharString1)]
     [InlineData(StringData.CharString2)]
-    [InlineData(StringData.CharString101)]
-    public void Comparative_ShouldHaveValidationError_WhenInvalidLength(string? value)
+    [InlineData(StringData.CharString26)]
+    public void Plural_ShouldHaveValidationError_WhenInvalidLength(string value)
+    {
+        Mock.Setup(r => r.Plural).Returns(value);
+        var result = Validator.TestValidate(Mock.Object);
+        result.ShouldHaveValidationErrorFor(request => request.Plural);
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("abc")]
+    [InlineData(StringData.CharString25)]
+    public void Plural_ShouldNotHaveValidationError_WhenNull_OrValidLength(string? value)
+    {
+        Mock.Setup(r => r.Plural).Returns(value);
+        var result = Validator.TestValidate(Mock.Object);
+        result.ShouldNotHaveValidationErrorFor(request => request.Plural);
+    }
+
+    [Fact]
+    public void Plural_ShouldHaveValidationError_WhenNull_AndAlwaysPlural()
+    {
+        Mock.Setup(r => r.FixedPlurality).Returns(FixedPlurality.Plural);
+        Mock.Setup(r => r.Plural).Returns(() => null);
+        var result = Validator.TestValidate(Mock.Object);
+        result.ShouldHaveValidationErrorFor(request => request.Plural);
+    }
+
+    [Theory]
+    [InlineData("abc")]
+    public void Plural_ShouldNotHaveValidationError_WhenNotNull_AndAlwaysPlural(string? value)
+    {
+        Mock.Setup(r => r.FixedPlurality).Returns(FixedPlurality.Plural);
+        Mock.Setup(r => r.Plural).Returns(value);
+        var result = Validator.TestValidate(Mock.Object);
+        result.ShouldNotHaveValidationErrorFor(request => request.Plural);
+    }
+
+    [Fact]
+    public void Plural_ShouldNotHaveValidationError_WhenNull_AndAlwaysSingular()
+    {
+        Mock.Setup(r => r.FixedPlurality).Returns(FixedPlurality.Singular);
+        Mock.Setup(r => r.Plural).Returns(() => null);
+        var result = Validator.TestValidate(Mock.Object);
+        result.ShouldNotHaveValidationErrorFor(request => request.Plural);
+    }
+
+    [Theory]
+    [InlineData(StringData.Whitespace)]
+    [InlineData(StringData.Empty)]
+    [InlineData(StringData.CharString1)]
+    public void Plural_ShouldHaveValidationError_WhenNotNull_AndAlwaysSingular(string? value)
+    {
+        Mock.Setup(r => r.FixedPlurality).Returns(FixedPlurality.Singular);
+        Mock.Setup(r => r.Plural).Returns(value);
+        var result = Validator.TestValidate(Mock.Object);
+        result.ShouldHaveValidationErrorFor(request => request.Plural);
+    }
+
+    [Fact]
+    public void Plural_ShouldNotHaveValidationError_WhenNoFixedPlurality()
+    {
+        Mock.Setup(r => r.FixedPlurality).Returns(FixedPlurality.Singular);
+        Mock.Setup(r => r.Plural).Returns(() => It.IsAny<string>());
+        var result = Validator.TestValidate(Mock.Object);
+        result.ShouldNotHaveValidationErrorFor(request => request.Plural);
+    }
+    #endregion
+
+    #region Comparative
+    [Fact]
+    public void Comparative_ShouldNotHaveValidationError_WhenNull()
+    {
+        Mock.Setup(r => r.Comparative).Returns(() => null);
+        var result = Validator.TestValidate(Mock.Object);
+        result.ShouldNotHaveValidationErrorFor(request => request.Comparative);
+    }
+
+    [Theory]
+    [InlineData(StringData.Empty)]
+    [InlineData(StringData.CharString1)]
+    public void Comparative_ShouldHaveValidationError_WhenNotNull(string value)
     {
         Mock.Setup(r => r.Comparative).Returns(value);
         var result = Validator.TestValidate(Mock.Object);
         result.ShouldHaveValidationErrorFor(request => request.Comparative);
     }
-
-    [Theory]
-    [InlineData(null)]
-    [InlineData("abc")]
-    [InlineData(StringData.CharString100)]
-    public void Comparative_ShouldNotHaveValidationError_WhenNull_OrValidLength(string? value)
-    {
-        Mock.Setup(r => r.Comparative).Returns(value);
-        var result = Validator.TestValidate(Mock.Object);
-        result.ShouldNotHaveValidationErrorFor(request => request.Comparative);
-    }
     #endregion
 
     #region Superlative
+    [Fact]
+    public void Superlative_ShouldNotHaveValidationError_WhenNull()
+    {
+        Mock.Setup(r => r.Superlative).Returns(() => null);
+        var result = Validator.TestValidate(Mock.Object);
+        result.ShouldNotHaveValidationErrorFor(request => request.Superlative);
+    }
+
     [Theory]
     [InlineData(StringData.Empty)]
     [InlineData(StringData.CharString1)]
-    [InlineData(StringData.CharString2)]
-    [InlineData(StringData.CharString101)]
-    public void Superlative_ShouldHaveValidationError_WhenInvalidLength(string? value)
+    public void Superlative_ShouldHaveValidationError_WhenNotNull(string value)
     {
         Mock.Setup(r => r.Superlative).Returns(value);
         var result = Validator.TestValidate(Mock.Object);
         result.ShouldHaveValidationErrorFor(request => request.Superlative);
     }
-
-    [Theory]
-    [InlineData(null)]
-    [InlineData("abc")]
-    [InlineData(StringData.CharString100)]
-    public void Superlative_ShouldNotHaveValidationError_WhenNull_OrValidLength(string? value)
-    {
-        Mock.Setup(r => r.Superlative).Returns(value);
-        var result = Validator.TestValidate(Mock.Object);
-        result.ShouldNotHaveValidationErrorFor(request => request.Superlative);
-    }
     #endregion
 
     #region FixedPlurality
-    [Theory]
-    [InlineData(FixedPlurality.None)]
-    [InlineData(FixedPlurality.Singular)]
-    [InlineData(FixedPlurality.Plural)]
-    public void FixedPlurality_ShouldHaveValidationError_WhenNotNull(FixedPlurality value)
+    [Fact]
+    public void FixedPlurality_ShouldHaveValidationError_WhenNull()
     {
-        Mock.Setup(r => r.FixedPlurality).Returns(value);
+        Mock.Setup(r => r.FixedPlurality).Returns(() => null);
         var result = Validator.TestValidate(Mock.Object);
         result.ShouldHaveValidationErrorFor(request => request.FixedPlurality);
     }
 
-    [Fact]
-    public void FixedPlurality_ShouldNotHaveValidationError_WhenNull()
+    [Theory]
+    [InlineData(FixedPlurality.None)]
+    [InlineData(FixedPlurality.Singular)]
+    [InlineData(FixedPlurality.Plural)]
+    public void FixedPlurality_ShouldNotHaveValidationError_WhenNotNull(FixedPlurality value)
     {
+        Mock.Setup(r => r.FixedPlurality).Returns(value);
         var result = Validator.TestValidate(Mock.Object);
         result.ShouldNotHaveValidationErrorFor(request => request.FixedPlurality);
     }

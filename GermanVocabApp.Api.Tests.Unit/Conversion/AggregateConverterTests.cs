@@ -5,7 +5,7 @@ using GermanVocabApp.Core.Contracts;
 using GermanVocabApp.DataAccess.Shared.DataTransfer;
 using Moq;
 
-namespace GermanVocabApp.Api.FluentValidation.Tests.Integration.Conversion;
+namespace GermanVocabApp.Api.Tests.Integration.Conversion;
 
 public class AggregateConverterTests
 {

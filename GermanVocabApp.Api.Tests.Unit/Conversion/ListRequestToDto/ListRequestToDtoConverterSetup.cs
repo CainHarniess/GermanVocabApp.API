@@ -1,7 +1,7 @@
 ﻿using AutoFixture;
 using GermanVocabApp.Api.VocabLists.Models;
 
-namespace GermanVocabApp.Api.FluentValidation.Tests.Unit.Conversion.ListRequestToDto;
+namespace GermanVocabApp.Api.Tests.Unit.Conversion;
 
 public abstract class ListRequestToDtoConverterSetup
 {
