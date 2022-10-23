@@ -11,8 +11,8 @@ public class VocabListDbContext : DbContext
 
     }
 
-    public DbSet<VocabList> VocablLists { get; set; }
-    public DbSet<VocabListItem> VocablListItems { get; set; }
+    public DbSet<VocabList> Lists { get; set; }
+    public DbSet<VocabListItem> ListItems { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

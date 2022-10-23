@@ -39,7 +39,7 @@ public abstract class ListRepositoryTestConfiguration
     protected Guid GetFirstListIdWhere(Expression<Func<VocabList, bool>> condition)
     {
         using VocabListDbContext context = ContextOptions.BuildNewInMemoryContext();
-        return context.VocablLists
+        return context.Lists
                       .Where(condition)
                       .Select(l => l.Id)
                       .First();
@@ -50,7 +50,7 @@ public abstract class ListRepositoryTestConfiguration
         VocabList entityPreUpdate;
         using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
         {
-            entityPreUpdate = context.VocablLists
+            entityPreUpdate = context.Lists
                                      .Include(l => l.ListItems
                                                     .Where(i => i.DeletedDate == null))
                                      .First(li => li.DeletedDate.HasValue == false
@@ -65,7 +65,7 @@ public abstract class ListRepositoryTestConfiguration
         VocabList? entity;
         using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
         {
-            entity = context.VocablLists
+            entity = context.Lists
                             .Include(l => l.ListItems)
                             .SingleOrDefault(condition);
         }

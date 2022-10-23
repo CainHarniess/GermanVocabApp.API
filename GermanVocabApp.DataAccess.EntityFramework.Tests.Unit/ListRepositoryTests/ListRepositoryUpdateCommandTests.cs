@@ -79,7 +79,7 @@ public class ListRepositoryUpdateCommandTests : ListRepositoryTestConfiguration
         VocabList testList;
         using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
         {
-            testList = context.VocablLists
+            testList = context.Lists
                               .Include(l => l.ListItems
                                              .Where(i => i.DeletedDate == null))
                               .First(li => li.DeletedDate.HasValue == false
@@ -187,7 +187,7 @@ public class ListRepositoryUpdateCommandTests : ListRepositoryTestConfiguration
         VocabList? entity;
         using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
         {
-            entity = context.VocablLists
+            entity = context.Lists
                             .Include(l => l.ListItems)
                             .FirstOrDefault(condition);
         }
@@ -199,7 +199,7 @@ public class ListRepositoryUpdateCommandTests : ListRepositoryTestConfiguration
         VocabList entity;
         using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
         {
-            entity = context.VocablLists
+            entity = context.Lists
                             .Include(l => l.ListItems)
                             .First(condition);
         }

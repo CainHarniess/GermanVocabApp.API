@@ -60,7 +60,7 @@ public class ListRepositoryHardDeleteCommandTests : ListRepositoryTestConfigurat
         VocabList? testList;
         using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
         {
-            testList = context.VocablLists
+            testList = context.Lists
                               .Where(l => l.Id == listId)
                               .FirstOrDefault();
         };
@@ -81,7 +81,7 @@ public class ListRepositoryHardDeleteCommandTests : ListRepositoryTestConfigurat
         Guid[] itemIds;
         using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
         {
-            itemIds = context.VocablListItems
+            itemIds = context.ListItems
                              .Where(i => i.VocabListId == listId)
                              .Select(i => i.Id)
                              .ToArray();

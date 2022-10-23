@@ -20,7 +20,7 @@ public class VocabListRepositoryAsync : RepositoryBase, IVocabListRepositoryAsyn
 
     public async Task<VocabListDto?> Get(Guid id)
     {
-        IQueryable<VocabList> query = Context.VocablLists
+        IQueryable<VocabList> query = Context.Lists
                                               .AsNoTracking()
                                               .Where(vl => vl.Id == id
                                                         && vl.DeletedDate == null)
@@ -33,7 +33,7 @@ public class VocabListRepositoryAsync : RepositoryBase, IVocabListRepositoryAsyn
     public async Task<IEnumerable<VocabListInfoDto>> GetVocabListInfos()
     {
         IEnumerable<VocabListInfoDto> listInfoDtos;
-        listInfoDtos = await Context.VocablLists
+        listInfoDtos = await Context.Lists
                                     .AsNoTracking()
                                     .Where(vl => vl.DeletedDate == null)
                                     .ProjectToInfoDto()
@@ -63,7 +63,7 @@ public class VocabListRepositoryAsync : RepositoryBase, IVocabListRepositoryAsyn
 
         Guid listId = dto.Id.Value;
 
-        VocabList existingList = await Context.VocablLists
+        VocabList existingList = await Context.Lists
                                               .TryGetFirstActiveWithId(listId);
 
         dto.CopyListDetails(existingList, currentTimestamp);
@@ -89,7 +89,7 @@ public class VocabListRepositoryAsync : RepositoryBase, IVocabListRepositoryAsyn
 
     public async Task<bool> HardDelete(Guid id)
     {
-        VocabList? list = await Context.VocablLists
+        VocabList? list = await Context.Lists
                                        .Include(vl => vl.ListItems)
                                        .FirstOrDefaultAsync(vl => vl.Id == id
                                                                && vl.DeletedDate == null);
@@ -102,7 +102,7 @@ public class VocabListRepositoryAsync : RepositoryBase, IVocabListRepositoryAsyn
         {
             HardDeleteRangeWhere(list.ListItems, li => true);
         }
-        Context.VocablLists.Remove(list);
+        Context.Lists.Remove(list);
 
         await Context.SaveChangesAsync();
         return true;

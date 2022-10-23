@@ -72,7 +72,7 @@ public class ListRepositoryQueryTests : ListRepositoryTestConfiguration
         Guid softDeletedListId;
         using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
         {
-            softDeletedListId = context.VocablLists.First(l => l.Name == zz_deleted).Id;
+            softDeletedListId = context.Lists.First(l => l.Name == zz_deleted).Id;
         }
 
         VocabListDto? softDeletedListFromRepo;
@@ -135,7 +135,7 @@ public class ListRepositoryQueryTests : ListRepositoryTestConfiguration
     {
         using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
         {
-            VocabList[] lists = await context.VocablLists
+            VocabList[] lists = await context.Lists
                                              .Where(l => l.DeletedDate == null)
                                              .Select(l => new VocabList
                                              {
@@ -157,7 +157,7 @@ public class ListRepositoryQueryTests : ListRepositoryTestConfiguration
     private async Task<VocabListItem> GetFirstItemIdPairWhereAsync(Expression<Func<VocabListItem, bool>> condition)
     {
         using VocabListDbContext context = ContextOptions.BuildNewInMemoryContext();
-        return await context.VocablListItems
+        return await context.ListItems
                       .Where(condition)
                       .Select(i => new VocabListItem()
                       {

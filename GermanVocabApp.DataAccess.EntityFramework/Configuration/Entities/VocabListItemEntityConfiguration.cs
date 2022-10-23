@@ -59,6 +59,7 @@ internal class VocabListItemEntityConfiguration : IEntityTypeConfiguration<Vocab
         builder.Property(n => n.ThirdPersonImperfect)
                .HasMaxLength(25);
 
+        // TODO: Fix the below max length constraint.
         builder.Property(n => n.ThirdPersonImperfect)
                .HasMaxLength(6);
 
