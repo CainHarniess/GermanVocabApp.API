@@ -8,6 +8,13 @@ namespace GermanVocabApp.Api.Testing;
 public class ErrorController : ControllerBase
 {
 
+    [HttpGet("no-content")]
+    [ProducesResponseType((int)HttpStatusCode.NoContent)]
+    public IActionResult ReturnNoContent()
+    {
+        return NoContent();
+    }
+
     [HttpGet("unauthorised")]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
     public IActionResult ThrowUnauthorised()

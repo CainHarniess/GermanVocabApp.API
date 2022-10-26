@@ -13,6 +13,13 @@ public class ErrorControllerTests
     }
 
     [Fact]
+    public void ReturnNoContent_ShouldReturnNoContent()
+    {
+        IActionResult result = _controller.ReturnNoContent();
+        Assert.IsType<NoContentResult>(result);
+    }
+
+    [Fact]
     public void ThrowUnauthorised_ShouldReturnUnauthorised()
     {
         IActionResult result = _controller.ThrowUnauthorised();
