@@ -1,6 +1,7 @@
 ﻿using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentValidation.Results;
+using GermanVocabApp.Api.Testing;
 using GermanVocabApp.Api.VocabLists;
 using GermanVocabApp.Api.VocabLists.Models;
 using GermanVocabApp.Core.Contracts;
