@@ -60,9 +60,19 @@ public class VocabControllerTests
     }
 
     [Fact]
+    public async void Create_ShouldReturnBadRequest_IfRequestHasId()
+    {
+        ListRequest request = ConfigureValidRequest();
+        request.Id = Guid.NewGuid();
+        IActionResult result = await _controller.Create(request);
+        Assert.IsType<BadRequestObjectResult>(result);
+    }
+
+    [Fact]
     public async void Create_ShouldThrowInternalServerError_IfRepositoryCreatesBadDto()
     {
         ListRequest request = _fixture.Create<ListRequest>();
+        request.Id = null;
         _mockValidator.Setup(r => r.Validate(request)).Returns(() => new ValidationResult()
         {
             Errors = new List<ValidationFailure>(0)
@@ -171,6 +181,7 @@ public class VocabControllerTests
     private ListRequest ConfigureValidRequest()
     {
         ListRequest request = _fixture.Create<ListRequest>();
+        request.Id = null;
         _mockValidator.Setup(r => r.Validate(request)).Returns(() => new ValidationResult()
         {
             Errors = new List<ValidationFailure>(0)

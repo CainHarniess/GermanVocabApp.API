@@ -47,6 +47,11 @@ public class VocabListsController : ControllerBase
             return BadRequest(result.ToDictionary());
         }
 
+        if (request.Id != null)
+        {
+            return BadRequest("List ID may not be provided on list creation.");
+        }
+
         VocabListDto dto = _createRequestConverter.Convert(request);
         VocabListDto newListDto = await _repository.Add(dto);
 
