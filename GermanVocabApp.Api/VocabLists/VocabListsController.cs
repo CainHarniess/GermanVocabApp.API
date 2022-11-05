@@ -47,6 +47,11 @@ public class VocabListsController : ControllerBase
             return BadRequest(result.ToDictionary());
         }
 
+        if (request.Id != null)
+        {
+            return BadRequest("List ID may not be provided on list creation.");
+        }
+
         VocabListDto dto = _createRequestConverter.Convert(request);
         VocabListDto newListDto = await _repository.Add(dto);
 
@@ -81,7 +86,7 @@ public class VocabListsController : ControllerBase
         ListResponse response = _responseConverter.Convert(dto);
         return Ok(response);
     }
-    
+
     [HttpPut(ActionParameters.IdGuid)]
     [ProducesResponseType((int)HttpStatusCode.BadRequest)]
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
@@ -117,16 +122,11 @@ public class VocabListsController : ControllerBase
     public async Task<IActionResult> HardDelete(Guid id)
     {
         bool result = await _repository.HardDelete(id);
-        
+
         if (result == false)
         {
             return NotFound();
         }
         return NoContent();
-    }
-
-    private static class ActionParameters
-    {
-        public const string IdGuid = "{id:guid}";
     }
 }
