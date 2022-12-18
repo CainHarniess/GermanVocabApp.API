@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GermanVocabApp.DataAccess.EntityFramework.Migrations
 {
-    [DbContext(typeof(VocabListDbContext))]
+    [DbContext(typeof(GermanAppAppDbContext))]
     partial class VocabListDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

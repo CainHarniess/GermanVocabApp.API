@@ -14,8 +14,8 @@ public static class VocabListDbContextCreationExtensions
 
     }
 
-    public static VocabListDbContext BuildNewInMemoryContext(this DbContextOptions options)
+    public static GermanAppAppDbContext BuildNewInMemoryContext(this DbContextOptions options)
     {
-        return new VocabListDbContext(options);
+        return new GermanAppAppDbContext(options);
     }
 }

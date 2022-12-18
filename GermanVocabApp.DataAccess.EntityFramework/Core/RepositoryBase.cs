@@ -4,14 +4,14 @@ namespace GermanVocabApp.DataAccess.EntityFramework.Core;
 
 public abstract class RepositoryBase
 {
-    private readonly VocabListDbContext _context;
+    private readonly GermanAppAppDbContext _context;
 
-    public RepositoryBase(VocabListDbContext context)
+    public RepositoryBase(GermanAppAppDbContext context)
     {
         _context = context;
     }
 
-    protected VocabListDbContext Context => _context;
+    protected GermanAppAppDbContext Context => _context;
 
     public void SoftDeleteRangeWhere<TEntity>(IEnumerable<TEntity> entities, Predicate<TEntity> condition)
         where TEntity : EntityBase

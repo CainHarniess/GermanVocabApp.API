@@ -62,7 +62,7 @@ public static class IServiceCollectionInjectionExtensions
 
     public static IServiceCollection AddEntityFrameworkDependencies(this IServiceCollection services, WebApplicationBuilder builder)
     {
-        services.AddDbContext<VocabListDbContext>(options =>
+        services.AddDbContext<GermanAppAppDbContext>(options =>
         {
             string connectionString = builder.Configuration.GetConnectionString("GermanVocabApp");
             options.UseSqlServer(connectionString);

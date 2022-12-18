@@ -22,7 +22,7 @@ public class ListRepositoryUpdateCommandTests : ListRepositoryTestConfiguration
             .WithDescription(Guid.NewGuid().ToString())
             .Build();
 
-        using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
+        using (GermanAppAppDbContext context = ContextOptions.BuildNewInMemoryContext())
         {
             VocabListRepositoryAsync repository = new(context);
             await repository.Update(updatedDto);
@@ -45,7 +45,7 @@ public class ListRepositoryUpdateCommandTests : ListRepositoryTestConfiguration
             .WithDescription(Guid.NewGuid().ToString())
             .Build();
 
-        using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
+        using (GermanAppAppDbContext context = ContextOptions.BuildNewInMemoryContext())
         {
             VocabListRepositoryAsync repository = new(context);
             await repository.Update(updatedDto);
@@ -69,14 +69,14 @@ public class ListRepositoryUpdateCommandTests : ListRepositoryTestConfiguration
 
         ItemModificationResult modificationResult = ModifyListItems(entityPreUpdate, updatedDto);
 
-        using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
+        using (GermanAppAppDbContext context = ContextOptions.BuildNewInMemoryContext())
         {
             VocabListRepositoryAsync repository = new(context);
             await repository.Update(updatedDto);
         }
 
         VocabList testList;
-        using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
+        using (GermanAppAppDbContext context = ContextOptions.BuildNewInMemoryContext())
         {
             testList = context.Lists
                               .Include(l => l.ListItems
@@ -171,7 +171,7 @@ public class ListRepositoryUpdateCommandTests : ListRepositoryTestConfiguration
         VocabListDto updatedDto = ListDtoBuilder.WithId(null)
             .Build();
 
-        using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
+        using (GermanAppAppDbContext context = ContextOptions.BuildNewInMemoryContext())
         {
             _ = await Assert.ThrowsAsync<UnexpectedNullIdException>(async () =>
             {
@@ -184,7 +184,7 @@ public class ListRepositoryUpdateCommandTests : ListRepositoryTestConfiguration
     private VocabList? GetFirstOrDefaultIncludeItemsWhere(Expression<Func<VocabList, bool>> condition)
     {
         VocabList? entity;
-        using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
+        using (GermanAppAppDbContext context = ContextOptions.BuildNewInMemoryContext())
         {
             entity = context.Lists
                             .Include(l => l.ListItems)
@@ -196,7 +196,7 @@ public class ListRepositoryUpdateCommandTests : ListRepositoryTestConfiguration
     private VocabList GetFirstIncludeItemsWhere(Expression<Func<VocabList, bool>> condition)
     {
         VocabList entity;
-        using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
+        using (GermanAppAppDbContext context = ContextOptions.BuildNewInMemoryContext())
         {
             entity = context.Lists
                             .Include(l => l.ListItems)

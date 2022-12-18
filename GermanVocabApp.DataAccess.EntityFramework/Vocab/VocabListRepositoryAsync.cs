@@ -13,7 +13,7 @@ namespace GermanVocabApp.DataAccess.EntityFramework.Vocab;
 
 public class VocabListRepositoryAsync : RepositoryBase, IVocabListRepositoryAsync
 {
-    public VocabListRepositoryAsync(VocabListDbContext context) : base(context)
+    public VocabListRepositoryAsync(GermanAppAppDbContext context) : base(context)
     {
 
     }

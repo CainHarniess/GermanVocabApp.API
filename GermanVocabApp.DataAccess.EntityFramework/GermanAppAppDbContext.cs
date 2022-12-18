@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace GermanVocabApp.DataAccess.EntityFramework;
-public class VocabListDbContext : DbContext
+public class GermanAppAppDbContext : DbContext
 {
-    public VocabListDbContext(DbContextOptions options) : base(options)
+    public GermanAppAppDbContext(DbContextOptions options) : base(options)
     {
 
     }

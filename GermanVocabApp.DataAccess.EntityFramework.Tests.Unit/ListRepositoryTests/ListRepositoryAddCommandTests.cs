@@ -21,7 +21,7 @@ public class ListRepositoryAddCommandTests : ListRepositoryTestConfiguration
                                                  .WithListItems(newItems)
                                                  .Build();
 
-        using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
+        using (GermanAppAppDbContext context = ContextOptions.BuildNewInMemoryContext())
         {
             VocabListRepositoryAsync repository = new(context);
             VocabListDto _ = await repository.Add(newListDto);

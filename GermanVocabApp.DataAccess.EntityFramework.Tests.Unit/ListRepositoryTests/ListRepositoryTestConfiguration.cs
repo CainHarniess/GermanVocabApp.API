@@ -38,7 +38,7 @@ public abstract class ListRepositoryTestConfiguration
 
     protected Guid GetFirstListIdWhere(Expression<Func<VocabList, bool>> condition)
     {
-        using VocabListDbContext context = ContextOptions.BuildNewInMemoryContext();
+        using GermanAppAppDbContext context = ContextOptions.BuildNewInMemoryContext();
         return context.Lists
                       .Where(condition)
                       .Select(l => l.Id)
@@ -48,7 +48,7 @@ public abstract class ListRepositoryTestConfiguration
     protected VocabList GetFirstActiveIncludeActiveItems()
     {
         VocabList entityPreUpdate;
-        using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
+        using (GermanAppAppDbContext context = ContextOptions.BuildNewInMemoryContext())
         {
             entityPreUpdate = context.Lists
                                      .Include(l => l.ListItems
@@ -63,7 +63,7 @@ public abstract class ListRepositoryTestConfiguration
     protected VocabList? GetSingleOrDefaultIncludeItemsWhere(Expression<Func<VocabList, bool>> condition)
     {
         VocabList? entity;
-        using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
+        using (GermanAppAppDbContext context = ContextOptions.BuildNewInMemoryContext())
         {
             entity = context.Lists
                             .Include(l => l.ListItems)

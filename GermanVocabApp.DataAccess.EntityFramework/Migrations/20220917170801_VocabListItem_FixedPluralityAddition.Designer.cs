@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GermanVocabApp.DataAccess.EntityFramework.Migrations
 {
-    [DbContext(typeof(VocabListDbContext))]
+    [DbContext(typeof(GermanAppAppDbContext))]
     [Migration("20220917170801_VocabListItem_FixedPluralityAddition")]
     partial class VocabListItem_FixedPluralityAddition
     {

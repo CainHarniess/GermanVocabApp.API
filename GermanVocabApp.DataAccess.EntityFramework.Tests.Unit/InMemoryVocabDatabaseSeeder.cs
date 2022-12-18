@@ -18,7 +18,7 @@ public class InMemoryVocabDatabaseSeeder
 
     public void Seed()
     {
-        using (VocabListDbContext context = _contextOptions.BuildNewInMemoryContext())
+        using (GermanAppAppDbContext context = _contextOptions.BuildNewInMemoryContext())
         {
             context.Database.OpenConnection();
             context.Database.EnsureCreated();

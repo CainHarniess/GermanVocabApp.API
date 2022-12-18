@@ -9,7 +9,7 @@ public class ListRepositoryHardDeleteCommandTests : ListRepositoryTestConfigurat
     public async void HardDelete_ShouldReturnFalse_IfListWithIdNotFound()
     {
         bool result;
-        using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
+        using (GermanAppAppDbContext context = ContextOptions.BuildNewInMemoryContext())
         {
             VocabListRepositoryAsync repository = new(context);
             result = await repository.HardDelete(Guid.NewGuid());
@@ -23,7 +23,7 @@ public class ListRepositoryHardDeleteCommandTests : ListRepositoryTestConfigurat
         Guid deletedListId = GetFirstListIdWhere(l => l.DeletedDate.HasValue);
 
         bool result;
-        using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
+        using (GermanAppAppDbContext context = ContextOptions.BuildNewInMemoryContext())
         {
             VocabListRepositoryAsync repository = new(context);
             result = await repository.HardDelete(deletedListId);
@@ -37,7 +37,7 @@ public class ListRepositoryHardDeleteCommandTests : ListRepositoryTestConfigurat
         Guid activeListId = GetFirstListIdWhere(l => l.DeletedDate.HasValue == false);
 
         bool result;
-        using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
+        using (GermanAppAppDbContext context = ContextOptions.BuildNewInMemoryContext())
         {
             VocabListRepositoryAsync repository = new(context);
             result = await repository.HardDelete(activeListId);
@@ -51,14 +51,14 @@ public class ListRepositoryHardDeleteCommandTests : ListRepositoryTestConfigurat
     {
         Guid listId = GetFirstListIdWhere(l => l.DeletedDate.HasValue == false);
 
-        using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
+        using (GermanAppAppDbContext context = ContextOptions.BuildNewInMemoryContext())
         {
             VocabListRepositoryAsync repository = new(context);
             bool _ = await repository.HardDelete(listId);
         }
 
         VocabList? testList;
-        using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
+        using (GermanAppAppDbContext context = ContextOptions.BuildNewInMemoryContext())
         {
             testList = context.Lists
                               .Where(l => l.Id == listId)
@@ -72,14 +72,14 @@ public class ListRepositoryHardDeleteCommandTests : ListRepositoryTestConfigurat
     {
         Guid listId = GetFirstListIdWhere(l => l.ListItems.Count() > 1);
 
-        using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
+        using (GermanAppAppDbContext context = ContextOptions.BuildNewInMemoryContext())
         {
             VocabListRepositoryAsync repository = new(context);
             bool _ = await repository.HardDelete(listId);
         }
 
         Guid[] itemIds;
-        using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
+        using (GermanAppAppDbContext context = ContextOptions.BuildNewInMemoryContext())
         {
             itemIds = context.ListItems
                              .Where(i => i.VocabListId == listId)

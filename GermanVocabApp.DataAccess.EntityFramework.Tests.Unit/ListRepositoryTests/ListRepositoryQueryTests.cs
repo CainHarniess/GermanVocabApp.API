@@ -16,7 +16,7 @@ public class ListRepositoryQueryTests : ListRepositoryTestConfiguration
         Guid activeListId = GetFirstListIdWhere(l => l.DeletedDate.HasValue == false);
 
         IEnumerable<VocabListInfoDto> listInfos;
-        using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
+        using (GermanAppAppDbContext context = ContextOptions.BuildNewInMemoryContext())
         {
             VocabListRepositoryAsync repository = new(context);
             listInfos = await repository.GetVocabListInfos();
@@ -28,7 +28,7 @@ public class ListRepositoryQueryTests : ListRepositoryTestConfiguration
     public async void GetVocabListInfos_ShouldNotReturnList_IfSoftDeleted()
     {
         IEnumerable<VocabListInfoDto> lists;
-        using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
+        using (GermanAppAppDbContext context = ContextOptions.BuildNewInMemoryContext())
         {
             VocabListRepositoryAsync repository = new(context);
             lists = await repository.GetVocabListInfos();
@@ -43,7 +43,7 @@ public class ListRepositoryQueryTests : ListRepositoryTestConfiguration
         await SoftDeleteAllLists(transactionTimeStamp);
 
         IEnumerable<VocabListInfoDto> testLists;
-        using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
+        using (GermanAppAppDbContext context = ContextOptions.BuildNewInMemoryContext())
         {
             VocabListRepositoryAsync repository = new(context);
             testLists = await repository.GetVocabListInfos();
@@ -58,7 +58,7 @@ public class ListRepositoryQueryTests : ListRepositoryTestConfiguration
         Guid activeListId = GetFirstListIdWhere(l => l.DeletedDate.HasValue == false);
 
         VocabListDto? listDto;
-        using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
+        using (GermanAppAppDbContext context = ContextOptions.BuildNewInMemoryContext())
         {
             VocabListRepositoryAsync repository = new(context);
             listDto = await repository.Get(activeListId);
@@ -70,13 +70,13 @@ public class ListRepositoryQueryTests : ListRepositoryTestConfiguration
     public async void Get_ShouldNotReturnList_IfSoftDeleted()
     {
         Guid softDeletedListId;
-        using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
+        using (GermanAppAppDbContext context = ContextOptions.BuildNewInMemoryContext())
         {
             softDeletedListId = context.Lists.First(l => l.Name == zz_deleted).Id;
         }
 
         VocabListDto? softDeletedListFromRepo;
-        using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
+        using (GermanAppAppDbContext context = ContextOptions.BuildNewInMemoryContext())
         {
             VocabListRepositoryAsync repository = new(context);
             softDeletedListFromRepo = await repository.Get(softDeletedListId);
@@ -92,7 +92,7 @@ public class ListRepositoryQueryTests : ListRepositoryTestConfiguration
                                                                       && i.VocabList.DeletedDate == null);
 
         VocabListDto? testList;
-        using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
+        using (GermanAppAppDbContext context = ContextOptions.BuildNewInMemoryContext())
         {
             VocabListRepositoryAsync repository = new(context);
             testList = await repository.Get(activeItemOnActiveList.VocabListId);
@@ -109,7 +109,7 @@ public class ListRepositoryQueryTests : ListRepositoryTestConfiguration
                                                                       && i.VocabList.DeletedDate == null);
 
         VocabListDto? testList;
-        using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
+        using (GermanAppAppDbContext context = ContextOptions.BuildNewInMemoryContext())
         {
             VocabListRepositoryAsync repository = new(context);
             testList = await repository.Get(deletedItemOnActiveList.VocabListId);
@@ -122,7 +122,7 @@ public class ListRepositoryQueryTests : ListRepositoryTestConfiguration
     public async void Get_ShouldReturnNull_IfItemNotFound()
     {
         VocabListDto? testList;
-        using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
+        using (GermanAppAppDbContext context = ContextOptions.BuildNewInMemoryContext())
         {
             VocabListRepositoryAsync repository = new(context);
             testList = await repository.Get(Guid.NewGuid());
@@ -133,7 +133,7 @@ public class ListRepositoryQueryTests : ListRepositoryTestConfiguration
 
     private async Task SoftDeleteAllLists(DateTime transactionTimeStamp)
     {
-        using (VocabListDbContext context = ContextOptions.BuildNewInMemoryContext())
+        using (GermanAppAppDbContext context = ContextOptions.BuildNewInMemoryContext())
         {
             VocabList[] lists = await context.Lists
                                              .Where(l => l.DeletedDate == null)
@@ -156,7 +156,7 @@ public class ListRepositoryQueryTests : ListRepositoryTestConfiguration
 
     private async Task<VocabListItem> GetFirstItemIdPairWhereAsync(Expression<Func<VocabListItem, bool>> condition)
     {
-        using VocabListDbContext context = ContextOptions.BuildNewInMemoryContext();
+        using GermanAppAppDbContext context = ContextOptions.BuildNewInMemoryContext();
         return await context.ListItems
                       .Where(condition)
                       .Select(i => new VocabListItem()
