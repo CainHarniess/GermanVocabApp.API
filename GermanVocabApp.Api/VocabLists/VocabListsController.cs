@@ -4,6 +4,7 @@ using GermanVocabApp.Core.Contracts;
 using GermanVocabApp.Core.Exceptions;
 using GermanVocabApp.DataAccess.Shared;
 using GermanVocabApp.DataAccess.Shared.DataTransfer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -11,6 +12,7 @@ namespace GermanVocabApp.Api.VocabLists;
 
 [ApiController]
 [Route("api/vocab-lists")]
+[Authorize]
 public class VocabListsController : ControllerBase
 {
     private readonly IVocabListRepositoryAsync _repository;
