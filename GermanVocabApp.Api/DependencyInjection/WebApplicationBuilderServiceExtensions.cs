@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using GermanVocabApp.Api.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -15,6 +16,7 @@ public static class WebApplicationBuilderServiceExtensions
         })
         .AddJwtBearer(o =>
         {
+            byte[] secretBytes = Encoding.UTF8.GetBytes(AuthenticationConstants.Secret);
             o.TokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuer = true,
@@ -22,9 +24,9 @@ public static class WebApplicationBuilderServiceExtensions
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
 
-                ValidIssuer = "https://localhost:7084",
-                ValidAudience = "https://localhost:7084",
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("4a2f5bc1-cde4-4fc9-82d5-a076f4d07071")),
+                ValidIssuer = AuthenticationConstants.Issuer,
+                ValidAudience = AuthenticationConstants.Audience,
+                IssuerSigningKey = new SymmetricSecurityKey(secretBytes),
             };
         });
         return builder;
