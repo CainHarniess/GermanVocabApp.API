@@ -57,6 +57,7 @@ public static class IServiceCollectionInjectionExtensions
     public static IServiceCollection AddDataAccessDependencies(this IServiceCollection services)
     {
         services.AddScoped<IVocabListRepositoryAsync, VocabListRepositoryAsync>();
+        services.AddScoped<IUserRepositoryAsync, UserRepositoryAsync>();
         return services;
     }
 

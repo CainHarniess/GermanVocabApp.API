@@ -1,10 +1,10 @@
 ﻿using GermanVocabApp.Api.Authentication.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using GermanVocabApp.DataAccess.Shared.Vocab;
 
 namespace GermanVocabApp.Api.Authentication;
 
@@ -13,10 +13,12 @@ namespace GermanVocabApp.Api.Authentication;
 public class AuthenticationController : ControllerBase
 {
     private readonly IConfiguration _configuration;
+    private readonly IUserRepositoryAsync _repository;
 
-    public AuthenticationController(IConfiguration configuration)
+    public AuthenticationController(IConfiguration configuration, IUserRepositoryAsync repository)
     {
         _configuration = configuration;
+        _repository = repository;
     }
 
     [HttpPost]

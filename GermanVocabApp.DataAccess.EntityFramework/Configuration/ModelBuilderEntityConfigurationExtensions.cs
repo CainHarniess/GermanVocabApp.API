@@ -1,6 +1,7 @@
 ﻿using GermanVocabApp.DataAccess.EntityFramework.Authentication.Models;
-using GermanVocabApp.DataAccess.EntityFramework.Configuration.Entities;
+using GermanVocabApp.DataAccess.EntityFramework.Authentication.Models.Configuration;
 using GermanVocabApp.DataAccess.EntityFramework.Vocab.Models;
+using GermanVocabApp.DataAccess.EntityFramework.Vocab.Models.Configuration;
 using Microsoft.EntityFrameworkCore;
 
 namespace GermanVocabApp.DataAccess.EntityFramework.Configuration;
