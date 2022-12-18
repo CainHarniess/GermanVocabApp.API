@@ -12,6 +12,13 @@ namespace GermanVocabApp.Api.Authentication;
 [Route("api/authentication")]
 public class AuthenticationController : ControllerBase
 {
+    private readonly IConfiguration _configuration;
+
+    public AuthenticationController(IConfiguration configuration)
+    {
+        _configuration = configuration;
+    }
+
     [HttpPost]
     [ProducesResponseType(typeof(AuthenticationResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -28,9 +35,10 @@ public class AuthenticationController : ControllerBase
         return Ok(new AuthenticationResponse(tokenString));
     }
 
-    private static SigningCredentials CreateSigningCredentials()
+    private SigningCredentials CreateSigningCredentials()
     {
-        byte[] secretBytes = Encoding.UTF8.GetBytes(AuthenticationConstants.Secret);
+        string secret = _configuration[AuthenticationConstants.SecretKey];
+        byte[] secretBytes = Encoding.UTF8.GetBytes(secret);
         SymmetricSecurityKey key = new(secretBytes);
         SigningCredentials credentials = new(key, SecurityAlgorithms.HmacSha256);
         return credentials;

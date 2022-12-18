@@ -17,7 +17,9 @@ public static class WebApplicationBuilderServiceExtensions
         })
         .AddJwtBearer(o =>
         {
-            byte[] secretBytes = Encoding.UTF8.GetBytes(AuthenticationConstants.Secret);
+            string secret = builder.Configuration[AuthenticationConstants.SecretKey];
+            byte[] secretBytes = Encoding.UTF8.GetBytes(secret);
+
             o.TokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuer = true,
