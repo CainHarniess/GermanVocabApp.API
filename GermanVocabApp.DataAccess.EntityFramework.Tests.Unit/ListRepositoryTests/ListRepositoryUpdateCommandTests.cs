@@ -1,10 +1,9 @@
 ﻿using GermanVocabApp.Core.Exceptions;
-using GermanVocabApp.DataAccess.EntityFramework.Conversion;
-using GermanVocabApp.DataAccess.EntityFramework.Models;
-using GermanVocabApp.DataAccess.EntityFramework.Repositories;
+using GermanVocabApp.DataAccess.EntityFramework.Vocab;
+using GermanVocabApp.DataAccess.EntityFramework.Vocab.Conversion;
+using GermanVocabApp.DataAccess.EntityFramework.Vocab.Models;
 using GermanVocabApp.DataAccess.Shared.DataTransfer;
 using Microsoft.EntityFrameworkCore;
-using SQLitePCL;
 using System.Linq.Expressions;
 
 namespace GermanVocabApp.DataAccess.EntityFramework.Tests.Unit;

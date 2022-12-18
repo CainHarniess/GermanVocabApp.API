@@ -1,15 +1,15 @@
 ﻿using GermanVocabApp.Core.Exceptions;
-using GermanVocabApp.DataAccess.EntityFramework.Conversion;
-using GermanVocabApp.DataAccess.EntityFramework.Models;
-using GermanVocabApp.DataAccess.EntityFramework.ModificationExtensions;
-using GermanVocabApp.DataAccess.EntityFramework.Projection;
+using GermanVocabApp.DataAccess.EntityFramework.Core;
+using GermanVocabApp.DataAccess.EntityFramework.Vocab.Conversion;
+using GermanVocabApp.DataAccess.EntityFramework.Vocab.Models;
+using GermanVocabApp.DataAccess.EntityFramework.Vocab.Projection;
+using GermanVocabApp.DataAccess.EntityFramework.Vocab.QueryExtensions;
 using GermanVocabApp.DataAccess.Shared;
-using GermanVocabApp.DataAccess.Shared.Abstractions;
 using GermanVocabApp.DataAccess.Shared.DataTransfer;
 using Microsoft.EntityFrameworkCore;
 using Osiris.Utilities.Collections.Generic;
 
-namespace GermanVocabApp.DataAccess.EntityFramework.Repositories;
+namespace GermanVocabApp.DataAccess.EntityFramework.Vocab;
 
 public class VocabListRepositoryAsync : RepositoryBase, IVocabListRepositoryAsync
 {
@@ -44,7 +44,7 @@ public class VocabListRepositoryAsync : RepositoryBase, IVocabListRepositoryAsyn
     public async Task<VocabListDto> Add(VocabListDto dto)
     {
         VocabList entity = dto.ToEntityWithListItems();
-        
+
         Context.Add(entity);
         await Context.SaveChangesAsync();
 
@@ -144,7 +144,7 @@ public class VocabListRepositoryAsync : RepositoryBase, IVocabListRepositoryAsyn
         SoftDeleteRangeWhere(existingListItems, item => !updatedListItems.ContainsKey(item.Id));
     }
 
-    private VocabListItem? TryCreateItemNewItem(VocabListItemDto updatedItemDto)
+    private static VocabListItem? TryCreateItemNewItem(VocabListItemDto updatedItemDto)
     {
         if (updatedItemDto.Id.HasValue)
         {
@@ -162,7 +162,7 @@ public class VocabListRepositoryAsync : RepositoryBase, IVocabListRepositoryAsyn
         return newListItem;
     }
 
-    private void TryUpdateListItem(VocabListItemDto updatedItem,
+    private static void TryUpdateListItem(VocabListItemDto updatedItem,
                                    Dictionary<Guid, VocabListItem> entities)
     {
         if (!updatedItem.Id.HasValue)

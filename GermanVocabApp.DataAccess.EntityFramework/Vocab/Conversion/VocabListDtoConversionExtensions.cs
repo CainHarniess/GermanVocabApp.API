@@ -1,7 +1,7 @@
-﻿using GermanVocabApp.DataAccess.EntityFramework.Models;
+﻿using GermanVocabApp.DataAccess.EntityFramework.Vocab.Models;
 using GermanVocabApp.DataAccess.Shared.DataTransfer;
 
-namespace GermanVocabApp.DataAccess.EntityFramework.Conversion;
+namespace GermanVocabApp.DataAccess.EntityFramework.Vocab.Conversion;
 
 internal static class VocabListDtoConversionExtensions
 {
@@ -19,7 +19,7 @@ internal static class VocabListDtoConversionExtensions
 
     public static VocabList ToEntityWithoutListItems(this VocabListDto dto)
     {
-        VocabList entity =  new VocabList()
+        var entity = new VocabList()
         {
             Name = dto.Name,
             Description = dto.Description,
@@ -29,7 +29,7 @@ internal static class VocabListDtoConversionExtensions
 
         if (dto.Id.HasValue)
         {
-            entity.Id = dto.Id.Value; 
+            entity.Id = dto.Id.Value;
         }
         return entity;
     }

@@ -1,7 +1,7 @@
-﻿using GermanVocabApp.DataAccess.EntityFramework.Models;
+﻿using GermanVocabApp.DataAccess.EntityFramework.Vocab.Models;
 using GermanVocabApp.DataAccess.Shared.DataTransfer;
 
-namespace GermanVocabApp.DataAccess.EntityFramework.Projection;
+namespace GermanVocabApp.DataAccess.EntityFramework.Vocab.Projection;
 
 public static class VocabListProjectionExtensions
 {

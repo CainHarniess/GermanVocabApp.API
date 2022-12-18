@@ -1,8 +1,8 @@
-﻿
+﻿using GermanVocabApp.DataAccess.EntityFramework.Core;
 using GermanVocabApp.DataAccess.Shared.Abstractions;
 using GermanVocabApp.Shared.Data;
 
-namespace GermanVocabApp.DataAccess.EntityFramework.Models;
+namespace GermanVocabApp.DataAccess.EntityFramework.Vocab.Models;
 
 public class VocabListItem : EntityBase, ISoftDeletable
 {

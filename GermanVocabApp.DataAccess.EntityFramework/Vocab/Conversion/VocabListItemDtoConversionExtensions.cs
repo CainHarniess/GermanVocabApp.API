@@ -1,8 +1,8 @@
 ﻿using GermanVocabApp.Core.Exceptions;
-using GermanVocabApp.DataAccess.EntityFramework.Models;
+using GermanVocabApp.DataAccess.EntityFramework.Vocab.Models;
 using GermanVocabApp.DataAccess.Shared.DataTransfer;
 
-namespace GermanVocabApp.DataAccess.EntityFramework.Conversion;
+namespace GermanVocabApp.DataAccess.EntityFramework.Vocab.Conversion;
 
 internal static class VocabListItemDtoConversionExtensions
 {
@@ -27,7 +27,7 @@ internal static class VocabListItemDtoConversionExtensions
 
     public static VocabListItem ToEntity(this VocabListItemDto dto)
     {
-        VocabListItem entity =  new VocabListItem()
+        var entity = new VocabListItem()
         {
             WordType = dto.WordType,
             IsWeakMasculineNoun = dto.IsWeakMasculineNoun,

@@ -1,5 +1,5 @@
 ﻿using GermanVocabApp.DataAccess.EntityFramework.Configuration.Entities;
-using GermanVocabApp.DataAccess.EntityFramework.Models;
+using GermanVocabApp.DataAccess.EntityFramework.Vocab.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace GermanVocabApp.DataAccess.EntityFramework.Configuration;

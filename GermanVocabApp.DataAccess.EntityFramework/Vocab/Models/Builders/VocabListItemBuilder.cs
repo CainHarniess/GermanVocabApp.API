@@ -1,4 +1,5 @@
-﻿using GermanVocabApp.DataAccess.EntityFramework.Models;
+﻿using GermanVocabApp.DataAccess.EntityFramework.Core;
+using GermanVocabApp.DataAccess.EntityFramework.Vocab.Models;
 using GermanVocabApp.Shared.Data;
 
 namespace GermanVocabApp.DataAccess.Models.Builders;

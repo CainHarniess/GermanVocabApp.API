@@ -1,7 +1,6 @@
 ﻿using GermanVocabApp.Core;
-using GermanVocabApp.DataAccess.EntityFramework.Models;
 
-namespace GermanVocabApp.DataAccess.Models.Builders;
+namespace GermanVocabApp.DataAccess.EntityFramework.Core;
 
 public abstract class EntityBuilder<TEntity, TBuilder> : AbstractBuilder<TEntity>
     where TBuilder : EntityBuilder<TEntity, TBuilder>

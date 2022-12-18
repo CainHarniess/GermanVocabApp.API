@@ -1,5 +1,5 @@
-﻿using GermanVocabApp.DataAccess.EntityFramework.Models;
-using GermanVocabApp.DataAccess.EntityFramework.Repositories;
+﻿using GermanVocabApp.DataAccess.EntityFramework.Vocab;
+using GermanVocabApp.DataAccess.EntityFramework.Vocab.Models;
 
 namespace GermanVocabApp.DataAccess.EntityFramework.Tests.Unit;
 

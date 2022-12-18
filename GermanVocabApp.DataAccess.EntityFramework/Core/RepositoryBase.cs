@@ -1,7 +1,6 @@
-﻿using GermanVocabApp.DataAccess.EntityFramework.Models;
-using Osiris.Utilities.Collections.Generic;
+﻿using Osiris.Utilities.Collections.Generic;
 
-namespace GermanVocabApp.DataAccess.EntityFramework.Repositories;
+namespace GermanVocabApp.DataAccess.EntityFramework.Core;
 
 public abstract class RepositoryBase
 {

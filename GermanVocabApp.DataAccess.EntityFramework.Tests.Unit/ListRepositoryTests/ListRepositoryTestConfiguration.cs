@@ -1,5 +1,5 @@
 ﻿using GermanVocabApp.Core.Exceptions;
-using GermanVocabApp.DataAccess.EntityFramework.Models;
+using GermanVocabApp.DataAccess.EntityFramework.Vocab.Models;
 using GermanVocabApp.DataAccess.Models.Builders;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;

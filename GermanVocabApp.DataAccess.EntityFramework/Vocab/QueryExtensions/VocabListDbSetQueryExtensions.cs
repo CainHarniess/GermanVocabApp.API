@@ -1,8 +1,8 @@
 ﻿using GermanVocabApp.Core.Exceptions;
-using GermanVocabApp.DataAccess.EntityFramework.Models;
+using GermanVocabApp.DataAccess.EntityFramework.Vocab.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace GermanVocabApp.DataAccess.EntityFramework.ModificationExtensions;
+namespace GermanVocabApp.DataAccess.EntityFramework.Vocab.QueryExtensions;
 
 internal static class VocabListDbSetQueryExtensions
 {

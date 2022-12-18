@@ -1,7 +1,7 @@
-﻿using GermanVocabApp.DataAccess.EntityFramework.Models;
+﻿using GermanVocabApp.DataAccess.EntityFramework.Vocab.Models;
 using GermanVocabApp.DataAccess.Shared.DataTransfer;
 
-namespace GermanVocabApp.DataAccess.EntityFramework.Conversion;
+namespace GermanVocabApp.DataAccess.EntityFramework.Vocab.Conversion;
 
 internal static class VocabListItemConversionExtensions
 {
