@@ -1,8 +1,7 @@
-﻿using GermanVocabApp.DataAccess.EntityFramework.Vocab.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace GermanVocabApp.DataAccess.EntityFramework.Configuration.Entities;
+namespace GermanVocabApp.DataAccess.EntityFramework.Vocab.Models.Configuration;
 
 internal class VocabListItemEntityConfiguration : IEntityTypeConfiguration<VocabListItem>
 {
@@ -11,7 +10,7 @@ internal class VocabListItemEntityConfiguration : IEntityTypeConfiguration<Vocab
         ConfigureConversions(builder);
         ConfigureCharacterLengths(builder);
     }
-    
+
     private static void ConfigureConversions(EntityTypeBuilder<VocabListItem> builder)
     {
         builder.Property(n => n.WordType)
@@ -38,7 +37,7 @@ internal class VocabListItemEntityConfiguration : IEntityTypeConfiguration<Vocab
         builder.Property(n => n.FixedPlurality)
                .HasConversion<string>();
     }
-   
+
     private static void ConfigureCharacterLengths(EntityTypeBuilder<VocabListItem> builder)
     {
         builder.Property(n => n.WordType)

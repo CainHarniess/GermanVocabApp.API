@@ -1,8 +1,7 @@
-﻿using GermanVocabApp.DataAccess.EntityFramework.Vocab.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace GermanVocabApp.DataAccess.EntityFramework.Configuration.Entities;
+namespace GermanVocabApp.DataAccess.EntityFramework.Vocab.Models.Configuration;
 
 internal class VocabListEntityConfiguration : IEntityTypeConfiguration<VocabList>
 {

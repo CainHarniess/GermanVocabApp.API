@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace GermanVocabApp.DataAccess.EntityFramework.Authentication.Models;
+namespace GermanVocabApp.DataAccess.EntityFramework.Authentication.Models.Configuration;
 
 internal class UserEntityTypeConfiguration : IEntityTypeConfiguration<User>
 {
