@@ -1,15 +1,17 @@
-﻿using GermanVocabApp.Api.Authentication.Models;
+﻿using GermanVocabApp.Api.Authentication.Conversion;
+using GermanVocabApp.Api.Authentication.Models;
+using GermanVocabApp.DataAccess.Shared.Users.Models;
+using GermanVocabApp.DataAccess.Shared.Vocab;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using GermanVocabApp.DataAccess.Shared.Vocab;
+using System.Text;
 
 namespace GermanVocabApp.Api.Authentication;
 
 [ApiController]
-[Route("api/authentication")]
+[Route("api")]
 public class AuthenticationController : ControllerBase
 {
     private readonly IConfiguration _configuration;
@@ -21,7 +23,7 @@ public class AuthenticationController : ControllerBase
         _repository = repository;
     }
 
-    [HttpPost]
+    [HttpPost("authenticate")]
     [ProducesResponseType(typeof(AuthenticationResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesDefaultResponseType]
@@ -32,9 +34,32 @@ public class AuthenticationController : ControllerBase
             return BadRequest();
         }
 
-        SigningCredentials credentials = CreateSigningCredentials();
-        string tokenString = CreateTokenString(credentials);
+        string tokenString = CreateTokenString();
         return Ok(new AuthenticationResponse(tokenString));
+    }
+
+    [HttpPost("register")]
+    [ProducesResponseType(typeof(AuthenticationResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> Register(RegistrationRequest request)
+    {
+        UserDto newUserDto = request.ToDto();
+        UserDto? createdUserDto = await _repository.Create(newUserDto);
+
+        if (createdUserDto == null)
+        {
+            return BadRequest($"Username {request.Username} is already in use.");
+        }
+
+        string tokenString = CreateTokenString();
+        return Ok(new AuthenticationResponse(tokenString));
+    }
+
+    private string CreateTokenString()
+    {
+        SigningCredentials credentials = CreateSigningCredentials();
+        JwtSecurityToken token = CreateToken(credentials);
+        return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
     private SigningCredentials CreateSigningCredentials()
@@ -44,12 +69,6 @@ public class AuthenticationController : ControllerBase
         SymmetricSecurityKey key = new(secretBytes);
         SigningCredentials credentials = new(key, SecurityAlgorithms.HmacSha256);
         return credentials;
-    }
-
-    private static string CreateTokenString(SigningCredentials credentials)
-    {
-        JwtSecurityToken token = CreateToken(credentials);
-        return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
     private static JwtSecurityToken CreateToken(SigningCredentials credentials)
