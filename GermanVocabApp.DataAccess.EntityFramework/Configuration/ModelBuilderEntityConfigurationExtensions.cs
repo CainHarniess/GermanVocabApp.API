@@ -1,4 +1,5 @@
-﻿using GermanVocabApp.DataAccess.EntityFramework.Configuration.Entities;
+﻿using GermanVocabApp.DataAccess.EntityFramework.Authentication.Models;
+using GermanVocabApp.DataAccess.EntityFramework.Configuration.Entities;
 using GermanVocabApp.DataAccess.EntityFramework.Vocab.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,5 +11,6 @@ internal static class ModelBuilderEntityConfigurationExtensions
     {
         new VocabListEntityConfiguration().Configure(modelBuilder.Entity<VocabList>());
         new VocabListItemEntityConfiguration().Configure(modelBuilder.Entity<VocabListItem>());
+        new UserEntityTypeConfiguration().Configure(modelBuilder.Entity<User>());
     }
 }

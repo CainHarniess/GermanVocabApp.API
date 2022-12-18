@@ -1,4 +1,5 @@
-﻿using GermanVocabApp.DataAccess.EntityFramework.Configuration;
+﻿using GermanVocabApp.DataAccess.EntityFramework.Authentication.Models;
+using GermanVocabApp.DataAccess.EntityFramework.Configuration;
 using GermanVocabApp.DataAccess.EntityFramework.Core;
 using GermanVocabApp.DataAccess.EntityFramework.Vocab.Models;
 using Microsoft.EntityFrameworkCore;
@@ -14,11 +15,11 @@ public class VocabListDbContext : DbContext
 
     public DbSet<VocabList> Lists { get; set; }
     public DbSet<VocabListItem> ListItems { get; set; }
+    public DbSet<User> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-
         modelBuilder.ConfigureDatabaseConventions();
         modelBuilder.ConfigureEntities();
     }
