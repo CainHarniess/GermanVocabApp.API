@@ -1,7 +1,6 @@
 ﻿using GermanVocabApp.Core;
-using GermanVocabApp.DataAccess.Shared.DataTransfer;
 
-namespace GermanVocabApp.DataAccess.Models.Builders;
+namespace GermanVocabApp.DataAccess.Shared.Core;
 
 public abstract class EntityDtoBuilder<TEntityDto, TBuilder> : AbstractBuilder<TEntityDto>
     where TBuilder : EntityDtoBuilder<TEntityDto, TBuilder>

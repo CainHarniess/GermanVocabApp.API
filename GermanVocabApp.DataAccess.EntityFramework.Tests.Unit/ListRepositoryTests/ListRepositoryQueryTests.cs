@@ -1,6 +1,6 @@
 ﻿using GermanVocabApp.DataAccess.EntityFramework.Vocab;
 using GermanVocabApp.DataAccess.EntityFramework.Vocab.Models;
-using GermanVocabApp.DataAccess.Shared.DataTransfer;
+using GermanVocabApp.DataAccess.Shared.Vocab.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Linq.Expressions;

@@ -8,8 +8,8 @@ using GermanVocabApp.Api.VocabLists.Validation;
 using GermanVocabApp.Core.Contracts;
 using GermanVocabApp.DataAccess.EntityFramework;
 using GermanVocabApp.DataAccess.EntityFramework.Vocab;
-using GermanVocabApp.DataAccess.Shared;
-using GermanVocabApp.DataAccess.Shared.DataTransfer;
+using GermanVocabApp.DataAccess.Shared.Vocab;
+using GermanVocabApp.DataAccess.Shared.Vocab.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 

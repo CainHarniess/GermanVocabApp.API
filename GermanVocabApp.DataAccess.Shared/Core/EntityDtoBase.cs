@@ -1,4 +1,4 @@
-﻿namespace GermanVocabApp.DataAccess.Shared.DataTransfer;
+﻿namespace GermanVocabApp.DataAccess.Shared.Core;
 
 public abstract class EntityDtoBase
 {

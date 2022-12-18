@@ -1,4 +1,6 @@
-﻿namespace GermanVocabApp.DataAccess.Shared.DataTransfer;
+﻿using GermanVocabApp.DataAccess.Shared.Core;
+
+namespace GermanVocabApp.DataAccess.Shared.Vocab.Models;
 
 public class VocabListInfoDto : QueryDtoBase
 {

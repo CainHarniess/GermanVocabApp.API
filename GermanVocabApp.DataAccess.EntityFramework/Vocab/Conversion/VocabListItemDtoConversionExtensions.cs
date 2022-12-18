@@ -1,6 +1,6 @@
 ﻿using GermanVocabApp.Core.Exceptions;
 using GermanVocabApp.DataAccess.EntityFramework.Vocab.Models;
-using GermanVocabApp.DataAccess.Shared.DataTransfer;
+using GermanVocabApp.DataAccess.Shared.Vocab.Models;
 
 namespace GermanVocabApp.DataAccess.EntityFramework.Vocab.Conversion;
 

@@ -2,7 +2,7 @@
 using GermanVocabApp.Api.VocabLists.Conversion;
 using GermanVocabApp.Api.VocabLists.Models;
 using GermanVocabApp.Core.Contracts;
-using GermanVocabApp.DataAccess.Shared.DataTransfer;
+using GermanVocabApp.DataAccess.Shared.Vocab.Models;
 using Moq;
 
 namespace GermanVocabApp.Api.Tests.Integration.Conversion;

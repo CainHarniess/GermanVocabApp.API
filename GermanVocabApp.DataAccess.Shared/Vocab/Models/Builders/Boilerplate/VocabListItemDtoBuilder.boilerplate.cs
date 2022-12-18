@@ -1,4 +1,5 @@
-﻿using GermanVocabApp.DataAccess.Shared.DataTransfer;
+﻿using GermanVocabApp.DataAccess.Shared.Core;
+using GermanVocabApp.DataAccess.Shared.Vocab.Models;
 using GermanVocabApp.Shared.Data;
 
 namespace GermanVocabApp.DataAccess.Models.Builders;

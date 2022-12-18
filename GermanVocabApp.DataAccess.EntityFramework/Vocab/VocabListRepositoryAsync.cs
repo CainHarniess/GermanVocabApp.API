@@ -4,8 +4,8 @@ using GermanVocabApp.DataAccess.EntityFramework.Vocab.Conversion;
 using GermanVocabApp.DataAccess.EntityFramework.Vocab.Models;
 using GermanVocabApp.DataAccess.EntityFramework.Vocab.Projection;
 using GermanVocabApp.DataAccess.EntityFramework.Vocab.QueryExtensions;
-using GermanVocabApp.DataAccess.Shared;
-using GermanVocabApp.DataAccess.Shared.DataTransfer;
+using GermanVocabApp.DataAccess.Shared.Vocab;
+using GermanVocabApp.DataAccess.Shared.Vocab.Models;
 using Microsoft.EntityFrameworkCore;
 using Osiris.Utilities.Collections.Generic;
 

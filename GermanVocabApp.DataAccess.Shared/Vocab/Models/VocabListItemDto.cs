@@ -1,6 +1,7 @@
-﻿using GermanVocabApp.Shared.Data;
+﻿using GermanVocabApp.DataAccess.Shared.Core;
+using GermanVocabApp.Shared.Data;
 
-namespace GermanVocabApp.DataAccess.Shared.DataTransfer;
+namespace GermanVocabApp.DataAccess.Shared.Vocab.Models;
 public class VocabListItemDto : EntityDtoBase
 {
     public WordType WordType { get; set; }

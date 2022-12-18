@@ -1,7 +1,7 @@
 ﻿using AutoFixture;
 using GermanVocabApp.Api.VocabLists.Conversion.Items;
 using GermanVocabApp.Core.Exceptions;
-using GermanVocabApp.DataAccess.Shared.DataTransfer;
+using GermanVocabApp.DataAccess.Shared.Vocab.Models;
 
 namespace GermanVocabApp.Api.Tests.Unit.Conversion;
 

@@ -1,6 +1,6 @@
-﻿using GermanVocabApp.DataAccess.Shared.DataTransfer;
+﻿using GermanVocabApp.DataAccess.Shared.Vocab.Models;
 
-namespace GermanVocabApp.DataAccess.Shared;
+namespace GermanVocabApp.DataAccess.Shared.Vocab;
 
 public interface IVocabListRepositoryAsync
 {
